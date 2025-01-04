@@ -358,8 +358,6 @@ class Client(Methods):
         self.updates_watchdog_event = asyncio.Event()
         self.last_update_time = datetime.now()
 
-        self.loop = asyncio.get_event_loop()
-
     async def __aenter__(self):
         return await self.start()
 
@@ -1239,7 +1237,9 @@ class Client(Methods):
         if inspect.iscoroutinefunction(func):
             return await func(*args, **kwargs)
         else:
-            return await self.loop.run_in_executor(self.executor, func, *args, **kwargs)
+            return await asyncio.get_running_loop().run_in_executor(
+                self.executor, func, *args, **kwargs
+            )
 
 
 class Cache:
