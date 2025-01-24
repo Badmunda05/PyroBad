@@ -52,7 +52,7 @@ class UpdateFolder:
                 Unique folder identifier.
 
             title (``str``):
-                Folder title.
+                Folder title. As of 2025-01-24, maximum length is 12 characters.
 
             parse_mode (:obj:`~pyrogram.enums.ParseMode`, *optional*):
                 By default, texts are parsed using both Markdown and HTML styles.
@@ -125,6 +125,7 @@ class UpdateFolder:
             pinned_chats = [pinned_chats] if pinned_chats else []
 
         title, title_entities = (await utils.parse_text_entities(self, title, parse_mode, entities)).values()
+        title_entities = title_entities or []  # For some reason, `title_entities` may be `None`
 
         r = await self.invoke(
             raw.functions.messages.UpdateDialogFilter(
