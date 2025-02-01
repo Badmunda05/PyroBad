@@ -4651,7 +4651,7 @@ class Message(Object, Update):
                 chat_id,
                 text=self.text,
                 entities=self.entities,
-                parse_mode=enums.ParseMode.DISABLED,
+                parse_mode=parse_mode if parse_mode is not None else enums.ParseMode.DISABLED,
                 disable_web_page_preview=not self.web_page,
                 disable_notification=disable_notification,
                 message_thread_id=message_thread_id,
