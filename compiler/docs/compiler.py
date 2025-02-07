@@ -562,6 +562,7 @@ def pyrogram_api():
             WebAppData
             MessageReactions
             ChatReactions
+            StoryView
             Story
             MyBoost
             BoostsStatus
