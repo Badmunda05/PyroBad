@@ -34,7 +34,7 @@ class StoryView(Object, Update):
         date (:obj:`~datetime`):
             When did the user view the story.
         
-        message (:obj:`~Message`):
+        message (:obj:`~pyrogram.types.Message`):
             The message with the forwarded story.
         
         peer_id (:obj:`~Peer`):
@@ -49,7 +49,7 @@ class StoryView(Object, Update):
         blocked_my_stories_from (``bool``, *optional*):
             Whether we have blocked this user from viewing more of our stories.
         
-        reaction (:obj:`~Reaction`, *optional*):
+        reaction (:obj:`~pyrogram.types.Reaction`, *optional*):
             If present, contains the reaction that the user left on the story.
     """
 
