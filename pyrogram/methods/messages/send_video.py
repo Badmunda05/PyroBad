@@ -43,7 +43,7 @@ class SendVideo:
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        video_timestamp: int = 0,
+        video_start_timestamp: int = 0,
         video_cover: Union[str, BinaryIO] = None,
         thumb: Union[str, BinaryIO] = None,
         file_name: str = None,
@@ -90,7 +90,7 @@ class SendVideo:
             video (``str`` | ``BinaryIO``):
                 Video to send.
                 Pass a file_id as string to send a video that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get a video from the Internet,
+                pass a HTTP URL as a string for Telegram to get a video from the Internet,
                 pass a file path as string to upload a new video that exists on your local machine, or
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
 
@@ -121,14 +121,13 @@ class SendVideo:
             height (``int``, *optional*):
                 Video height.
             
-            video_timestamp (``int``, *optional*):
-                Video timestamp.
+            video_start_timestamp (``int``, *optional*):
+                Video start timestamp.
             
             video_cover (``str`` | ``BinaryIO``, *optional*):
                 Video cover.
-                Video cover supported only in channels.
                 Pass a file_id as string to send a video that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get a video from the Internet,
+                pass a HTTP URL as a string for Telegram to get a video from the Internet,
                 pass a file path as string to upload a new video that exists on your local machine, or
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
 
@@ -323,7 +322,7 @@ class SendVideo:
                         spoiler=has_spoiler,
                         thumb=thumb,
                         video_cover=video_cover,
-                        video_timestamp=video_timestamp,
+                        video_timestamp=video_start_timestamp,
                         nosound_video=no_sound,
                         attributes=[
                             raw.types.DocumentAttributeVideo(
@@ -341,7 +340,7 @@ class SendVideo:
                         ttl_seconds=ttl_seconds,
                         spoiler=has_spoiler,
                         video_cover=video_cover,
-                        video_timestamp=video_timestamp
+                        video_timestamp=video_start_timestamp
                     )
                 else:
                     media = utils.get_input_media_from_file_id(video, FileType.VIDEO, ttl_seconds=ttl_seconds, has_spoiler=has_spoiler)
@@ -355,7 +354,7 @@ class SendVideo:
                     spoiler=has_spoiler,
                     thumb=thumb,
                     video_cover=video_cover,
-                    video_timestamp=video_timestamp,
+                    video_timestamp=video_start_timestamp,
                     nosound_video=no_sound,
                     attributes=[
                         raw.types.DocumentAttributeVideo(
