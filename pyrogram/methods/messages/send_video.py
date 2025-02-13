@@ -126,8 +126,11 @@ class SendVideo:
             
             video_cover (``str`` | ``BinaryIO``, *optional*):
                 Video cover.
-                Not all videos support video cover.
                 Video cover supported only in channels.
+                Pass a file_id as string to send a video that exists on the Telegram servers,
+                pass an HTTP URL as a string for Telegram to get a video from the Internet,
+                pass a file path as string to upload a new video that exists on your local machine, or
+                pass a binary file-like object with its attribute ".name" set for in-memory uploads.
 
             thumb (``str`` | ``BinaryIO``, *optional*):
                 Thumbnail of the video sent.
@@ -253,11 +256,36 @@ class SendVideo:
             if video_cover is not None:
                 if isinstance(video_cover, str):
                     if os.path.isfile(video_cover):
-                        # TODO: local video cover
-                        print()
+                        peer = await self.resolve_peer(chat_id)
+                        file = await self.save_file(video_cover)
+                        data = await self.invoke(
+                            raw.functions.messages.UploadMedia(
+                                peer=peer,
+                                media=raw.types.InputMediaUploadedPhoto(
+                                    file=file
+                                )
+                            )
+                        )
+                        video_cover = raw.types.InputPhoto(
+                            id=data.photo.id,
+                            access_hash=data.photo.access_hash,
+                            file_reference=data.photo.file_reference
+                        )
                     elif re.match("^https?://", video_cover):
-                        # TODO: external url for video cover
-                        print()
+                        peer = await self.resolve_peer(chat_id)
+                        data = await self.invoke(
+                            raw.functions.messages.UploadMedia(
+                                peer=peer,
+                                media=raw.types.InputMediaPhotoExternal(
+                                    url=video_cover
+                                )
+                            )
+                        )
+                        video_cover = raw.types.InputPhoto(
+                            id=data.photo.id,
+                            access_hash=data.photo.access_hash,
+                            file_reference=data.photo.file_reference
+                        )
                     else:
                         decoded = FileId.decode(video_cover)
                         video_cover = raw.types.InputPhoto(
@@ -266,8 +294,21 @@ class SendVideo:
                             file_reference=decoded.file_reference
                         )
                 else:
-                    # TODO: BinaryIO video cover
-                    print()
+                    peer = await self.resolve_peer(chat_id)
+                    file = await self.save_file(video_cover)
+                    data = await self.invoke(
+                        raw.functions.messages.UploadMedia(
+                            peer=peer,
+                            media=raw.types.InputMediaUploadedPhoto(
+                                file=file
+                            )
+                        )
+                    )
+                    video_cover = raw.types.InputPhoto(
+                        id=data.photo.id,
+                        access_hash=data.photo.access_hash,
+                        file_reference=data.photo.file_reference
+                    )
             else:
                 video_cover = raw.types.InputPhotoEmpty()
             
