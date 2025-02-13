@@ -27,7 +27,7 @@ from pyrogram import raw
 from pyrogram import types
 from pyrogram import utils
 from pyrogram.errors import FilePartMissing
-from pyrogram.file_id import FileType
+from pyrogram.file_id import FileType, FileId
 
 
 class SendVideo:
@@ -128,7 +128,6 @@ class SendVideo:
                 Video cover.
                 Not all videos support video cover.
                 Video cover supported only in channels.
-                Video cover can't be reused and can be only uploaded as a new file.
 
             thumb (``str`` | ``BinaryIO``, *optional*):
                 Thumbnail of the video sent.
@@ -250,7 +249,28 @@ class SendVideo:
         file = None
 
         try:
-            video_cover = await self.save_file(video_cover)
+
+            if video_cover is not None:
+                if isinstance(video_cover, str):
+                    if os.path.isfile(video_cover):
+                        # TODO: local video cover
+                        print()
+                    elif re.match("^https?://", video_cover):
+                        # TODO: external url for video cover
+                        print()
+                    else:
+                        decoded = FileId.decode(video_cover)
+                        video_cover = raw.types.InputPhoto(
+                            id=decoded.media_id,
+                            access_hash=decoded.access_hash,
+                            file_reference=decoded.file_reference
+                        )
+                else:
+                    # TODO: BinaryIO video cover
+                    print()
+            else:
+                video_cover = raw.types.InputPhotoEmpty()
+            
             if isinstance(video, str):
                 if os.path.isfile(video):
                     thumb = await self.save_file(thumb)
