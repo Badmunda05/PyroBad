@@ -983,8 +983,8 @@ class Message(Object, Update):
             if isinstance(action, raw.types.MessageActionPinMessage):
                 try:
                     parsed_message.pinned_message = await client.get_messages(
-                        chat_id=parsed_message.chat.id,
-                        pinned=True,
+                        parsed_message.chat.id,
+                        reply_to_message_ids=message.id,
                         replies=0
                     )
 
@@ -997,9 +997,8 @@ class Message(Object, Update):
                 if message.reply_to and replies:
                     try:
                         parsed_message.reply_to_message = await client.get_messages(
-                            chat_id=parsed_message.chat.id,
-                            message_ids=message.id,
-                            reply=True,
+                            parsed_message.chat.id,
+                            reply_to_message_ids=message.id,
                             replies=0
                         )
 
@@ -1356,7 +1355,7 @@ class Message(Object, Update):
                                 reply_to_params = {"chat_id": key[0], 'message_ids': key[1]}
                             else:
                                 key = (parsed_message.chat.id, parsed_message.reply_to_message_id)
-                                reply_to_params = {'chat_id': key[0], 'message_ids': message.id, 'reply': True}
+                                reply_to_params = {'chat_id': key[0], 'reply_to_message_ids': message.id}
 
                             reply_to_message = client.message_cache[key]
 
@@ -3558,6 +3557,8 @@ class Message(Object, Update):
         duration: int = 0,
         width: int = 0,
         height: int = 0,
+        video_timestamp: int = 0,
+        video_cover: Union[str, BinaryIO] = None,
         thumb: Union[str, BinaryIO] = None,
         supports_streaming: bool = True,
         disable_notification: bool = None,
@@ -3635,6 +3636,15 @@ class Message(Object, Update):
 
             height (``int``, *optional*):
                 Video height.
+            
+            video_timestamp (``int``, *optional*):
+                Video timestamp.
+            
+            video_cover (``str`` | ``BinaryIO``, *optional*):
+                Video cover.
+                Not all videos support video cover.
+                Video cover supported only in channels.
+                Video cover can't be reused and can be only uploaded as a new file.
 
             thumb (``str`` | ``BinaryIO``, *optional*):
                 Thumbnail of the video sent.
@@ -3737,6 +3747,8 @@ class Message(Object, Update):
             duration=duration,
             width=width,
             height=height,
+            video_timestamp=video_timestamp,
+            video_cover=video_cover,
             thumb=thumb,
             supports_streaming=supports_streaming,
             disable_notification=disable_notification,
@@ -4815,7 +4827,7 @@ class Message(Object, Update):
             .. code-block:: python
 
                 await message.copy_media_group("me")
-
+        
         Parameters:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
