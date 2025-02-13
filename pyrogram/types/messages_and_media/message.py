@@ -3557,6 +3557,8 @@ class Message(Object, Update):
         duration: int = 0,
         width: int = 0,
         height: int = 0,
+        video_timestamp: int = 0,
+        video_cover: Union[str, BinaryIO] = None,
         thumb: Union[str, BinaryIO] = None,
         supports_streaming: bool = True,
         disable_notification: bool = None,
@@ -3634,6 +3636,15 @@ class Message(Object, Update):
 
             height (``int``, *optional*):
                 Video height.
+            
+            video_timestamp (``int``, *optional*):
+                Video timestamp.
+            
+            video_cover (``str`` | ``BinaryIO``, *optional*):
+                Video cover.
+                Not all videos support video cover.
+                Video cover supported only in channels.
+                Video cover can't be reused and can be only uploaded as a new file.
 
             thumb (``str`` | ``BinaryIO``, *optional*):
                 Thumbnail of the video sent.
@@ -3736,6 +3747,8 @@ class Message(Object, Update):
             duration=duration,
             width=width,
             height=height,
+            video_timestamp=video_timestamp,
+            video_cover=video_cover,
             thumb=thumb,
             supports_streaming=supports_streaming,
             disable_notification=disable_notification,
