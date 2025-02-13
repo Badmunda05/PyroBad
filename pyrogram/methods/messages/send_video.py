@@ -43,6 +43,8 @@ class SendVideo:
         duration: int = 0,
         width: int = 0,
         height: int = 0,
+        video_timestamp: int = 0,
+        video_cover: Union[str, BinaryIO] = None,
         thumb: Union[str, BinaryIO] = None,
         file_name: str = None,
         supports_streaming: bool = True,
@@ -118,6 +120,15 @@ class SendVideo:
 
             height (``int``, *optional*):
                 Video height.
+            
+            video_timestamp (``int``, *optional*):
+                Video timestamp.
+            
+            video_cover (``str`` | ``BinaryIO``, *optional*):
+                Video cover.
+                Not all videos support video cover.
+                Video cover supported only in channels.
+                Video cover can't be reused and can be only uploaded as a new file.
 
             thumb (``str`` | ``BinaryIO``, *optional*):
                 Thumbnail of the video sent.
@@ -227,6 +238,9 @@ class SendVideo:
                 # Send self-destructing video
                 await app.send_video("me", "video.mp4", ttl_seconds=10)
 
+                # Add video_cover to the video
+                await app.send_video(channel_id, "video.mp4", video_cover="photo.jpg")
+
                 # Keep track of the progress while uploading
                 async def progress(current, total):
                     print(f"{current * 100 / total:.1f}%")
@@ -236,6 +250,7 @@ class SendVideo:
         file = None
 
         try:
+            video_cover = await self.save_file(video_cover)
             if isinstance(video, str):
                 if os.path.isfile(video):
                     thumb = await self.save_file(thumb)
@@ -246,6 +261,8 @@ class SendVideo:
                         ttl_seconds=ttl_seconds,
                         spoiler=has_spoiler,
                         thumb=thumb,
+                        video_cover=video_cover,
+                        video_timestamp=video_timestamp,
                         nosound_video=no_sound,
                         attributes=[
                             raw.types.DocumentAttributeVideo(
@@ -261,7 +278,9 @@ class SendVideo:
                     media = raw.types.InputMediaDocumentExternal(
                         url=video,
                         ttl_seconds=ttl_seconds,
-                        spoiler=has_spoiler
+                        spoiler=has_spoiler,
+                        video_cover=video_cover,
+                        video_timestamp=video_timestamp
                     )
                 else:
                     media = utils.get_input_media_from_file_id(video, FileType.VIDEO, ttl_seconds=ttl_seconds, has_spoiler=has_spoiler)
@@ -274,6 +293,8 @@ class SendVideo:
                     ttl_seconds=ttl_seconds,
                     spoiler=has_spoiler,
                     thumb=thumb,
+                    video_cover=video_cover,
+                    video_timestamp=video_timestamp,
                     nosound_video=no_sound,
                     attributes=[
                         raw.types.DocumentAttributeVideo(
