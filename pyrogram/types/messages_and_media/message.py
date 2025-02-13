@@ -3558,7 +3558,7 @@ class Message(Object, Update):
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        video_timestamp: int = 0,
+        video_start_timestamp: int = 0,
         video_cover: Union[str, BinaryIO] = None,
         thumb: Union[str, BinaryIO] = None,
         supports_streaming: bool = True,
@@ -3600,7 +3600,7 @@ class Message(Object, Update):
             video (``str``):
                 Video to send.
                 Pass a file_id as string to send a video that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get a video from the Internet, or
+                pass a HTTP URL as a string for Telegram to get a video from the Internet, or
                 pass a file path as string to upload a new video that exists on your local machine.
 
             quote (``bool``, *optional*):
@@ -3643,9 +3643,8 @@ class Message(Object, Update):
             
             video_cover (``str`` | ``BinaryIO``, *optional*):
                 Video cover.
-                Video cover supported only in channels.
                 Pass a file_id as string to send a video that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get a video from the Internet,
+                pass a HTTP URL as a string for Telegram to get a video from the Internet,
                 pass a file path as string to upload a new video that exists on your local machine, or
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
 
@@ -3750,7 +3749,7 @@ class Message(Object, Update):
             duration=duration,
             width=width,
             height=height,
-            video_timestamp=video_timestamp,
+            video_start_timestamp=video_start_timestamp,
             video_cover=video_cover,
             thumb=thumb,
             supports_streaming=supports_streaming,
