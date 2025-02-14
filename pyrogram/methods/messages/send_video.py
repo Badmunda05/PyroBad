@@ -285,13 +285,13 @@ class SendVideo:
                         )
                     )
                 
-                if decoded:
+                try:
                     video_cover = raw.types.InputPhoto(
                         id=decoded.media_id,
                         access_hash=decoded.access_hash,
                         file_reference=decoded.file_reference
                     )
-                else:
+                except:
                     video_cover = raw.types.InputPhoto(
                         id=data.photo.id,
                         access_hash=data.photo.access_hash,
