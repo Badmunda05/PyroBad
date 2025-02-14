@@ -43,7 +43,7 @@ class SendVideo:
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        video_start_timestamp: int = 0,
+        video_timestamp: int = 0,
         video_cover: Union[str, BinaryIO] = None,
         thumb: Union[str, BinaryIO] = None,
         file_name: str = None,
@@ -121,11 +121,12 @@ class SendVideo:
             height (``int``, *optional*):
                 Video height.
             
-            video_start_timestamp (``int``, *optional*):
-                Video start timestamp.
+            video_timestamp (``int``, *optional*):
+                Video timestamp.
             
             video_cover (``str`` | ``BinaryIO``, *optional*):
                 Video cover.
+                Video cover supported only in channels.
                 Pass a file_id as string to send a video that exists on the Telegram servers,
                 pass a HTTP URL as a string for Telegram to get a video from the Internet,
                 pass a file path as string to upload a new video that exists on your local machine, or
@@ -251,27 +252,19 @@ class SendVideo:
         file = None
 
         try:
-
+            peer = await self.resolve_peer(chat_id)
             if video_cover is not None:
                 if isinstance(video_cover, str):
                     if os.path.isfile(video_cover):
-                        peer = await self.resolve_peer(chat_id)
-                        file = await self.save_file(video_cover)
                         data = await self.invoke(
                             raw.functions.messages.UploadMedia(
                                 peer=peer,
                                 media=raw.types.InputMediaUploadedPhoto(
-                                    file=file
+                                    file=await self.save_file(video_cover)
                                 )
                             )
                         )
-                        video_cover = raw.types.InputPhoto(
-                            id=data.photo.id,
-                            access_hash=data.photo.access_hash,
-                            file_reference=data.photo.file_reference
-                        )
                     elif re.match("^https?://", video_cover):
-                        peer = await self.resolve_peer(chat_id)
                         data = await self.invoke(
                             raw.functions.messages.UploadMedia(
                                 peer=peer,
@@ -280,36 +273,30 @@ class SendVideo:
                                 )
                             )
                         )
-                        video_cover = raw.types.InputPhoto(
-                            id=data.photo.id,
-                            access_hash=data.photo.access_hash,
-                            file_reference=data.photo.file_reference
-                        )
                     else:
                         decoded = FileId.decode(video_cover)
-                        video_cover = raw.types.InputPhoto(
-                            id=decoded.media_id,
-                            access_hash=decoded.access_hash,
-                            file_reference=decoded.file_reference
-                        )
                 else:
-                    peer = await self.resolve_peer(chat_id)
-                    file = await self.save_file(video_cover)
                     data = await self.invoke(
                         raw.functions.messages.UploadMedia(
                             peer=peer,
                             media=raw.types.InputMediaUploadedPhoto(
-                                file=file
+                                file=await self.save_file(video_cover)
                             )
                         )
                     )
+                
+                if decoded:
+                    video_cover = raw.types.InputPhoto(
+                        id=decoded.media_id,
+                        access_hash=decoded.access_hash,
+                        file_reference=decoded.file_reference
+                    )
+                else:
                     video_cover = raw.types.InputPhoto(
                         id=data.photo.id,
                         access_hash=data.photo.access_hash,
                         file_reference=data.photo.file_reference
                     )
-            else:
-                video_cover = raw.types.InputPhotoEmpty()
             
             if isinstance(video, str):
                 if os.path.isfile(video):
@@ -322,7 +309,7 @@ class SendVideo:
                         spoiler=has_spoiler,
                         thumb=thumb,
                         video_cover=video_cover,
-                        video_timestamp=video_start_timestamp,
+                        video_timestamp=video_timestamp,
                         nosound_video=no_sound,
                         attributes=[
                             raw.types.DocumentAttributeVideo(
@@ -340,7 +327,7 @@ class SendVideo:
                         ttl_seconds=ttl_seconds,
                         spoiler=has_spoiler,
                         video_cover=video_cover,
-                        video_timestamp=video_start_timestamp
+                        video_timestamp=video_timestamp
                     )
                 else:
                     media = utils.get_input_media_from_file_id(video, FileType.VIDEO, ttl_seconds=ttl_seconds, has_spoiler=has_spoiler)
@@ -354,7 +341,7 @@ class SendVideo:
                     spoiler=has_spoiler,
                     thumb=thumb,
                     video_cover=video_cover,
-                    video_timestamp=video_start_timestamp,
+                    video_timestamp=video_timestamp,
                     nosound_video=no_sound,
                     attributes=[
                         raw.types.DocumentAttributeVideo(
@@ -371,7 +358,6 @@ class SendVideo:
 
             while True:
                 try:
-                    peer = await self.resolve_peer(chat_id)
                     r = await self.invoke(
                         raw.functions.messages.SendMedia(
                             peer=peer,
