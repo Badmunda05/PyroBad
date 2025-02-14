@@ -122,11 +122,10 @@ class SendVideo:
                 Video height.
             
             video_start_timestamp (``int``, *optional*):
-                Video  start timestamp.
+                Video startpoint, in seconds.
             
             video_cover (``str`` | ``BinaryIO``, *optional*):
-                Video cover.
-                Video cover supported only in channels.
+                Large thumbnail for your video.
                 Pass a file_id as string to send a video that exists on the Telegram servers,
                 pass a HTTP URL as a string for Telegram to get a video from the Internet,
                 pass a file path as string to upload a new video that exists on your local machine, or
