@@ -43,7 +43,7 @@ class SendVideo:
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        video_timestamp: int = 0,
+        video_start_timestamp: int = 0,
         video_cover: Union[str, BinaryIO] = None,
         thumb: Union[str, BinaryIO] = None,
         file_name: str = None,
@@ -121,8 +121,8 @@ class SendVideo:
             height (``int``, *optional*):
                 Video height.
             
-            video_timestamp (``int``, *optional*):
-                Video timestamp.
+            video_start_timestamp (``int``, *optional*):
+                Video  start timestamp.
             
             video_cover (``str`` | ``BinaryIO``, *optional*):
                 Video cover.
@@ -309,7 +309,7 @@ class SendVideo:
                         spoiler=has_spoiler,
                         thumb=thumb,
                         video_cover=video_cover,
-                        video_timestamp=video_timestamp,
+                        video_timestamp=video_start_timestamp,
                         nosound_video=no_sound,
                         attributes=[
                             raw.types.DocumentAttributeVideo(
@@ -327,7 +327,7 @@ class SendVideo:
                         ttl_seconds=ttl_seconds,
                         spoiler=has_spoiler,
                         video_cover=video_cover,
-                        video_timestamp=video_timestamp
+                        video_timestamp=video_start_timestamp
                     )
                 else:
                     media = utils.get_input_media_from_file_id(video, FileType.VIDEO, ttl_seconds=ttl_seconds, has_spoiler=has_spoiler)
@@ -341,7 +341,7 @@ class SendVideo:
                     spoiler=has_spoiler,
                     thumb=thumb,
                     video_cover=video_cover,
-                    video_timestamp=video_timestamp,
+                    video_timestamp=video_start_timestamp,
                     nosound_video=no_sound,
                     attributes=[
                         raw.types.DocumentAttributeVideo(
