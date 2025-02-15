@@ -27,7 +27,7 @@ from pyrogram import raw
 from pyrogram import types
 from pyrogram import utils
 from pyrogram.errors import FilePartMissing
-from pyrogram.file_id import FileType, FileId
+from pyrogram.file_id import FileType
 
 
 class SendVideo:
@@ -120,15 +120,14 @@ class SendVideo:
 
             height (``int``, *optional*):
                 Video height.
-            
+
             video_start_timestamp (``int``, *optional*):
                 Video startpoint, in seconds.
-            
+
             video_cover (``str`` | ``BinaryIO``, *optional*):
-                Large thumbnail for your video.
-                Pass a file_id as string to send a video that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get a video from the Internet,
-                pass a file path as string to upload a new video that exists on your local machine, or
+                Video cover.
+                Pass a file_id as string to attach a photo that exists on the Telegram servers,
+                pass a file path as string to upload a new photo civer that exists on your local machine, or
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
 
             thumb (``str`` | ``BinaryIO``, *optional*):
@@ -249,13 +248,15 @@ class SendVideo:
                 await app.send_video("me", "video.mp4", progress=progress)
         """
         file = None
+        vcover_file = None
+        vcover_media = None
+        peer = await self.resolve_peer(chat_id)
 
         try:
-            peer = await self.resolve_peer(chat_id)
             if video_cover is not None:
                 if isinstance(video_cover, str):
                     if os.path.isfile(video_cover):
-                        data = await self.invoke(
+                        vcover_media = await self.invoke(
                             raw.functions.messages.UploadMedia(
                                 peer=peer,
                                 media=raw.types.InputMediaUploadedPhoto(
@@ -264,18 +265,11 @@ class SendVideo:
                             )
                         )
                     elif re.match("^https?://", video_cover):
-                        data = await self.invoke(
-                            raw.functions.messages.UploadMedia(
-                                peer=peer,
-                                media=raw.types.InputMediaPhotoExternal(
-                                    url=video_cover
-                                )
-                            )
-                        )
+                        raise ValueError("Video cover can't be a URL")
                     else:
-                        decoded = FileId.decode(video_cover)
+                        vcover_file = utils.get_input_media_from_file_id(video_cover, FileType.PHOTO).id
                 else:
-                    data = await self.invoke(
+                    vcover_media = await self.invoke(
                         raw.functions.messages.UploadMedia(
                             peer=peer,
                             media=raw.types.InputMediaUploadedPhoto(
@@ -283,20 +277,14 @@ class SendVideo:
                             )
                         )
                     )
-                
-                try:
-                    video_cover = raw.types.InputPhoto(
-                        id=decoded.media_id,
-                        access_hash=decoded.access_hash,
-                        file_reference=decoded.file_reference
+
+                if vcover_media:
+                    vcover_file = raw.types.InputPhoto(
+                        id=vcover_media.photo.id,
+                        access_hash=vcover_media.photo.access_hash,
+                        file_reference=vcover_media.photo.file_reference
                     )
-                except:
-                    video_cover = raw.types.InputPhoto(
-                        id=data.photo.id,
-                        access_hash=data.photo.access_hash,
-                        file_reference=data.photo.file_reference
-                    )
-            
+
             if isinstance(video, str):
                 if os.path.isfile(video):
                     thumb = await self.save_file(thumb)
@@ -307,7 +295,7 @@ class SendVideo:
                         ttl_seconds=ttl_seconds,
                         spoiler=has_spoiler,
                         thumb=thumb,
-                        video_cover=video_cover,
+                        video_cover=vcover_file,
                         video_timestamp=video_start_timestamp,
                         nosound_video=no_sound,
                         attributes=[
@@ -325,7 +313,7 @@ class SendVideo:
                         url=video,
                         ttl_seconds=ttl_seconds,
                         spoiler=has_spoiler,
-                        video_cover=video_cover,
+                        video_cover=vcover_file,
                         video_timestamp=video_start_timestamp
                     )
                 else:
@@ -339,7 +327,7 @@ class SendVideo:
                     ttl_seconds=ttl_seconds,
                     spoiler=has_spoiler,
                     thumb=thumb,
-                    video_cover=video_cover,
+                    video_cover=vcover_file,
                     video_timestamp=video_start_timestamp,
                     nosound_video=no_sound,
                     attributes=[
