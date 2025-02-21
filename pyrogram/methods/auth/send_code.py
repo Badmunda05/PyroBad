@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from typing import List
+from typing import List, Optional
 
 import pyrogram
 from pyrogram import raw
@@ -32,14 +32,14 @@ class SendCode:
     async def send_code(
         self: "pyrogram.Client",
         phone_number: str,
-        current_number: bool = None,
-        allow_flashcall: bool = None,
-        allow_app_hash: bool = None,
-        allow_missed_call: bool = None,
-        allow_firebase: bool = None,
-        logout_tokens: List[bytes] = None,
-        token: str = None,
-        app_sandbox: bool = None,
+        current_number: Optional[bool] = None,
+        allow_flashcall: Optional[bool] = None,
+        allow_app_hash: Optional[bool] = None,
+        allow_missed_call: Optional[bool] = None,
+        allow_firebase: Optional[bool] = None,
+        logout_tokens: Optional[List[bytes]] = None,
+        token: Optional[str] = None,
+        app_sandbox: Optional[bool] = None,
     ) -> "types.SentCode":
         """Send the confirmation code to the given phone number.
 

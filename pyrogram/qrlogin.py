@@ -43,7 +43,7 @@ class QRLogin:
 
         return self.r
 
-    async def wait(self, timeout: float = None) -> Optional["types.User"]:
+    async def wait(self, timeout: Optional[float] = None) -> Optional["types.User"]:
         if timeout is None:
             if not self.r:
                 raise asyncio.TimeoutError

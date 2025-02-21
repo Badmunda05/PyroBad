@@ -17,6 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
+from typing import Optional
 
 import pyrogram
 from pyrogram import types, raw, utils
@@ -80,21 +81,21 @@ class ForumTopic(Object):
         self,
         *,
         id: int,
-        title: str = None,
-        date: datetime = None,
-        icon_color: str = None,
-        icon_emoji_id: int = None,
-        creator: "types.Chat" = None,
-        top_message: "types.Message" = None,
-        unread_count: int = None,
-        unread_mentions_count: int = None,
-        unread_reactions_count: int = None,
-        is_my: bool = None,
-        is_closed: bool = None,
-        is_pinned: bool = None,
-        is_short: bool = None,
-        is_hidden: bool = None,
-        is_deleted: bool = None
+        title: Optional[str] = None,
+        date: Optional[datetime] = None,
+        icon_color: Optional[str] = None,
+        icon_emoji_id: Optional[int] = None,
+        creator: Optional["types.Chat"] = None,
+        top_message: Optional["types.Message"] = None,
+        unread_count: Optional[int] = None,
+        unread_mentions_count: Optional[int] = None,
+        unread_reactions_count: Optional[int] = None,
+        is_my: Optional[bool] = None,
+        is_closed: Optional[bool] = None,
+        is_pinned: Optional[bool] = None,
+        is_short: Optional[bool] = None,
+        is_hidden: Optional[bool] = None,
+        is_deleted: Optional[bool] = None
     ):
         super().__init__()
 

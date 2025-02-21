@@ -92,7 +92,7 @@ class Invoice(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         currency: str,
         is_test: bool,
         title: Optional[str] = None,

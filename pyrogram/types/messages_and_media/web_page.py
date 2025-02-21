@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
@@ -102,30 +103,30 @@ class WebPage(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         id: str,
         url: str,
         display_url: str,
-        type: str = None,
-        site_name: str = None,
-        title: str = None,
-        description: str = None,
-        audio: "types.Audio" = None,
-        document: "types.Document" = None,
-        photo: "types.Photo" = None,
-        animation: "types.Animation" = None,
-        video: "types.Video" = None,
-        embed_url: str = None,
-        embed_type: str = None,
-        embed_width: int = None,
-        embed_height: int = None,
-        has_large_media: bool = None,
-        prefer_large_media: bool = None,
-        prefer_small_media: bool = None,
-        manual: bool = None,
-        safe: bool = None,
-        duration: int = None,
-        author: str = None
+        type: Optional[str] = None,
+        site_name: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        audio: Optional["types.Audio"] = None,
+        document: Optional["types.Document"] = None,
+        photo: Optional["types.Photo"] = None,
+        animation: Optional["types.Animation"] = None,
+        video: Optional["types.Video"] = None,
+        embed_url: Optional[str] = None,
+        embed_type: Optional[str] = None,
+        embed_width: Optional[int] = None,
+        embed_height: Optional[int] = None,
+        has_large_media: Optional[bool] = None,
+        prefer_large_media: Optional[bool] = None,
+        prefer_small_media: Optional[bool] = None,
+        manual: Optional[bool] = None,
+        safe: Optional[bool] = None,
+        duration: Optional[int] = None,
+        author: Optional[str] = None
     ):
         super().__init__(client)
 
@@ -157,10 +158,10 @@ class WebPage(Object):
     def _parse(
         client,
         webpage: "raw.types.WebPage",
-        prefer_large_media: bool = None,
-        prefer_small_media: bool = None,
-        manual: bool = None,
-        safe: bool = None
+        prefer_large_media: Optional[bool] = None,
+        prefer_small_media: Optional[bool] = None,
+        manual: Optional[bool] = None,
+        safe: Optional[bool] = None
     ) -> "WebPage":
         audio = None
         document = None

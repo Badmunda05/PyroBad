@@ -59,15 +59,15 @@ class MessageEntity(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         type: "enums.MessageEntityType",
         offset: int,
         length: int,
-        url: str = None,
-        user: "types.User" = None,
-        language: str = None,
-        custom_emoji_id: int = None,
-        expandable: bool = None
+        url: Optional[str] = None,
+        user: Optional["types.User"] = None,
+        language: Optional[str] = None,
+        custom_emoji_id: Optional[int] = None,
+        expandable: Optional[bool] = None
     ):
         super().__init__(client)
 

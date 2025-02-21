@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Union
+from typing import List, Union, Optional
 
 import pyrogram
 from pyrogram import enums
@@ -79,23 +79,23 @@ class Folder(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         id: int,
         title: str,
-        included_chats: List["types.Chat"] = None,
-        excluded_chats: List["types.Chat"] = None,
-        pinned_chats: List["types.Chat"] = None,
-        contacts: bool = None,
-        non_contacts: bool = None,
-        groups: bool = None,
-        channels: bool = None,
-        bots: bool = None,
-        exclude_muted: bool = None,
-        exclude_read: bool = None,
-        exclude_archived: bool = None,
-        emoji: str = None,
-        color: "enums.FolderColor" = None,
-        has_my_invites: bool = None
+        included_chats: Optional[List["types.Chat"]] = None,
+        excluded_chats: Optional[List["types.Chat"]] = None,
+        pinned_chats: Optional[List["types.Chat"]] = None,
+        contacts: Optional[bool] = None,
+        non_contacts: Optional[bool] = None,
+        groups: Optional[bool] = None,
+        channels: Optional[bool] = None,
+        bots: Optional[bool] = None,
+        exclude_muted: Optional[bool] = None,
+        exclude_read: Optional[bool] = None,
+        exclude_archived: Optional[bool] = None,
+        emoji: Optional[str] = None,
+        color: Optional["enums.FolderColor"] = None,
+        has_my_invites: Optional[bool] = None
     ):
         super().__init__(client)
 
@@ -186,17 +186,17 @@ class Folder(Object):
         included_chats: List[Union[int, str]] = None,
         excluded_chats: List[Union[int, str]] = None,
         pinned_chats: List[Union[int, str]] = None,
-        title: str = None,
-        contacts: bool = None,
-        non_contacts: bool = None,
-        groups: bool = None,
-        channels: bool = None,
-        bots: bool = None,
-        exclude_muted: bool = None,
-        exclude_read: bool = None,
-        exclude_archived: bool = None,
-        emoji: str = None,
-        color: "enums.FolderColor" = None
+        title: Optional[str] = None,
+        contacts: Optional[bool] = None,
+        non_contacts: Optional[bool] = None,
+        groups: Optional[bool] = None,
+        channels: Optional[bool] = None,
+        bots: Optional[bool] = None,
+        exclude_muted: Optional[bool] = None,
+        exclude_read: Optional[bool] = None,
+        exclude_archived: Optional[bool] = None,
+        emoji: Optional[str] = None,
+        color: Optional["enums.FolderColor"] = None
     ):
         """Bound method *update_peers* of :obj:`~pyrogram.types.Folder`.
 

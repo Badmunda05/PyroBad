@@ -45,11 +45,11 @@ class BusinessInfo(Object):
     def __init__(
         self,
         *,
-        address: str = None,
-        location: "types.Location" = None,
-        greeting_message: "types.BusinessMessage" = None,
-        away_message: "types.BusinessMessage" = None,
-        working_hours: "types.BusinessWorkingHours" = None,
+        address: Optional[str] = None,
+        location: Optional["types.Location"] = None,
+        greeting_message: Optional["types.BusinessMessage"] = None,
+        away_message: Optional["types.BusinessMessage"] = None,
+        working_hours: Optional["types.BusinessWorkingHours"] = None,
 
     ):
         self.address = address
@@ -61,8 +61,8 @@ class BusinessInfo(Object):
     @staticmethod
     def _parse(
         client,
-        user: "raw.types.UserFull" = None,
-        users: dict = None
+        user: Optional["raw.types.UserFull"] = None,
+        users: Optional[dict] = None
     ) -> Optional["BusinessInfo"]:
         working_hours = getattr(user, "business_work_hours", None)
         location = getattr(user, "business_location", None)

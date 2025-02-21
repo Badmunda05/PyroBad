@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
@@ -61,7 +62,7 @@ class Dialog(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         chat: "types.Chat",
         top_message: "types.Message",
         unread_messages_count: int,
@@ -69,9 +70,9 @@ class Dialog(Object):
         unread_reactions_count: int,
         unread_mark: bool,
         is_pinned: bool,
-        folder_id: int = None,
-        ttl_period: int = None,
-        raw: "raw.types.Dialog" = None
+        folder_id: Optional[int] = None,
+        ttl_period: Optional[int] = None,
+        raw: Optional["raw.types.Dialog"] = None
     ):
         super().__init__(client)
 

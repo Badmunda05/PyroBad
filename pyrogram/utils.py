@@ -45,11 +45,11 @@ async def ainput(prompt: str = "", *, hide: bool = False):
 
 def get_input_media_from_file_id(
     file_id: str,
-    expected_file_type: FileType = None,
-    ttl_seconds: int = None,
-    has_spoiler: bool = None,
-    video_cover: "raw.types.InputPhoto" = None,
-    video_start_timestamp: int = None,
+    expected_file_type: Optional[FileType] = None,
+    ttl_seconds: Optional[int] = None,
+    has_spoiler: Optional[bool] = None,
+    video_cover: Optional["raw.types.InputPhoto"] = None,
+    video_start_timestamp: Optional[int] = None,
 ) -> Union["raw.types.InputMediaPhoto", "raw.types.InputMediaDocument"]:
     try:
         decoded = FileId.decode(file_id)
@@ -98,7 +98,7 @@ async def parse_messages(
     client: "pyrogram.Client",
     messages: Union["raw.base.messages.Messages", "raw.base.Updates"],
     replies: int = 1,
-    business_connection_id: str = None
+    business_connection_id: Optional[str] = None
 ) -> List["types.Message"]:
     users = {i.id: i for i in getattr(messages, "users", [])}
     chats = {i.id: i for i in getattr(messages, "chats", [])}
@@ -572,7 +572,7 @@ def expand_inline_bytes(bytes_data: bytes):
     return header + bytes_data[3:] + footer
 
 
-def from_inline_bytes(data: bytes, file_name: str = None) -> BytesIO:
+def from_inline_bytes(data: bytes, file_name: Optional[str] = None) -> BytesIO:
     b = BytesIO()
 
     b.write(data)

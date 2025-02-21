@@ -16,6 +16,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from pyrogram import types
 
 from ..object import Object
@@ -47,10 +49,10 @@ class RequestChannelInfo(Object):
     def __init__(
         self, *,
         button_id: int,
-        is_creator: bool = None,
-        has_username: bool = None,
-        user_privileges: "types.ChatPrivileges" = None,
-        bot_privileges: "types.ChatPrivileges" = None
+        is_creator: Optional[bool] = None,
+        has_username: Optional[bool] = None,
+        user_privileges: Optional["types.ChatPrivileges"] = None,
+        bot_privileges: Optional["types.ChatPrivileges"] = None
     ):
         super().__init__()
 

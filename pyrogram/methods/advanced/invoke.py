@@ -17,6 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from typing import Optional
 
 import pyrogram
 from pyrogram import raw
@@ -33,8 +34,8 @@ class Invoke:
         query: TLObject,
         retries: int = Session.MAX_RETRIES,
         timeout: float = Session.WAIT_TIMEOUT,
-        sleep_threshold: float = None,
-        business_connection_id: str = None
+        sleep_threshold: Optional[float] = None,
+        business_connection_id: Optional[str] = None
     ):
         """Invoke raw Telegram functions.
 

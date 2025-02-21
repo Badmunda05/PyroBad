@@ -30,9 +30,9 @@ class EditMessageCaption:
         message_id: int,
         caption: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        schedule_date: datetime = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        schedule_date: Optional[datetime] = None,
+        reply_markup: Optional["types.InlineKeyboardMarkup"] = None
     ) -> "types.Message":
         """Edit the caption of media messages.
 

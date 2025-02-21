@@ -19,7 +19,7 @@
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
-from typing import Union
+from typing import Union, Optional
 
 
 class EditForumTopic:
@@ -27,10 +27,10 @@ class EditForumTopic:
         self: "pyrogram.Client",
         chat_id: Union[int, str],
         topic_id: int,
-        title: str = None,
-        icon_emoji_id: int = None,
-        closed: bool = None,
-        hidden: bool = None
+        title: Optional[str] = None,
+        icon_emoji_id: Optional[int] = None,
+        closed: Optional[bool] = None,
+        hidden: Optional[bool] = None
     ) -> bool:
         """Edit a forum topic.
 

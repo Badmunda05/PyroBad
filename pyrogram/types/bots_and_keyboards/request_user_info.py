@@ -16,6 +16,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from ..object import Object
 
 
@@ -46,9 +48,9 @@ class RequestUserInfo(Object):
     def __init__(
         self, *,
         button_id: int,
-        is_bot: bool = None,
-        is_premium: bool = None,
-        max_quantity: int = None,
+        is_bot: Optional[bool] = None,
+        is_premium: Optional[bool] = None,
+        max_quantity: Optional[int] = None,
     ):
         super().__init__()
 

@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from typing import Union, BinaryIO, Callable
+from typing import Union, BinaryIO, Callable, Optional
 
 import pyrogram
 from pyrogram import raw, types, utils, StopTransmission
@@ -34,8 +34,8 @@ class EditStoryMedia:
         height: int = 0,
         thumb: Union[str, BinaryIO] = None,
         supports_streaming: bool = True,
-        file_name: str = None,
-        progress: Callable = None,
+        file_name: Optional[str] = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = ()
     ) -> "types.Story":
         """Edit story media.

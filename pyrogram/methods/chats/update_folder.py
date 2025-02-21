@@ -28,20 +28,20 @@ class UpdateFolder:
         folder_id: int,
         title: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: List["types.MessageEntity"] = None,
+        entities: Optional[List["types.MessageEntity"]] = None,
         included_chats: Union[Union[int, str], List[Union[int, str]]] = None,
         excluded_chats: Union[Union[int, str], List[Union[int, str]]] = None,
         pinned_chats: Union[Union[int, str], List[Union[int, str]]] = None,
-        contacts: bool = None,
-        non_contacts: bool = None,
-        groups: bool = None,
-        channels: bool = None,
-        bots: bool = None,
-        exclude_muted: bool = None,
-        exclude_read: bool = None,
-        exclude_archived: bool = None,
-        color: "enums.FolderColor" = None,
-        emoji: str = None
+        contacts: Optional[bool] = None,
+        non_contacts: Optional[bool] = None,
+        groups: Optional[bool] = None,
+        channels: Optional[bool] = None,
+        bots: Optional[bool] = None,
+        exclude_muted: Optional[bool] = None,
+        exclude_read: Optional[bool] = None,
+        exclude_archived: Optional[bool] = None,
+        color: Optional["enums.FolderColor"] = None,
+        emoji: Optional[str] = None
     ) -> bool:
         """Create or update a user's folder.
 

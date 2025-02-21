@@ -70,7 +70,7 @@ class GiftCode(Object):
         id: str,
         premium_subscription_month_count: int,
         caption: Optional[str] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         via_giveaway: Optional[bool] = None,
         is_unclaimed: Optional[bool] = None,
         boosted_chat: Optional["types.Chat"] = None,

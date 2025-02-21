@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
@@ -47,12 +48,12 @@ class Venue(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         location: "types.Location",
         title: str,
         address: str,
-        foursquare_id: str = None,
-        foursquare_type: str = None
+        foursquare_id: Optional[str] = None,
+        foursquare_type: Optional[str] = None
     ):
         super().__init__(client)
 

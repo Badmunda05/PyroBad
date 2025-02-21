@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict
+from typing import Dict, Optional
 
 import pyrogram
 from pyrogram import raw
@@ -42,7 +42,7 @@ class ChatAdminWithInviteLinks(Object):
         self, *,
         admin: "types.User",
         chat_invite_links_count: int,
-        revoked_chat_invite_links_count: int = None
+        revoked_chat_invite_links_count: Optional[int] = None
     ):
         super().__init__()
 

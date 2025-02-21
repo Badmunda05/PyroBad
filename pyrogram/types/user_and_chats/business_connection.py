@@ -53,8 +53,8 @@ class BusinessConnection(Object):
         user: "types.User",
         dc_id: int,
         date: datetime,
-        can_reply: bool = None,
-        disabled: bool = None
+        can_reply: Optional[bool] = None,
+        disabled: Optional[bool] = None
     ):
         self.id = id
         self.user = user
@@ -66,7 +66,7 @@ class BusinessConnection(Object):
     @staticmethod
     def _parse(
         client,
-        connection: "raw.types.BotBusinessConnection" = None,
+        connection: Optional["raw.types.BotBusinessConnection"] = None,
         users = {}
     ) -> Optional["BusinessConnection"]:
         if not connection:

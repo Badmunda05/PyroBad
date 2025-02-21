@@ -32,7 +32,7 @@ class CreateInvoiceLink:
         currency: str,
         prices: List["types.LabeledPrice"],
         provider_token: Optional[str] = None,
-        subscription_period: datetime = None,
+        subscription_period: Optional[datetime] = None,
         max_tip_amount: Optional[int] = None,
         suggested_tip_amounts: Optional[List[int]] = None,
         start_parameter: Optional[str] = None,

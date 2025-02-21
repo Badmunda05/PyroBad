@@ -39,7 +39,7 @@ class SendInlineBotResult:
         parse_mode: Optional["enums.ParseMode"] = None,
         quote_entities: Optional[List["types.MessageEntity"]] = None,
         quote_offset: Optional[int] = None,
-        schedule_date: datetime = None,
+        schedule_date: Optional[datetime] = None,
     ) -> "types.Message":
         """Send an inline bot result.
         Bot results can be retrieved using :meth:`~pyrogram.Client.get_inline_bot_results`

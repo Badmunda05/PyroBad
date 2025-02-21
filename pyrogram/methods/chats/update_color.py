@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Union, Optional
 
 import pyrogram
 from pyrogram import raw
@@ -27,7 +27,7 @@ class UpdateColor:
         self: "pyrogram.Client",
         chat_id: Union[int, str],
         color: Union["enums.ReplyColor", "enums.ProfileColor"],
-        background_emoji_id: int = None
+        background_emoji_id: Optional[int] = None
     ) -> bool:
         """Update color
 

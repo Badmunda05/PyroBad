@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from typing import BinaryIO, Callable, List, Union
+from typing import BinaryIO, Callable, List, Union, Optional
 
 import pyrogram
 from pyrogram import StopTransmission, enums, raw, types, utils
@@ -29,24 +29,24 @@ class SendStory:
         self: "pyrogram.Client",
         chat_id: Union[int, str],
         media: Union[str, BinaryIO],
-        caption: str = None,
-        period: int = None,
+        caption: Optional[str] = None,
+        period: Optional[int] = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
         thumb: Union[str, BinaryIO] = None,
         supports_streaming: bool = True,
-        file_name: str = None,
-        privacy: "enums.StoriesPrivacyRules" = None,
+        file_name: Optional[str] = None,
+        privacy: Optional["enums.StoriesPrivacyRules"] = None,
         allowed_users: List[Union[int, str]] = None,
         disallowed_users: List[Union[int, str]] = None,
-        pinned: bool = None,
-        protect_content: bool = None,
-        parse_mode: "enums.ParseMode" = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        progress: Callable = None,
+        pinned: Optional[bool] = None,
+        protect_content: Optional[bool] = None,
+        parse_mode: Optional["enums.ParseMode"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        progress: Optional[Callable] = None,
         progress_args: tuple = (),
-        media_areas: List["types.MediaArea"] = None
+        media_areas: Optional[List["types.MediaArea"]] = None
     ) -> "types.Story":
         """Post new story.
 
