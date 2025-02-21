@@ -43,7 +43,7 @@ class Birthday(Object):
         month: int,
         year: Optional[int] = None
 
-    ):
+    ) -> None:
         self.day = day
         self.month = month
         self.year = year

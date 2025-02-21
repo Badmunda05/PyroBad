@@ -52,7 +52,7 @@ class DeletedMessagesHandler(Handler[Callable[["pyrogram.Client", List[Message]]
         self,
         callback: Callable[["pyrogram.Client", List[Message]], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)
 
     async def check(self, client: "pyrogram.Client", messages: List[Message]) -> bool:

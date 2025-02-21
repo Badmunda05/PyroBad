@@ -69,7 +69,7 @@ class InlineQueryResultCachedAnimation(InlineQueryResult):
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: Optional["types.InlineKeyboardMarkup"] = None,
         input_message_content: Optional["types.InputMessageContent"] = None
-    ):
+    ) -> None:
         super().__init__("gif", id, input_message_content, reply_markup)
 
         self.animation_file_id = animation_file_id

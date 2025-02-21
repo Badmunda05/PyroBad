@@ -52,5 +52,5 @@ class MessageHandler(Handler[Callable[["pyrogram.Client", Message], Any]]):
         self,
         callback: Callable[["pyrogram.Client", Message], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

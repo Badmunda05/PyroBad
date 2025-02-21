@@ -42,7 +42,7 @@ class WriteAccessAllowed(Object):
         from_request: Optional[bool] = None,
         web_app_name: Optional[str] = None,
         from_attachment_menu: Optional[bool] = None,
-    ):
+    ) -> None:
         super().__init__()
 
         self.from_request = from_request

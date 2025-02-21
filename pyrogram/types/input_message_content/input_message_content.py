@@ -33,7 +33,7 @@ class InputMessageContent(Object):
     - :obj:`~pyrogram.types.InputTextMessageContent`
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     async def write(self, client: "pyrogram.Client", reply_markup):

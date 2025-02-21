@@ -52,7 +52,7 @@ class MessageReactionCountUpdated(Object, Update):
         message_id: int,
         date: datetime,
         reactions: List["types.ReactionCount"]
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat

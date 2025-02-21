@@ -53,5 +53,5 @@ class PollHandler(Handler[Callable[["pyrogram.Client", Poll], Any]]):
         self,
         callback: Callable[["pyrogram.Client", Poll], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

@@ -43,7 +43,7 @@ class PollOption(Object):
         text: str,
         voter_count: int,
         data: bytes
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.text = text

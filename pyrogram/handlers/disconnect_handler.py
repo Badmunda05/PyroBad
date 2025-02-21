@@ -40,5 +40,5 @@ class DisconnectHandler(Handler[Callable[["pyrogram.Client"], Any]]):
             is established.
     """
 
-    def __init__(self, callback: Callable[["pyrogram.Client"], Any]):
+    def __init__(self, callback: Callable[["pyrogram.Client"], Any]) -> None:
         super().__init__(callback)

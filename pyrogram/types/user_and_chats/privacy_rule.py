@@ -57,7 +57,7 @@ class PrivacyRule(Object):
         allow_users: Optional[bool] = None,
         users: Optional[List["types.User"]] = None,
         chats: Optional[List["types.Chat"]] = None
-    ):
+    ) -> None:
         super().__init__(None)
 
         self.allow_all = allow_all

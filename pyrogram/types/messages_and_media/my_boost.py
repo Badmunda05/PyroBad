@@ -52,7 +52,7 @@ class MyBoost(Object):
         date: datetime,
         expire_date: datetime,
         cooldown_until_date: datetime
-    ):
+    ) -> None:
         super().__init__()
 
         self.slot = slot

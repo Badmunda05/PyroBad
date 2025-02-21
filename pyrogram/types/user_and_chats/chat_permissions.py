@@ -72,7 +72,7 @@ class ChatPermissions(Object):
         can_invite_users: Optional[bool] = None,
         can_pin_messages: Optional[bool] = None,
         can_manage_topics: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__(None)
 
         self.can_send_messages = can_send_messages

@@ -58,7 +58,7 @@ class AvailableEffect(Object):
         is_premium: Optional[bool] = None,
         static_icon_id: Optional[int] = None,
         effect_animation_id: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

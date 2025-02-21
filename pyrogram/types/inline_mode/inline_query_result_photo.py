@@ -86,7 +86,7 @@ class InlineQueryResultPhoto(InlineQueryResult):
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: Optional["types.InlineKeyboardMarkup"] = None,
         input_message_content: Optional["types.InputMessageContent"] = None
-    ):
+    ) -> None:
         super().__init__("photo", id, input_message_content, reply_markup)
 
         self.photo_url = photo_url

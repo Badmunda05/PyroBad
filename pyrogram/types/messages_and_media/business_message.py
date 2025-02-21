@@ -68,7 +68,7 @@ class BusinessMessage(Object):
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
 
-    ):
+    ) -> None:
         self.shortcut_id = shortcut_id
         self.is_greeting = is_greeting
         self.is_away = is_away

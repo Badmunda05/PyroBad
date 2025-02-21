@@ -75,7 +75,7 @@ class InputMediaAnimation(InputMedia):
         height: int = 0,
         duration: int = 0,
         has_spoiler: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__(media, caption, parse_mode, caption_entities)
 
         self.thumb = thumb

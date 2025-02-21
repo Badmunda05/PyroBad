@@ -50,5 +50,5 @@ class UserStatusHandler(Handler[Callable[["pyrogram.Client", User], Any]]):
         self,
         callback: Callable[["pyrogram.Client", User], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

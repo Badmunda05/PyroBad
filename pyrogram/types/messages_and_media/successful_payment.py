@@ -76,7 +76,7 @@ class SuccessfulPayment(Object):
         is_first_recurring: Optional[bool] = None,
         invoice_slug: Optional[str] = None,
         subscription_expiration_date: Optional[datetime] = None,
-    ):
+    ) -> None:
         super().__init__()
 
         self.currency = currency

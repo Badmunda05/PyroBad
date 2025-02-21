@@ -55,7 +55,7 @@ class BusinessConnection(Object):
         date: datetime,
         can_reply: Optional[bool] = None,
         disabled: Optional[bool] = None
-    ):
+    ) -> None:
         self.id = id
         self.user = user
         self.dc_id = dc_id

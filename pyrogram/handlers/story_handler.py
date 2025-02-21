@@ -52,5 +52,5 @@ class StoryHandler(Handler[Callable[["pyrogram.Client", Story], Any]]):
         self,
         callback: Callable[["pyrogram.Client", Story], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

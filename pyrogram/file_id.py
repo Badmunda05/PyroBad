@@ -176,7 +176,7 @@ class FileId:
         chat_access_hash: Optional[int] = None,
         sticker_set_id: Optional[int] = None,
         sticker_set_access_hash: Optional[int] = None
-    ):
+    ) -> None:
         self.major = major
         self.minor = minor
         self.file_type = file_type
@@ -419,7 +419,7 @@ class FileUniqueId:
         media_id: Optional[int] = None,
         volume_id: Optional[int] = None,
         local_id: Optional[int] = None
-    ):
+    ) -> None:
         self.file_unique_type = file_unique_type
         self.url = url
         self.media_id = media_id

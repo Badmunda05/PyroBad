@@ -74,7 +74,7 @@ class CallbackQuery(Object, Update):
         data: Union[str, bytes, None] = None,
         game_short_name: Optional[str] = None,
         matches: Optional[List[Match]] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

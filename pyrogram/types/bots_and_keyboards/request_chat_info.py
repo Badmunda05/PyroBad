@@ -64,7 +64,7 @@ class RequestChatInfo(Object):
         has_forum: Optional[bool] = None,
         user_privileges: Optional["types.ChatPrivileges"] = None,
         bot_privileges: Optional["types.ChatPrivileges"] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.button_id = button_id

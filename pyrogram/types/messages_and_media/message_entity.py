@@ -68,7 +68,7 @@ class MessageEntity(Object):
         language: Optional[str] = None,
         custom_emoji_id: Optional[int] = None,
         expandable: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.type = type

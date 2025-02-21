@@ -78,7 +78,7 @@ class InputMediaAudio(InputMedia):
         performer: str = "",
         title: str = "",
         file_name: Optional[str] = None
-    ):
+    ) -> None:
         super().__init__(media, caption, parse_mode, caption_entities)
 
         self.thumb = thumb

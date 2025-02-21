@@ -42,7 +42,7 @@ class BotVerification(Object):
         bot: int,
         custom_emoji_id: int,
         description: str
-    ):
+    ) -> None:
         self.bot = bot
         self.custom_emoji_id = custom_emoji_id
         self.description = description

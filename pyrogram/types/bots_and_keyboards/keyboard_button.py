@@ -61,7 +61,7 @@ class KeyboardButton(Object):
         request_poll: Optional["types.RequestPollInfo"] = None,
         request_peer: Union["types.RequestChannelInfo", "types.RequestChatInfo", "types.RequestUserInfo", None] = None,
         web_app: Optional["types.WebAppInfo"] = None,
-    ):
+    ) -> None:
         super().__init__()
 
         self.text = str(text)

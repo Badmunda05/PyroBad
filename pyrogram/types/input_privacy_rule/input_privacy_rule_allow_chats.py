@@ -35,7 +35,7 @@ class InputPrivacyRuleAllowChats(InputPrivacyRule):
     def __init__(
         self,
         chat_ids: Union[int, str, Iterable[Union[int, str]]],
-    ):
+    ) -> None:
         super().__init__()
 
         self.chat_ids = chat_ids

@@ -38,7 +38,7 @@ class MenuButtonWebApp(MenuButton):
         self,
         text: str,
         web_app: "types.WebAppInfo"
-    ):
+    ) -> None:
         super().__init__("web_app")
 
         self.text = text

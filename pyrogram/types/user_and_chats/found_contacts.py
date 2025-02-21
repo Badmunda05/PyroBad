@@ -42,7 +42,7 @@ class FoundContacts(Object):
         client: Optional["pyrogram.Client"] = None,
         my_results: Optional["types.Chat"] = None,
         global_results: Optional["types.Chat"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.my_results = my_results

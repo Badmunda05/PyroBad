@@ -109,7 +109,7 @@ class ActiveSession(Object):
         is_password_pending: Optional[bool] = None,
         is_unconfirmed: Optional[bool] = None,
         is_official_application: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

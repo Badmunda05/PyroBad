@@ -52,5 +52,5 @@ class ChatJoinRequestHandler(Handler[Callable[["pyrogram.Client", ChatJoinReques
         self,
         callback: Callable[["pyrogram.Client", ChatJoinRequest], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

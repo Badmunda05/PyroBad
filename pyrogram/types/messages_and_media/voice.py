@@ -67,7 +67,7 @@ class Voice(Object):
         file_size: Optional[int] = None,
         date: Optional[datetime] = None,
         ttl_seconds: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.file_id = file_id

@@ -61,7 +61,7 @@ class ChatPhoto(Object):
         big_photo_unique_id: str,
         has_animation: bool,
         is_personal: bool
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.small_file_id = small_file_id

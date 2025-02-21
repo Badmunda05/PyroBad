@@ -109,7 +109,7 @@ class SQLiteStorage(Storage):
     VERSION = 6
     USERNAME_TTL = 8 * 60 * 60
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         super().__init__(name)
 
         self.conn = None  # type: sqlite3.Connection

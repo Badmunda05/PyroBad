@@ -98,7 +98,7 @@ class GiftAttribute(Object):
         edge_color: Optional[int] = None,
         pattern_color: Optional[int] = None,
         text_color: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.name = name

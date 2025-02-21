@@ -74,7 +74,7 @@ class InlineQueryResultContact(InlineQueryResult):
         thumb_url: Optional[str] = None,
         thumb_width: int = 0,
         thumb_height: int = 0
-    ):
+    ) -> None:
         super().__init__("contact", id, input_message_content, reply_markup)
 
         self.phone_number = phone_number

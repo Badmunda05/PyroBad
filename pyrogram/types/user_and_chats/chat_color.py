@@ -39,7 +39,7 @@ class ChatColor(Object):
         *,
         color: Union["enums.ReplyColor", "enums.ProfileColor", None] = None,
         background_emoji_id: Optional[int] = None
-    ):
+    ) -> None:
         self.color = color
         self.background_emoji_id = background_emoji_id
 

@@ -335,7 +335,7 @@ class Chat(Object):
         gifts_count: Optional[int] = None,
         bot_verification: Optional["types.BotVerification"] = None,
         raw: Union["raw.base.Chat", "raw.base.User", "raw.base.ChatFull", "raw.base.UserFull", None] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

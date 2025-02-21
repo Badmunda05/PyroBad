@@ -45,7 +45,7 @@ class Location(Object):
         longitude: float,
         latitude: float,
         accuracy_radius: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.longitude = longitude

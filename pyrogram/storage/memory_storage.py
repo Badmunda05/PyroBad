@@ -28,7 +28,7 @@ log = logging.getLogger(__name__)
 
 
 class MemoryStorage(SQLiteStorage):
-    def __init__(self, name: str, session_string: Optional[str] = None):
+    def __init__(self, name: str, session_string: Optional[str] = None) -> None:
         super().__init__(name)
 
         self.session_string = session_string

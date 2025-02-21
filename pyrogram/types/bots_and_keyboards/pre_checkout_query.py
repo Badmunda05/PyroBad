@@ -61,7 +61,7 @@ class PreCheckoutQuery(Object, Update):
         invoice_payload: str,
         shipping_option_id: Optional[str] = None,
         order_info: Optional["types.OrderInfo"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

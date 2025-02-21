@@ -53,7 +53,7 @@ class Reaction(Object):
         count: Optional[int] = None,
         chosen_order: Optional[int] = None,
         is_paid: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.emoji = emoji

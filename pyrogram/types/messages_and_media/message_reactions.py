@@ -36,7 +36,7 @@ class MessageReactions(Object):
         *,
         client: Optional["pyrogram.Client"] = None,
         reactions: Optional[List["types.Reaction"]] = None,
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.reactions = reactions

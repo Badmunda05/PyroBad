@@ -68,7 +68,7 @@ class Photo(Object):
         date: datetime,
         ttl_seconds: Optional[int] = None,
         thumbs: Optional[List["types.Thumbnail"]] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.file_id = file_id

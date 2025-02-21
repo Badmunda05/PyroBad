@@ -93,7 +93,7 @@ class GroupCallMember(Object):
         is_hand_raised: Optional[bool] = None,
         is_video_enabled: Optional[bool] = None,
         is_screen_sharing_enabled: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat

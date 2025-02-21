@@ -78,7 +78,7 @@ class GiftCode(Object):
         amount: Optional[int] = None,
         cryptocurrency: Optional[str] = None,
         cryptocurrency_amount: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

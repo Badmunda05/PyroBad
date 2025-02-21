@@ -51,7 +51,7 @@ class BusinessInfo(Object):
         away_message: Optional["types.BusinessMessage"] = None,
         working_hours: Optional["types.BusinessWorkingHours"] = None,
 
-    ):
+    ) -> None:
         self.address = address
         self.location = location
         self.greeting_message = greeting_message

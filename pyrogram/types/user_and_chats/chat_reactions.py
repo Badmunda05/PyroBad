@@ -43,7 +43,7 @@ class ChatReactions(Object):
         all_are_enabled: Optional[bool] = None,
         allow_custom_emoji: Optional[bool] = None,
         reactions: Optional[List["types.Reaction"]] = None,
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.all_are_enabled = all_are_enabled

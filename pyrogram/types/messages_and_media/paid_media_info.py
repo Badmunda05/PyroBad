@@ -39,7 +39,7 @@ class PaidMediaInfo(Object):
         *,
         stars_amount: str,
         media: List[Union["types.Photo", "types.Video", "types.PaidMediaPreview"]]
-    ):
+    ) -> None:
         super().__init__()
 
         self.stars_amount = stars_amount

@@ -73,7 +73,7 @@ class Giveaway(Object):
         only_for_countries: Optional[List[str]] = None,
         winners_are_visible: Optional[bool] = None,
         stars: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.chats = chats

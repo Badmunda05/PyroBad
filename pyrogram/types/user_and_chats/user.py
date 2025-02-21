@@ -32,7 +32,7 @@ class Link(str):
     HTML = "<a href={url}>{text}</a>"
     MARKDOWN = "[{text}]({url})"
 
-    def __init__(self, url: str, text: str, style: enums.ParseMode):
+    def __init__(self, url: str, text: str, style: enums.ParseMode) -> None:
         super().__init__()
 
         self.url = url
@@ -250,7 +250,7 @@ class User(Object, Update):
         can_read_all_group_messages: Optional[bool] = None,
         has_main_web_app: Optional[bool] = None,
         raw: Union["raw.base.User", "raw.base.UserStatus", None] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

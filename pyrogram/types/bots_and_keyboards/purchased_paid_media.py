@@ -36,7 +36,7 @@ class PurchasedPaidMedia(Object):
         self,
         from_user: "types.User",
         payload: str
-    ):
+    ) -> None:
         super().__init__()
 
         self.from_user = from_user

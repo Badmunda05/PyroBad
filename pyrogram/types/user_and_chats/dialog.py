@@ -73,7 +73,7 @@ class Dialog(Object):
         folder_id: Optional[int] = None,
         ttl_period: Optional[int] = None,
         raw: Optional["raw.types.Dialog"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat

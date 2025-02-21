@@ -44,7 +44,7 @@ class GameHighScore(Object):
         user: "types.User",
         score: int,
         position: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.user = user

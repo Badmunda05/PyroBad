@@ -89,7 +89,7 @@ class InlineQueryResultVenue(InlineQueryResult):
         thumb_url: Optional[str] = None,
         thumb_width: int = 0,
         thumb_height: int = 0
-    ):
+    ) -> None:
         super().__init__("venue", id, input_message_content, reply_markup)
 
         self.title = title

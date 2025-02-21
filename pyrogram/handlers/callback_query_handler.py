@@ -52,5 +52,5 @@ class CallbackQueryHandler(Handler[Callable[["pyrogram.Client", CallbackQuery], 
         self,
         callback: Callable[["pyrogram.Client", CallbackQuery], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

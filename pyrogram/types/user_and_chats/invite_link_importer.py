@@ -38,7 +38,7 @@ class InviteLinkImporter(Object):
         self, *,
         date: datetime,
         user: "types.User"
-    ):
+    ) -> None:
         super().__init__(None)
 
         self.date = date

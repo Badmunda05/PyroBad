@@ -47,7 +47,7 @@ class InputTextMessageContent(InputMessageContent):
         parse_mode: Optional["enums.ParseMode"] = None,
         entities: Optional[List["types.MessageEntity"]] = None,
         disable_web_page_preview: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.message_text = message_text

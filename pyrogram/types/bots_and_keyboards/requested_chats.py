@@ -41,7 +41,7 @@ class RequestedChats(Object):
         client: Optional["pyrogram.Client"] = None,
         button_id: int,
         chats: List["types.Chat"],
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.button_id = button_id

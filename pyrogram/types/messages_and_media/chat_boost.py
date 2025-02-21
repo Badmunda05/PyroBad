@@ -76,7 +76,7 @@ class ChatBoost(Object):
         giveaway_message_id: Optional[int] = None,
         used_gift_slug: Optional[str] = None,
         stars: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

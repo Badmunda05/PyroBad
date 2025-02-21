@@ -51,7 +51,7 @@ CREATE TABLE update_state
 class FileStorage(SQLiteStorage):
     FILE_EXTENSION = ".session"
 
-    def __init__(self, name: str, workdir: Path):
+    def __init__(self, name: str, workdir: Path) -> None:
         super().__init__(name)
 
         self.database = workdir / (self.name + self.FILE_EXTENSION)

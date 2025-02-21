@@ -74,7 +74,7 @@ class EmojiStatus(Object):
         edge_color: Optional[int] = None,
         pattern_color: Optional[int] = None,
         text_color: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.custom_emoji_id = custom_emoji_id

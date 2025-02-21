@@ -48,7 +48,7 @@ class PaidMediaPreview(Object):
         height: Optional[int] = None,
         duration: Optional[int] = None,
         thumbnail: Optional["types.StrippedThumbnail"] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.width = width

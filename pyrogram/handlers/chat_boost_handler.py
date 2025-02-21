@@ -52,5 +52,5 @@ class ChatBoostHandler(Handler[Callable[["pyrogram.Client", ChatBoost], Any]]):
         self,
         callback: Callable[["pyrogram.Client", ChatBoost], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

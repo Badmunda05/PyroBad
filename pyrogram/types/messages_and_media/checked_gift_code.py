@@ -59,7 +59,7 @@ class CheckedGiftCode(Object):
         winner: Optional["types.User"] = None,
         giveaway_message_id: Optional[int] = None,
         used_date: Optional[datetime] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.date = date

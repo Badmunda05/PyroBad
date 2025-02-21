@@ -123,7 +123,7 @@ class MediaArea(Object):
         temperature: Optional[float] = None,
         color: Optional[int] = None,
         gift: Optional["types.Gift"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.x = x

@@ -53,7 +53,7 @@ class ChatJoiner(Object):
         bio: Optional[str] = None,
         pending: Optional[bool] = None,
         approved_by: Optional["types.User"] = None,
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.user = user

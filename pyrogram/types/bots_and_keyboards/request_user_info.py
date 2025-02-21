@@ -51,7 +51,7 @@ class RequestUserInfo(Object):
         is_bot: Optional[bool] = None,
         is_premium: Optional[bool] = None,
         max_quantity: Optional[int] = None,
-    ):
+    ) -> None:
         super().__init__()
 
         self.button_id = button_id

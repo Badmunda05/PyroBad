@@ -31,7 +31,7 @@ class Handler(Generic[T]):
         self,
         callback: T,
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         self.callback = callback
         self.filters = filters
 

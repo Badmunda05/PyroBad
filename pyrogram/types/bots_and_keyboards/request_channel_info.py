@@ -53,7 +53,7 @@ class RequestChannelInfo(Object):
         has_username: Optional[bool] = None,
         user_privileges: Optional["types.ChatPrivileges"] = None,
         bot_privileges: Optional["types.ChatPrivileges"] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.button_id = button_id

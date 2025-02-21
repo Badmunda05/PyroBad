@@ -127,7 +127,7 @@ class WebPage(Object):
         safe: Optional[bool] = None,
         duration: Optional[int] = None,
         author: Optional[str] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

@@ -42,7 +42,7 @@ class ChatBoostUpdated(Object, Update):
         client: Optional["pyrogram.Client"] = None,
         chat: "types.Chat",
         boost: "types.ChatBoost"
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat

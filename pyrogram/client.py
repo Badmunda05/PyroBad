@@ -272,7 +272,7 @@ class Client(Methods):
         init_connection_params: Optional["raw.base.JSONValue"] = None,
         connection_factory: Type[Connection] = Connection,
         protocol_factory: Type[TCP] = TCPAbridged
-    ):
+    ) -> None:
         super().__init__()
 
         self.name = name
@@ -1243,7 +1243,7 @@ class Client(Methods):
 
 
 class Cache:
-    def __init__(self, capacity: int):
+    def __init__(self, capacity: int) -> None:
         self.capacity = capacity
         self.store = {}
 

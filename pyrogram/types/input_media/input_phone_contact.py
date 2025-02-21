@@ -36,7 +36,7 @@ class InputPhoneContact(Object):
             Contact's last name
     """
 
-    def __init__(self, phone: str, first_name: str, last_name: str = ""):
+    def __init__(self, phone: str, first_name: str, last_name: str = "") -> None:
         super().__init__(None)
 
     def __new__(cls,

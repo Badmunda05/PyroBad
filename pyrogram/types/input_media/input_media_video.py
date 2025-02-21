@@ -103,7 +103,7 @@ class InputMediaVideo(InputMedia):
         no_sound: Optional[bool] = None,
         video_start_timestamp: Optional[int] = None,
         video_cover: Union[str, BinaryIO, None] = None,
-    ):
+    ) -> None:
         super().__init__(media, caption, parse_mode, caption_entities)
 
         self.thumb = thumb

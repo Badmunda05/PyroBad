@@ -52,5 +52,5 @@ class InlineQueryHandler(Handler[Callable[["pyrogram.Client", InlineQuery], Any]
         self,
         callback: Callable[["pyrogram.Client", InlineQuery], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

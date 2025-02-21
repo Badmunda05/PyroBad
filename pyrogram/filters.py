@@ -40,7 +40,7 @@ class Filter:
 
 
 class InvertFilter(Filter):
-    def __init__(self, base):
+    def __init__(self, base) -> None:
         self.base = base
 
     async def __call__(self, client: "pyrogram.Client", update: Update):
@@ -57,7 +57,7 @@ class InvertFilter(Filter):
 
 
 class AndFilter(Filter):
-    def __init__(self, base, other):
+    def __init__(self, base, other) -> None:
         self.base = base
         self.other = other
 
@@ -88,7 +88,7 @@ class AndFilter(Filter):
 
 
 class OrFilter(Filter):
-    def __init__(self, base, other):
+    def __init__(self, base, other) -> None:
         self.base = base
         self.other = other
 
@@ -1022,7 +1022,7 @@ class user(Filter, set):
             Defaults to None (no users).
     """
 
-    def __init__(self, users: Optional[Union[int, str, List[Union[int, str]]]] = None):
+    def __init__(self, users: Optional[Union[int, str, List[Union[int, str]]]] = None) -> None:
         users = [] if users is None else users if isinstance(users, list) else [users]
 
         super().__init__(
@@ -1054,7 +1054,7 @@ class chat(Filter, set):
             Defaults to None (no chats).
     """
 
-    def __init__(self, chats: Optional[Union[int, str, List[Union[int, str]]]] = None):
+    def __init__(self, chats: Optional[Union[int, str, List[Union[int, str]]]] = None) -> None:
         chats = [] if chats is None else chats if isinstance(chats, list) else [chats]
 
         super().__init__(
@@ -1087,7 +1087,7 @@ class topic(Filter, set):
             Defaults to None (no topics).
     """
 
-    def __init__(self, topics: Optional[Union[int, List[int]]] = None):
+    def __init__(self, topics: Optional[Union[int, List[int]]] = None) -> None:
         topics = [] if topics is None else topics if isinstance(topics, list) else [topics]
 
         super().__init__(

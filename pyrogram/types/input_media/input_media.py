@@ -40,7 +40,7 @@ class InputMedia(Object):
         caption: str = "",
         parse_mode: Optional[str] = None,
         caption_entities: Optional[List[MessageEntity]] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.media = media

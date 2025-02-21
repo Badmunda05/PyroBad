@@ -33,7 +33,7 @@ class Dice(Object):
             Value of the dice, 1-6 for currently supported base emoji.
     """
 
-    def __init__(self, *, client: Optional["pyrogram.Client"] = None, emoji: str, value: int):
+    def __init__(self, *, client: Optional["pyrogram.Client"] = None, emoji: str, value: int) -> None:
         super().__init__(client)
 
         self.emoji = emoji

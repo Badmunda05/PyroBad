@@ -42,7 +42,7 @@ class BusinessIntro(Object):
         title: Optional[str] = None,
         text: Optional[str] = None,
         sticker: Optional["types.Sticker"] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.title = title

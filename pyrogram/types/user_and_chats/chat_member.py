@@ -93,7 +93,7 @@ class ChatMember(Object):
         permissions: Optional["types.ChatPermissions"] = None,
         privileges: Optional["types.ChatPrivileges"] = None,
         subscription_until_date: Optional[datetime] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.status = status

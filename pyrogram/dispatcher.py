@@ -64,7 +64,7 @@ class Dispatcher:
     CHAT_BOOST_UPDATES = (UpdateBotChatBoost,)
     PURCHASED_PAID_MEDIA_UPDATES = (UpdateBotPurchasedPaidMedia,)
 
-    def __init__(self, client: "pyrogram.Client"):
+    def __init__(self, client: "pyrogram.Client") -> None:
         self.client = client
         self.loop = asyncio.get_event_loop()
 

@@ -34,7 +34,7 @@ class VideoChatMembersInvited(Object):
     def __init__(
         self, *,
         users: List["types.User"]
-    ):
+    ) -> None:
         super().__init__()
 
         self.users = users

@@ -182,7 +182,7 @@ class Story(Object, Update):
         deleted: Optional[bool] = None,
         media_areas: Optional[List["types.MediaArea"]] = None,
         raw: Optional["raw.types.StoryItem"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

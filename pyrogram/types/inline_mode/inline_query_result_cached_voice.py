@@ -69,7 +69,7 @@ class InlineQueryResultCachedVoice(InlineQueryResult):
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         reply_markup: Optional["types.InlineKeyboardMarkup"] = None,
         input_message_content: Optional["types.InputMessageContent"] = None
-    ):
+    ) -> None:
         super().__init__("voice", id, input_message_content, reply_markup)
 
         self.voice_file_id = voice_file_id

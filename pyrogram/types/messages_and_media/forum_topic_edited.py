@@ -49,7 +49,7 @@ class ForumTopicEdited(Object):
         custom_emoji_id: Optional[int] = None,
         is_closed: Optional[bool] = None,
         is_hidden: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.title = title

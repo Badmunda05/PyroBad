@@ -39,7 +39,7 @@ class ActiveSessions(Object):
         *,
         inactive_session_ttl_days: Optional[int] = None,
         active_sessions: Optional[List["types.ActiveSession"]] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.inactive_session_ttl_days = inactive_session_ttl_days

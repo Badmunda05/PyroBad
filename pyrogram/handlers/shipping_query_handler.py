@@ -53,5 +53,5 @@ class ShippingQueryHandler(Handler[Callable[["pyrogram.Client", ShippingQuery], 
         self,
         callback: Callable[["pyrogram.Client", ShippingQuery], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

@@ -61,7 +61,7 @@ class ChosenInlineResult(Object, Update):
         query: str,
         location: Optional["types.Location"] = None,
         inline_message_id: Optional[str] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.result_id = result_id

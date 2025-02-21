@@ -34,7 +34,7 @@ log = logging.getLogger(__name__)
 
 
 class Str(str):
-    def __init__(self, *args):
+    def __init__(self, *args) -> None:
         super().__init__()
 
         self.entities: Optional[List["types.MessageEntity"]] = None
@@ -585,7 +585,7 @@ class Message(Object, Update):
         ] = None,
         reactions: Optional[List["types.Reaction"]] = None,
         raw: Optional["raw.types.Message"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

@@ -99,7 +99,7 @@ class InlineKeyboardButton(Object):
         requires_password: Optional[bool] = None,
         pay: Optional[bool] = None,
         copy_text: Optional[str] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.text = str(text)

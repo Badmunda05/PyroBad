@@ -54,5 +54,5 @@ class MessageReactionCountHandler(Handler[Callable[["pyrogram.Client", MessageRe
         self,
         callback: Callable[["pyrogram.Client", MessageReactionCountUpdated], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)

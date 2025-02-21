@@ -83,7 +83,7 @@ class PaymentForm(Object):
         # additional_params
         # saved_info
         # saved_credentials
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

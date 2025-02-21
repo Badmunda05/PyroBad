@@ -95,7 +95,7 @@ class Sticker(Object):
         emoji: Optional[str] = None,
         set_name: Optional[str] = None,
         thumbs: Optional[List["types.Thumbnail"]] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.file_id = file_id

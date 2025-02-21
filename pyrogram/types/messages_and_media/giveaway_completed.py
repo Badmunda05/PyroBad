@@ -55,7 +55,7 @@ class GiveawayCompleted(Object):
         giveaway_message_id: Optional[int] = None,
         giveaway_message: Optional["types.Message"] = None,
         is_star_giveaway: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.winner_count = winner_count

@@ -102,7 +102,7 @@ class Poll(Object, Update):
         open_period: Optional[int] = None,
         close_date: Optional[datetime] = None,
         voter: Optional["types.User"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

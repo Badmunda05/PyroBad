@@ -50,7 +50,7 @@ class InlineQueryResultCachedSticker(InlineQueryResult):
         id: Optional[str] = None,
         reply_markup: Optional["types.InlineKeyboardMarkup"] = None,
         input_message_content: Optional["types.InputMessageContent"] = None
-    ):
+    ) -> None:
         super().__init__("sticker", id, input_message_content, reply_markup)
 
         self.sticker_file_id = sticker_file_id

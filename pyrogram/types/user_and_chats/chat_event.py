@@ -208,7 +208,7 @@ class ChatEvent(Object):
         old_forum_topic: Optional["types.ForumTopic"] = None,
         new_forum_topic: Optional["types.ForumTopic"] = None,
         deleted_forum_topic: Optional["types.ForumTopic"] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

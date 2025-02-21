@@ -65,7 +65,7 @@ class LoginUrl(Object):
         bot_username: Optional[str] = None,
         request_write_access: Optional[str] = None,
         button_id: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.url = url

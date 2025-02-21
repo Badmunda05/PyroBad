@@ -92,7 +92,7 @@ class GiveawayWinners(Object):
         only_new_members: Optional[bool] = None,
         was_refunded: Optional[bool] = None,
         prize_description: Optional[str] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat

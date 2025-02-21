@@ -190,7 +190,7 @@ class Gift(Object):
         is_transferred: Optional[bool] = None,
         is_birthday: Optional[bool] = None,
         raw: Optional["raw.base.StarGift"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id

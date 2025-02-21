@@ -76,7 +76,7 @@ class Audio(Object):
         file_size: Optional[int] = None,
         date: Optional[datetime] = None,
         thumbs: Optional[List["types.Thumbnail"]] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.file_id = file_id

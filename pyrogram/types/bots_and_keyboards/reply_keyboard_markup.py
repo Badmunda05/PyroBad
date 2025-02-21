@@ -64,7 +64,7 @@ class ReplyKeyboardMarkup(Object):
         one_time_keyboard: Optional[bool] = None,
         selective: Optional[bool] = None,
         placeholder: Optional[str] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.keyboard = keyboard

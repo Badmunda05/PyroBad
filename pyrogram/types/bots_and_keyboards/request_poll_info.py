@@ -32,7 +32,7 @@ class RequestPollInfo(Object):
     def __init__(
         self, *,
         is_quiz: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.is_quiz = is_quiz

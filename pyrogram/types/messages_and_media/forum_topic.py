@@ -96,7 +96,7 @@ class ForumTopic(Object):
         is_short: Optional[bool] = None,
         is_hidden: Optional[bool] = None,
         is_deleted: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

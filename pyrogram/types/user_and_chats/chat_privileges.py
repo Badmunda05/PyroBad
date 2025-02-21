@@ -100,7 +100,7 @@ class ChatPrivileges(Object):
         can_pin_messages: bool = False,  # Groups and supergroups only
         can_manage_topics: bool = False, # Supergroups only
         is_anonymous: bool = False
-    ):
+    ) -> None:
         super().__init__(None)
 
         self.can_manage_chat: bool = can_manage_chat

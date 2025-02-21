@@ -52,5 +52,5 @@ class ChatMemberUpdatedHandler(Handler[Callable[["pyrogram.Client", ChatMemberUp
         self,
         callback: Callable[["pyrogram.Client", ChatMemberUpdated], Any],
         filters: Optional[Filter] = None
-    ):
+    ) -> None:
         super().__init__(callback, filters)
