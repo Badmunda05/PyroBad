@@ -33,7 +33,7 @@ class DeleteChatHistory:
         chat_id: Union[int, str],
         max_id: int = 0,
         revoke: Optional[bool] = None,
-        just_clear = None,
+        just_clear: Optional[bool] = None,
         min_date: Optional[datetime] = None,
         max_date: Optional[datetime] = None,
     ) -> int:

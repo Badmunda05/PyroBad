@@ -98,7 +98,7 @@ class SaveFile:
             if path is None:
                 return None
 
-            async def worker(session) -> None:
+            async def worker(session: Session) -> None:
                 while True:
                     data = await queue.get()
 

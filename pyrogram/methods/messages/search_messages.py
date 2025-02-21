@@ -25,7 +25,7 @@ from pyrogram import raw, types, utils, enums
 
 # noinspection PyShadowingBuiltins
 async def get_chunk(
-    client,
+    client: "pyrogram.Client",
     chat_id: Union[int, str],
     query: str = "",
     filter: "enums.MessagesFilter" = enums.MessagesFilter.EMPTY,

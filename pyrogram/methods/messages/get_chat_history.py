@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, Optional, AsyncGenerator
+from typing import Union, Optional, AsyncGenerator, List
 
 import pyrogram
 from pyrogram import types, raw, utils
@@ -33,7 +33,7 @@ async def get_chunk(
     from_date: datetime = utils.zero_datetime(),
     min_id: int = 0,
     max_id: int = 0
-):
+) -> List["types.Message"]:
     messages = await client.invoke(
         raw.functions.messages.GetHistory(
             peer=await client.resolve_peer(chat_id),
