@@ -534,7 +534,7 @@ class Story(Object, Update):
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: Union[str, BinaryIO] = None,
+        thumb: Union[str, BinaryIO, None] = None,
         file_name: Optional[str] = None,
         disable_notification: Optional[bool] = None,
         reply_markup: Union[
@@ -668,7 +668,7 @@ class Story(Object, Update):
         duration: int = 0,
         performer: Optional[str] = None,
         title: Optional[str] = None,
-        thumb: Union[str, BinaryIO] = None,
+        thumb: Union[str, BinaryIO, None] = None,
         file_name: Optional[str] = None,
         disable_notification: Optional[bool] = None,
         reply_markup: Union[
@@ -1130,8 +1130,8 @@ class Story(Object, Update):
         width: int = 0,
         height: int = 0,
         video_start_timestamp: Optional[int] = None,
-        video_cover: Union[str, BinaryIO] = None,
-        thumb: Union[str, BinaryIO] = None,
+        video_cover: Union[str, BinaryIO, None] = None,
+        thumb: Union[str, BinaryIO, None] = None,
         file_name: Optional[str] = None,
         supports_streaming: bool = True,
         disable_notification: Optional[bool] = None,
@@ -1290,7 +1290,7 @@ class Story(Object, Update):
         video_note: Union[str, BinaryIO],
         duration: int = 0,
         length: int = 1,
-        thumb: Union[str, BinaryIO] = None,
+        thumb: Union[str, BinaryIO, None] = None,
         disable_notification: Optional[bool] = None,
         view_once: Optional[bool] = None,
         reply_markup: Union[
@@ -1623,7 +1623,7 @@ class Story(Object, Update):
 
     async def edit_media(
         self,
-        media: Union[str, BinaryIO] = None,
+        media: Union[str, BinaryIO, None] = None,
     ) -> "types.Story":
         """Bound method *edit* of :obj:`~pyrogram.types.Story`.
 
@@ -1759,7 +1759,7 @@ class Story(Object, Update):
             disallowed_users=disallowed_users,
         )
 
-    async def react(self, emoji: Union[int, str] = None) -> bool:
+    async def react(self, emoji: Union[int, str, None] = None) -> bool:
         """Bound method *react* of :obj:`~pyrogram.types.Story`.
 
         Use as a shortcut for:

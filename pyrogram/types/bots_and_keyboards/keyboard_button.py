@@ -59,7 +59,7 @@ class KeyboardButton(Object):
         request_contact: Optional[bool] = None,
         request_location: Optional[bool] = None,
         request_poll: Optional["types.RequestPollInfo"] = None,
-        request_peer: Union["types.RequestChannelInfo", "types.RequestChatInfo", "types.RequestUserInfo"] = None,
+        request_peer: Union["types.RequestChannelInfo", "types.RequestChatInfo", "types.RequestUserInfo", None] = None,
         web_app: Optional["types.WebAppInfo"] = None,
     ):
         super().__init__()

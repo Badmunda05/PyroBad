@@ -71,7 +71,7 @@ class CallbackQuery(Object, Update):
         chat_instance: str,
         message: Optional["types.Message"] = None,
         inline_message_id: Optional[str] = None,
-        data: Union[str, bytes] = None,
+        data: Union[str, bytes, None] = None,
         game_short_name: Optional[str] = None,
         matches: Optional[List[Match]] = None
     ):

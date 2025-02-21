@@ -30,7 +30,7 @@ class SetGameScore:
         score: int,
         force: Optional[bool] = None,
         disable_edit_message: Optional[bool] = None,
-        chat_id: Union[int, str] = None,
+        chat_id: Union[int, str, None] = None,
         message_id: Optional[int] = None
     ) -> Union["types.Message", bool]:
         # inline_message_id: Optional[str] = None):  TODO Add inline_message_id

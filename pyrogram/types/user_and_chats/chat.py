@@ -334,7 +334,7 @@ class Chat(Object):
         reactions_limit: Optional[int] = None,
         gifts_count: Optional[int] = None,
         bot_verification: Optional["types.BotVerification"] = None,
-        raw: Union["raw.base.Chat", "raw.base.User", "raw.base.ChatFull", "raw.base.UserFull"] = None
+        raw: Union["raw.base.Chat", "raw.base.User", "raw.base.ChatFull", "raw.base.UserFull", None] = None
     ):
         super().__init__(client)
 
@@ -852,8 +852,8 @@ class Chat(Object):
     async def set_photo(
         self,
         *,
-        photo: Union[str, BinaryIO] = None,
-        video: Union[str, BinaryIO] = None,
+        photo: Union[str, BinaryIO, None] = None,
+        video: Union[str, BinaryIO, None] = None,
         video_start_ts: Optional[float] = None,
     ) -> bool:
         """Bound method *set_photo* of :obj:`~pyrogram.types.Chat`.

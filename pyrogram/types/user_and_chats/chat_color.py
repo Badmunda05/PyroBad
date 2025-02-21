@@ -37,7 +37,7 @@ class ChatColor(Object):
     def __init__(
         self,
         *,
-        color: Union["enums.ReplyColor", "enums.ProfileColor"] = None,
+        color: Union["enums.ReplyColor", "enums.ProfileColor", None] = None,
         background_emoji_id: Optional[int] = None
     ):
         self.color = color

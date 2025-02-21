@@ -111,7 +111,7 @@ class Invoice(Object):
         max_tip_amount: Optional[int] = None,
         suggested_tip_amounts: Optional[List[int]] = None,
         terms_url: Optional[str] = None,
-        raw: Union["raw.types.MessageMediaInvoice", "raw.types.Invoice"] = None
+        raw: Union["raw.types.MessageMediaInvoice", "raw.types.Invoice", None] = None
     ):
         super().__init__(client)
 

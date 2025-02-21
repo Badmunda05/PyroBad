@@ -249,7 +249,7 @@ class User(Object, Update):
         can_join_groups: Optional[bool] = None,
         can_read_all_group_messages: Optional[bool] = None,
         has_main_web_app: Optional[bool] = None,
-        raw: Union["raw.base.User", "raw.base.UserStatus"] = None
+        raw: Union["raw.base.User", "raw.base.UserStatus", None] = None
     ):
         super().__init__(client)
 

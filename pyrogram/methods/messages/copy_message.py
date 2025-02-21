@@ -38,7 +38,7 @@ class CopyMessage:
         disable_notification: Optional[bool] = None,
         message_thread_id: Optional[int] = None,
         reply_to_message_id: Optional[int] = None,
-        reply_to_chat_id: Union[int, str] = None,
+        reply_to_chat_id: Union[int, str, None] = None,
         schedule_date: Optional[datetime] = None,
         protect_content: Optional[bool] = None,
         has_spoiler: Optional[bool] = None,

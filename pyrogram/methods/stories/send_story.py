@@ -34,7 +34,7 @@ class SendStory:
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        thumb: Union[str, BinaryIO] = None,
+        thumb: Union[str, BinaryIO, None] = None,
         supports_streaming: bool = True,
         file_name: Optional[str] = None,
         privacy: Optional["enums.StoriesPrivacyRules"] = None,

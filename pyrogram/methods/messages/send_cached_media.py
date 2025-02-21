@@ -35,7 +35,7 @@ class SendCachedMedia:
         disable_notification: Optional[bool] = None,
         message_thread_id: Optional[int] = None,
         reply_to_message_id: Optional[int] = None,
-        reply_to_chat_id: Union[int, str] = None,
+        reply_to_chat_id: Union[int, str, None] = None,
         reply_to_story_id: Optional[int] = None,
         quote_text: Optional[str] = None,
         quote_offset: Optional[int] = None,

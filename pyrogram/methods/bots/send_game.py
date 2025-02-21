@@ -33,7 +33,7 @@ class SendGame:
         message_thread_id: Optional[int] = None,
         effect_id: Optional[int] = None,
         reply_to_message_id: Optional[int] = None,
-        reply_to_chat_id: Union[int, str] = None,
+        reply_to_chat_id: Union[int, str, None] = None,
         protect_content: Optional[bool] = None,
         allow_paid_broadcast: Optional[bool] = None,
         reply_markup: Union[

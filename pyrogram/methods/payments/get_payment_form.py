@@ -26,7 +26,7 @@ from pyrogram import raw, types
 class GetPaymentForm:
     async def get_payment_form(
         self: "pyrogram.Client", *,
-        chat_id: Union[int, str] = None,
+        chat_id: Union[int, str, None] = None,
         message_id: Optional[int] = None,
         invoice_link: Optional[str] = None
     ) -> "types.PaymentForm":

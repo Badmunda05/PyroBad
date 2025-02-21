@@ -34,7 +34,7 @@ class RPCError(Exception):
 
     def __init__(
         self,
-        value: Union[int, str, raw.types.RpcError] = None,
+        value: Union[int, str, raw.types.RpcError, None] = None,
         rpc_name: Optional[str] = None,
         is_unknown: bool = False,
         is_signed: bool = False
