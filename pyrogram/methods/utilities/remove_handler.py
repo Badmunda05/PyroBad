@@ -26,7 +26,7 @@ class RemoveHandler:
         self: "pyrogram.Client",
         handler: "Handler",
         group: int = 0
-    ):
+    ) -> None:
         """Remove a previously-registered update handler.
 
         Make sure to provide the right group where the handler was added in. You can use the return value of the

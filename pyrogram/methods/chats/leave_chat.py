@@ -27,7 +27,7 @@ class LeaveChat:
         self: "pyrogram.Client",
         chat_id: Union[int, str],
         delete: bool = False
-    ):
+    ) -> "raw.base.Updates":
         """Leave a group chat or channel.
 
         .. include:: /_includes/usable-by/users-bots.rst

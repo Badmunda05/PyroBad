@@ -22,7 +22,7 @@ import pyrogram
 class Disconnect:
     async def disconnect(
         self: "pyrogram.Client",
-    ):
+    ) -> None:
         """Disconnect the client from Telegram servers.
 
         Raises:

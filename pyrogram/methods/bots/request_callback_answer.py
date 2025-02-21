@@ -30,7 +30,7 @@ class RequestCallbackAnswer:
         callback_data: Union[str, bytes],
         password: Optional[str] = None,
         timeout: int = 10
-    ):
+    ) -> "raw.base.messages.BotCallbackAnswer":
         """Request a callback answer from bots.
         This is the equivalent of clicking an inline button containing callback data.
 

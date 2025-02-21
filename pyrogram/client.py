@@ -32,7 +32,7 @@ from importlib import import_module
 from io import StringIO, BytesIO
 from mimetypes import MimeTypes
 from pathlib import Path
-from typing import Union, List, Optional, Callable, AsyncGenerator, Type, Tuple, Optional
+from typing import Any, Union, List, Optional, Callable, AsyncGenerator, Type, Tuple, Optional
 
 
 import pyrogram
@@ -346,7 +346,7 @@ class Client(Methods):
 
         self.takeout_id = None
 
-        self.disconnect_handler = None
+        self.disconnect_handler: Union[Callable[["Client"], Any], None] = None
 
         self.me: Optional[User] = None
 
