@@ -16,12 +16,15 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Optional
 
+import pyrogram
+from pyrogram.filters import Filter
+from pyrogram.types import ChosenInlineResult
 from .handler import Handler
 
 
-class ChosenInlineResultHandler(Handler):
+class ChosenInlineResultHandler(Handler[Callable[["pyrogram.Client", ChosenInlineResult], Any]]):
     """The ChosenInlineResultHandler handler class. Used to handle chosen inline results coming from inline queries.
     It is intended to be used with :meth:`~pyrogram.Client.add_handler`
 
@@ -46,5 +49,9 @@ class ChosenInlineResultHandler(Handler):
             The received chosen inline result.
     """
 
-    def __init__(self, callback: Callable, filters=None):
+    def __init__(
+        self,
+        callback: Callable[["pyrogram.Client", ChosenInlineResult], Any],
+        filters: Optional[Filter] = None
+    ):
         super().__init__(callback, filters)

@@ -16,12 +16,15 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Optional
 
+import pyrogram
+from pyrogram.filters import Filter
+from pyrogram.types import ChatMemberUpdated
 from .handler import Handler
 
 
-class ChatMemberUpdatedHandler(Handler):
+class ChatMemberUpdatedHandler(Handler[Callable[["pyrogram.Client", ChatMemberUpdated], Any]]):
     """The ChatMemberUpdated handler class. Used to handle changes in the status of a chat member.
     It is intended to be used with :meth:`~pyrogram.Client.add_handler`.
 
@@ -45,5 +48,9 @@ class ChatMemberUpdatedHandler(Handler):
             The received chat member update.
     """
 
-    def __init__(self, callback: Callable, filters=None):
+    def __init__(
+        self,
+        callback: Callable[["pyrogram.Client", ChatMemberUpdated], Any],
+        filters: Optional[Filter] = None
+    ):
         super().__init__(callback, filters)

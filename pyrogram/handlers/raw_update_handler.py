@@ -16,12 +16,17 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Dict, Optional
 
+import pyrogram
+from pyrogram.filters import Filter
+from pyrogram.raw.base import Update, User, Chat
 from .handler import Handler
 
 
-class RawUpdateHandler(Handler):
+class RawUpdateHandler(Handler[Callable[
+    ["pyrogram.Client", Update, Dict[int, User], Dict[int, Chat]], Any
+]]):
     """The Raw Update handler class. Used to handle raw updates. It is intended to be used with
     :meth:`~pyrogram.Client.add_handler`
 
@@ -47,12 +52,12 @@ class RawUpdateHandler(Handler):
             :obj:`~pyrogram.raw.base.Update` base type.
 
         users (``dict``):
-            Dictionary of all :obj:`~pyrogram.types.User` mentioned in the update.
+            Dictionary of all :obj:`~pyrogram.raw.types.User` mentioned in the update.
             You can access extra info about the user (such as *first_name*, *last_name*, etc...) by using
             the IDs you find in the *update* argument (e.g.: *users[1768841572]*).
 
         chats (``dict``):
-            Dictionary of all :obj:`~pyrogram.types.Chat` and
+            Dictionary of all :obj:`~pyrogram.raw.types.Chat` and
             :obj:`~pyrogram.raw.types.Channel` mentioned in the update.
             You can access extra info about the chat (such as *title*, *participants_count*, etc...)
             by using the IDs you find in the *update* argument (e.g.: *chats[1701277281]*).
@@ -68,5 +73,11 @@ class RawUpdateHandler(Handler):
         - :obj:`~pyrogram.raw.types.ChannelForbidden`
     """
 
-    def __init__(self, callback: Callable, filters=None):
+    def __init__(
+        self,
+        callback: Callable[
+            ["pyrogram.Client", Update, Dict[int, User], Dict[int, Chat]], Any
+        ],
+        filters: Optional[Filter] = None
+    ):
         super().__init__(callback, filters)

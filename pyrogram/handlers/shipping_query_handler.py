@@ -16,12 +16,15 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Optional
 
+import pyrogram
+from pyrogram.filters import Filter
+from pyrogram.types import ShippingQuery
 from .handler import Handler
 
 
-class ShippingQueryHandler(Handler):
+class ShippingQueryHandler(Handler[Callable[["pyrogram.Client", ShippingQuery], Any]]):
     """The ShippingQueryHandler handler class. Used to handle shipping queries coming only from invoice buttons with flexible price.
 
     It is intended to be used with :meth:`~pyrogram.Client.add_handler`
@@ -46,5 +49,9 @@ class ShippingQueryHandler(Handler):
             New incoming shipping query. Only for invoices with flexible price.
     """
 
-    def __init__(self, callback: Callable, filters=None):
+    def __init__(
+        self,
+        callback: Callable[["pyrogram.Client", ShippingQuery], Any],
+        filters: Optional[Filter] = None
+    ):
         super().__init__(callback, filters)

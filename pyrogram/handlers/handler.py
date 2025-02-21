@@ -17,15 +17,21 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import inspect
-from typing import Callable, Optional
+from typing import Callable, Generic, Optional, TypeVar
 
 import pyrogram
 from pyrogram.filters import Filter
 from pyrogram.types import Update
 
+T = TypeVar("T", bound=Callable)
 
-class Handler:
-    def __init__(self, callback: Callable, filters: Optional[Filter] = None):
+
+class Handler(Generic[T]):
+    def __init__(
+        self,
+        callback: T,
+        filters: Optional[Filter] = None
+    ):
         self.callback = callback
         self.filters = filters
 

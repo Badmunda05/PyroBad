@@ -16,18 +16,22 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Optional, Union
 
 import pyrogram
 from pyrogram.filters import Filter
+from pyrogram.types import PurchasedPaidMedia
 
 
 class OnPurchasedPaidMedia:
     def on_purchased_paid_media(
-        self=None,
-        filters=None,
+        self: Union["OnPurchasedPaidMedia", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0
-    ) -> Callable:
+    ) -> Callable[
+        [Callable[["pyrogram.Client", PurchasedPaidMedia], Any]],
+        Callable[["pyrogram.Client", PurchasedPaidMedia], Any]
+    ]:
         """Decorator for handling purchased paid media.
 
         This does the same thing as :meth:`~pyrogram.Client.add_handler` using the
@@ -43,7 +47,9 @@ class OnPurchasedPaidMedia:
                 The group identifier, defaults to 0.
         """
 
-        def decorator(func: Callable) -> Callable:
+        def decorator(
+            func: Callable[["pyrogram.Client", PurchasedPaidMedia], Any]
+        ) -> Callable[["pyrogram.Client", PurchasedPaidMedia], Any]:
             if isinstance(self, pyrogram.Client):
                 self.add_handler(pyrogram.handlers.PurchasedPaidMediaHandler(func, filters), group)
             elif isinstance(self, Filter) or self is None:
