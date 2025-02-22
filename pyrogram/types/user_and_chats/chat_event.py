@@ -280,7 +280,7 @@ class ChatEvent(Object):
         event: "raw.base.ChannelAdminLogEvent",
         users: List["raw.base.User"],
         chats: List["raw.base.Chat"]
-    ):
+    ) -> "ChatEvent":
         users = {i.id: i for i in users}
         chats = {i.id: i for i in chats}
 

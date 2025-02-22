@@ -78,6 +78,6 @@ class RawUpdateHandler(Handler[Callable[
         callback: Callable[
             ["pyrogram.Client", Update, Dict[int, User], Dict[int, Chat]], Any
         ],
-        filters: Optional[Filter] = None
+        filters: Optional[Filter[Update]] = None
     ) -> None:
         super().__init__(callback, filters)

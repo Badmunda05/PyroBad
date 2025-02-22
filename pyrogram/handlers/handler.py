@@ -17,11 +17,12 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import inspect
-from typing import Callable, Generic, Optional, TypeVar
+from typing import Callable, Generic, Optional, TypeVar, Union
 
 import pyrogram
 from pyrogram.filters import Filter
 from pyrogram.types import Update
+from pyrogram.raw.base import Update as RawUpdate
 
 T = TypeVar("T", bound=Callable)
 
@@ -35,7 +36,7 @@ class Handler(Generic[T]):
         self.callback = callback
         self.filters = filters
 
-    async def check(self, client: "pyrogram.Client", update: Update):
+    async def check(self, client: "pyrogram.Client", update: Union[Update, RawUpdate]) -> bool:
         if callable(self.filters):
             if inspect.iscoroutinefunction(self.filters.__call__):
                 return await self.filters(client, update)

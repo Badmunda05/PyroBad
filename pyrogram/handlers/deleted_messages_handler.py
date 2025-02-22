@@ -51,7 +51,7 @@ class DeletedMessagesHandler(Handler[Callable[["pyrogram.Client", List[Message]]
     def __init__(
         self,
         callback: Callable[["pyrogram.Client", List[Message]], Any],
-        filters: Optional[Filter] = None
+        filters: Optional[Filter[Message]] = None
     ) -> None:
         super().__init__(callback, filters)
 

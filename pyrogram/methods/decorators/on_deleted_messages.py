@@ -25,8 +25,8 @@ from pyrogram.types import Message
 
 class OnDeletedMessages:
     def on_deleted_messages(
-        self: Union["OnDeletedMessages", Filter, None] = None,
-        filters: Optional[Filter] = None,
+        self: Union["OnDeletedMessages", Filter[Message], None] = None,
+        filters: Optional[Filter[Message]] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", List[Message]], Any]],

@@ -60,7 +60,7 @@ class Restart:
                 app.run(main())
         """
 
-        async def do_it():
+        async def do_it() -> None:
             await self.stop()
             await self.start()
 

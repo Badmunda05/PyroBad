@@ -103,7 +103,7 @@ class MessageEntity(Object):
             client=client
         )
 
-    async def write(self):
+    async def write(self) -> raw.base.MessageEntity:
         args = self.__dict__.copy()
 
         for arg in ("_client", "type", "user"):

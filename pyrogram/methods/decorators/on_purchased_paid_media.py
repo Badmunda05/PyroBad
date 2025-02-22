@@ -25,8 +25,8 @@ from pyrogram.types import PurchasedPaidMedia
 
 class OnPurchasedPaidMedia:
     def on_purchased_paid_media(
-        self: Union["OnPurchasedPaidMedia", Filter, None] = None,
-        filters: Optional[Filter] = None,
+        self: Union["OnPurchasedPaidMedia", Filter[PurchasedPaidMedia], None] = None,
+        filters: Optional[Filter[PurchasedPaidMedia]] = None,
         group: int = 0
     ) -> Callable[
         [Callable[["pyrogram.Client", PurchasedPaidMedia], Any]],

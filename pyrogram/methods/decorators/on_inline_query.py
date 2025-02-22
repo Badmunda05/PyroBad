@@ -25,8 +25,8 @@ from pyrogram.types import InlineQuery
 
 class OnInlineQuery:
     def on_inline_query(
-        self: Union["OnInlineQuery", Filter, None] = None,
-        filters: Optional[Filter] = None,
+        self: Union["OnInlineQuery", Filter[InlineQuery], None] = None,
+        filters: Optional[Filter[InlineQuery]] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", InlineQuery], Any]],

@@ -52,6 +52,6 @@ class PollHandler(Handler[Callable[["pyrogram.Client", Poll], Any]]):
     def __init__(
         self,
         callback: Callable[["pyrogram.Client", Poll], Any],
-        filters: Optional[Filter] = None
+        filters: Optional[Filter[Poll]] = None
     ) -> None:
         super().__init__(callback, filters)

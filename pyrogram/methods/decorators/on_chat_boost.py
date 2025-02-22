@@ -20,17 +20,17 @@ from typing import Any, Callable, Optional, Union
 
 import pyrogram
 from pyrogram.filters import Filter
-from pyrogram.types import ChatBoost
+from pyrogram.types import ChatBoostUpdated
 
 
 class OnChatBoost:
     def on_chat_boost(
-        self: Union["OnChatBoost", Filter, None] = None,
-        filters: Optional[Filter] = None,
+        self: Union["OnChatBoost", Filter[ChatBoostUpdated], None] = None,
+        filters: Optional[Filter[ChatBoostUpdated]] = None,
         group: int = 0,
     ) -> Callable[
-        [Callable[["pyrogram.Client", ChatBoost], Any]],
-        Callable[["pyrogram.Client", ChatBoost], Any]
+        [Callable[["pyrogram.Client", ChatBoostUpdated], Any]],
+        Callable[["pyrogram.Client", ChatBoostUpdated], Any]
     ]:
         """Decorator for handling applied chat boosts.
 
@@ -50,8 +50,8 @@ class OnChatBoost:
         """
 
         def decorator(
-            func: Callable[["pyrogram.Client", ChatBoost], Any]
-        ) -> Callable[["pyrogram.Client", ChatBoost], Any]:
+            func: Callable[["pyrogram.Client", ChatBoostUpdated], Any]
+        ) -> Callable[["pyrogram.Client", ChatBoostUpdated], Any]:
             if isinstance(self, pyrogram.Client):
                 self.add_handler(pyrogram.handlers.ChatBoostHandler(func, filters), group)
             elif isinstance(self, Filter) or self is None:

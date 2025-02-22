@@ -25,8 +25,8 @@ from pyrogram.types import CallbackQuery
 
 class OnCallbackQuery:
     def on_callback_query(
-        self: Union["OnCallbackQuery", Filter, None] = None,
-        filters: Optional[Filter] = None,
+        self: Union["OnCallbackQuery", Filter[CallbackQuery], None] = None,
+        filters: Optional[Filter[CallbackQuery]] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", CallbackQuery], Any]],

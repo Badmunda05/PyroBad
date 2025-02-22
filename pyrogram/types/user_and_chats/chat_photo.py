@@ -77,7 +77,7 @@ class ChatPhoto(Object):
         chat_photo: Union["raw.types.UserProfilePhoto", "raw.types.ChatPhoto"],
         peer_id: int,
         peer_access_hash: int
-    ):
+    ) -> Optional["ChatPhoto"]:
         if not isinstance(chat_photo, (raw.types.UserProfilePhoto, raw.types.ChatPhoto)):
             return None
 

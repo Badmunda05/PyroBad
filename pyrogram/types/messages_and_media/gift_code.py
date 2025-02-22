@@ -18,6 +18,7 @@
 
 from typing import Optional, List
 
+import pyrogram
 from pyrogram import raw, types, utils
 from ..object import Object
 
@@ -94,7 +95,9 @@ class GiftCode(Object):
         self.cryptocurrency_amount = cryptocurrency_amount
 
     @staticmethod
-    def _parse(client, giftcode: "raw.types.MessageActionGiftCode", users, chats):
+    def _parse(
+        client: "pyrogram.Client", giftcode: "raw.types.MessageActionGiftCode", users, chats
+    ) -> "GiftCode":
         peer = chats.get(utils.get_raw_peer_id(getattr(giftcode, "boost_peer")))
 
         message, entities = (utils.parse_text_with_entities(client, getattr(giftcode, "message", None), users)).values()

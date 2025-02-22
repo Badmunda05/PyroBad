@@ -26,7 +26,7 @@ from pyrogram.raw.base import Update, User, Chat
 class OnRawUpdate:
     def on_raw_update(
         self: Optional["OnRawUpdate"] = None,
-        filters: Optional[Filter] = None,
+        filters: Optional[Filter[Update]] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[

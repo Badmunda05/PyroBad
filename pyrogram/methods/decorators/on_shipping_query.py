@@ -25,8 +25,8 @@ from pyrogram.types import ShippingQuery
 
 class OnShippingQuery:
     def on_shipping_query(
-        self: Union["OnShippingQuery", Filter, None] = None,
-        filters: Optional[Filter] = None,
+        self: Union["OnShippingQuery", Filter[ShippingQuery], None] = None,
+        filters: Optional[Filter[ShippingQuery]] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", ShippingQuery], Any]],

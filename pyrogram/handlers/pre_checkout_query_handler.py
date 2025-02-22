@@ -51,6 +51,6 @@ class PreCheckoutQueryHandler(Handler[Callable[["pyrogram.Client", PreCheckoutQu
     def __init__(
         self,
         callback: Callable[["pyrogram.Client", PreCheckoutQuery], Any],
-        filters: Optional[Filter] = None
+        filters: Optional[Filter[PreCheckoutQuery]] = None
     ) -> None:
         super().__init__(callback, filters)

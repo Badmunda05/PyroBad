@@ -552,7 +552,7 @@ class Chat(Object):
         return Chat._parse_channel_chat(client, chats[chat_id])
 
     @staticmethod
-    def _parse_dialog(client, peer, users: dict, chats: dict):
+    def _parse_dialog(client, peer, users: dict, chats: dict) -> Optional["Chat"]:
         if isinstance(peer, (raw.types.PeerUser, raw.types.InputPeerUser)):
             return Chat._parse_user_chat(client, users[peer.user_id])
         elif isinstance(peer, (raw.types.PeerChat, raw.types.InputPeerChat)):
@@ -729,7 +729,7 @@ class Chat(Object):
     def full_name(self) -> str:
         return " ".join(filter(None, [self.first_name, self.last_name])) or self.title or None
 
-    async def archive(self):
+    async def archive(self) -> bool:
         """Bound method *archive* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -752,7 +752,7 @@ class Chat(Object):
 
         return await self._client.archive_chats(self.id)
 
-    async def unarchive(self):
+    async def unarchive(self) -> bool:
         """Bound method *unarchive* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -1120,7 +1120,7 @@ class Chat(Object):
             privileges=privileges
         )
 
-    async def join(self):
+    async def join(self) -> "Chat":
         """Bound method *join* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -1147,7 +1147,7 @@ class Chat(Object):
 
         return await self._client.join_chat(self.username or self.id)
 
-    async def leave(self):
+    async def leave(self) -> raw.base.Updates:
         """Bound method *leave* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -1167,7 +1167,7 @@ class Chat(Object):
 
         return await self._client.leave_chat(self.id)
 
-    async def export_invite_link(self):
+    async def export_invite_link(self) -> types.ChatInviteLink:
         """Bound method *export_invite_link* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:

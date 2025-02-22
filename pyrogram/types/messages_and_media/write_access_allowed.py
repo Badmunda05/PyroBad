@@ -50,7 +50,7 @@ class WriteAccessAllowed(Object):
         self.from_attachment_menu = from_attachment_menu
 
     @staticmethod
-    def _parse(action: "raw.types.MessageActionBotAllowed"):
+    def _parse(action: "raw.types.MessageActionBotAllowed") -> "WriteAccessAllowed":
         return WriteAccessAllowed(
             from_request=action.from_request if action.from_request else None,
             web_app_name=action.app.short_name if action.app is not None else None,

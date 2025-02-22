@@ -64,7 +64,7 @@ class Venue(Object):
         self.foursquare_type = foursquare_type
 
     @staticmethod
-    def _parse(client, venue: "raw.types.MessageMediaVenue"):
+    def _parse(client: "pyrogram.Client", venue: "raw.types.MessageMediaVenue") -> "Venue":
         return Venue(
             location=types.Location._parse(client, venue.geo),
             title=venue.title,

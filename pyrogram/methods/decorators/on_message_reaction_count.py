@@ -25,8 +25,8 @@ from pyrogram.types import MessageReactionCountUpdated
 
 class OnMessageReactionCount:
     def on_message_reaction_count(
-        self: Union["OnMessageReactionCount", Filter, None] = None,
-        filters: Optional[Filter] = None,
+        self: Union["OnMessageReactionCount", Filter[MessageReactionCountUpdated], None] = None,
+        filters: Optional[Filter[MessageReactionCountUpdated]] = None,
         group: int = 0
     ) -> Callable[
         [Callable[["pyrogram.Client", MessageReactionCountUpdated], Any]],

@@ -18,7 +18,7 @@
 
 import html
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 import pyrogram
 from pyrogram import enums, utils
@@ -32,7 +32,7 @@ class Link(str):
     HTML = "<a href={url}>{text}</a>"
     MARKDOWN = "[{text}]({url})"
 
-    def __init__(self, url: str, text: str, style: enums.ParseMode) -> None:
+    def __init__(self, url: str, text: str, style: Optional[enums.ParseMode]) -> None:
         super().__init__()
 
         self.url = url
@@ -40,7 +40,7 @@ class Link(str):
         self.style = style
 
     @staticmethod
-    def format(url: str, text: str, style: enums.ParseMode):
+    def format(url: str, text: str, style: Optional[enums.ParseMode]) -> str:
         if style == enums.ParseMode.MARKDOWN:
             fmt = Link.MARKDOWN
         else:
@@ -52,7 +52,9 @@ class Link(str):
     def __new__(cls, url, text, style):
         return str.__new__(cls, Link.format(url, text, style))
 
-    def __call__(self, other: Optional[str] = None, *, style: Optional[str] = None):
+    def __call__(
+        self, other: Optional[str] = None, *, style: Optional[enums.ParseMode] = None
+    ) -> str:
         return Link.format(self.url, other or self.text, style or self.style)
 
     def __str__(self):
@@ -297,11 +299,11 @@ class User(Object, Update):
         self.raw = raw
 
     @property
-    def full_name(self) -> str:
+    def full_name(self) -> Optional[str]:
         return " ".join(filter(None, [self.first_name, self.last_name])) or None
 
     @property
-    def mention(self):
+    def mention(self) -> Link:
         return Link(
             f"tg://user?id={self.id}",
             self.first_name or "Deleted Account",
@@ -358,7 +360,9 @@ class User(Object, Update):
         )
 
     @staticmethod
-    def _parse_status(user_status: "raw.base.UserStatus", is_bot: bool = False):
+    def _parse_status(
+        user_status: "raw.base.UserStatus", is_bot: bool = False
+    ) -> Dict[str, Optional[datetime]]:
         if isinstance(user_status, raw.types.UserStatusOnline):
             status, date = enums.UserStatus.ONLINE, user_status.expires
         elif isinstance(user_status, raw.types.UserStatusOffline):
@@ -391,7 +395,7 @@ class User(Object, Update):
         }
 
     @staticmethod
-    def _parse_user_status(client, user_status: "raw.types.UpdateUserStatus"):
+    def _parse_user_status(client, user_status: "raw.types.UpdateUserStatus") -> "User":
         return User(
             id=user_status.user_id,
             **User._parse_status(user_status.status),
@@ -399,7 +403,7 @@ class User(Object, Update):
             client=client
         )
 
-    async def archive(self):
+    async def archive(self) -> bool:
         """Bound method *archive* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -422,7 +426,7 @@ class User(Object, Update):
 
         return await self._client.archive_chats(self.id)
 
-    async def unarchive(self):
+    async def unarchive(self) -> bool:
         """Bound method *unarchive* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -445,7 +449,7 @@ class User(Object, Update):
 
         return await self._client.unarchive_chats(self.id)
 
-    def block(self):
+    async def block(self) -> bool:
         """Bound method *block* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -466,9 +470,9 @@ class User(Object, Update):
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.block_user(self.id)
+        return await self._client.block_user(self.id)
 
-    def unblock(self):
+    async def unblock(self) -> bool:
         """Bound method *unblock* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -489,9 +493,9 @@ class User(Object, Update):
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.unblock_user(self.id)
+        return await self._client.unblock_user(self.id)
 
-    def get_common_chats(self):
+    async def get_common_chats(self) -> List["types.Chat"]:
         """Bound method *get_common_chats* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -512,4 +516,4 @@ class User(Object, Update):
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.get_common_chats(self.id)
+        return await self._client.get_common_chats(self.id)

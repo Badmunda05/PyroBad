@@ -581,7 +581,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         reactions: Optional[List["types.Reaction"]] = None,
         raw: Optional["raw.types.Message"] = None
@@ -1452,7 +1453,13 @@ class Message(Object, Update):
         protect_content: Optional[bool] = None,
         business_connection_id: Optional[str] = None,
         allow_paid_broadcast: Optional[bool] = None,
-        reply_markup=None
+        reply_markup: Union[
+            "types.InlineKeyboardMarkup",
+            "types.ReplyKeyboardMarkup",
+            "types.ReplyKeyboardRemove",
+            "types.ForceReply",
+            None
+        ] = None
     ) -> "Message":
         """Bound method *reply_text* of :obj:`~pyrogram.types.Message`.
 

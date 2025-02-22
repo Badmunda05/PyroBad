@@ -20,11 +20,11 @@ from typing import Any, Callable, Optional
 
 import pyrogram
 from pyrogram.filters import Filter
-from pyrogram.types import ChatBoost
+from pyrogram.types import ChatBoostUpdated
 from .handler import Handler
 
 
-class ChatBoostHandler(Handler[Callable[["pyrogram.Client", ChatBoost], Any]]):
+class ChatBoostHandler(Handler[Callable[["pyrogram.Client", ChatBoostUpdated], Any]]):
     """The ChatBoost handler class. Used to handle applied chat boosts.
     It is intended to be used with :meth:`~pyrogram.Client.add_handler`
 
@@ -50,7 +50,7 @@ class ChatBoostHandler(Handler[Callable[["pyrogram.Client", ChatBoost], Any]]):
 
     def __init__(
         self,
-        callback: Callable[["pyrogram.Client", ChatBoost], Any],
-        filters: Optional[Filter] = None
+        callback: Callable[["pyrogram.Client", ChatBoostUpdated], Any],
+        filters: Optional[Filter[ChatBoostUpdated]] = None
     ) -> None:
         super().__init__(callback, filters)

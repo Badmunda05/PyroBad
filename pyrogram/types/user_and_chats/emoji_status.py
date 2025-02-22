@@ -114,7 +114,7 @@ class EmojiStatus(Object):
 
         return None
 
-    def write(self):
+    def write(self) -> "raw.base.EmojiStatus":
         if self.gift_id:
             return raw.types.InputEmojiStatusCollectible(
                 collectible_id=self.gift_id,

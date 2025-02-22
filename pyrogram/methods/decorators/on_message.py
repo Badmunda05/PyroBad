@@ -25,8 +25,8 @@ from pyrogram.types import Message
 
 class OnMessage:
     def on_message(
-        self: Union["OnMessage", Filter, None] = None,
-        filters: Optional[Filter] = None,
+        self: Union["OnMessage", Filter[Message], None] = None,
+        filters: Optional[Filter[Message]] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", Message], Any]],

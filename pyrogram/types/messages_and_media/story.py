@@ -1597,7 +1597,7 @@ class Story(Object, Update):
             disallowed_users=disallowed_users
         )
 
-    async def delete(self):
+    async def delete(self) -> List[int]:
         """Bound method *delete* of :obj:`~pyrogram.types.Story`.
 
         Use as a shortcut for:
