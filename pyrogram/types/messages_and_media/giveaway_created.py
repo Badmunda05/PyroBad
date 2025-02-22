@@ -47,7 +47,7 @@ class GiveawayCreated(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         giveaway_launch: "raw.types.MessageActionGiveawayLaunch"
     ) -> "GiveawayCreated":
         if isinstance(giveaway_launch, raw.types.MessageActionGiveawayLaunch):

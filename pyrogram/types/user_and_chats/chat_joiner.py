@@ -64,7 +64,7 @@ class ChatJoiner(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         joiner: "raw.base.ChatInviteImporter",
         users: Dict[int, "raw.base.User"],
     ) -> "ChatJoiner":

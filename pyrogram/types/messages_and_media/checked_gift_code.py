@@ -17,8 +17,9 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict
 
+import pyrogram
 from pyrogram import raw, types, utils
 from ..object import Object
 
@@ -71,7 +72,12 @@ class CheckedGiftCode(Object):
         self.used_date = used_date
 
     @staticmethod
-    def _parse(client, checked_gift_code: "raw.types.payments.CheckedGiftCode", users, chats):
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        checked_gift_code: "raw.types.payments.CheckedGiftCode",
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
+    ):
         from_chat = None
         winner = None
 

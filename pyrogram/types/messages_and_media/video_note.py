@@ -87,7 +87,7 @@ class VideoNote(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         video_note: "raw.types.Document",
         video_attributes: "raw.types.DocumentAttributeVideo",
         ttl_seconds: Optional[int] = None

@@ -16,8 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Optional
+from typing import List, Optional, Dict
 
+import pyrogram
 from pyrogram import types, raw
 from ..object import Object
 
@@ -64,9 +65,9 @@ class BusinessRecipients(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         recipients: "raw.types.BusinessRecipients",
-        users: Optional[dict] = None
+        users: Optional[Dict[int, "raw.base.User"]] = None
     ) -> "BusinessRecipients":
         return BusinessRecipients(
             existing_chats=getattr(recipients, "existing_chats", None),

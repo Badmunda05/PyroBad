@@ -49,7 +49,9 @@ class FoundContacts(Object):
         self.global_results = global_results
 
     @staticmethod
-    def _parse(client, found: "raw.types.contacts.Found") -> "FoundContacts":
+    def _parse(
+        client: Optional["pyrogram.Client"], found: "raw.types.contacts.Found"
+    ) -> "FoundContacts":
         users = {u.id: u for u in found.users}
         chats = {c.id: c for c in found.chats}
 

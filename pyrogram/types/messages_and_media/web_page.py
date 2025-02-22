@@ -156,7 +156,7 @@ class WebPage(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         webpage: "raw.types.WebPage",
         prefer_large_media: Optional[bool] = None,
         prefer_small_media: Optional[bool] = None,

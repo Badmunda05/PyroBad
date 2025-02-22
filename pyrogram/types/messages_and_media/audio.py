@@ -92,7 +92,7 @@ class Audio(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         audio: "raw.types.Document",
         audio_attributes: "raw.types.DocumentAttributeAudio",
         file_name: str

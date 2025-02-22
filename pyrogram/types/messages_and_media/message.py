@@ -19,7 +19,7 @@
 import logging
 from datetime import datetime
 from functools import partial
-from typing import List, Match, Union, BinaryIO, Optional, Callable
+from typing import List, Match, Union, BinaryIO, Optional, Callable, Dict
 
 import pyrogram
 from pyrogram import raw, enums
@@ -31,6 +31,10 @@ from ..object import Object
 from ..update import Update
 
 log = logging.getLogger(__name__)
+
+
+class KeepReplyMarkup:
+    pass
 
 
 class Str(str):
@@ -708,16 +712,16 @@ class Message(Object, Update):
 
     @staticmethod
     async def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         message: "raw.base.Message",
-        users: dict,
-        chats: dict,
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"],
         topics: Optional[dict] = None,
         is_scheduled: bool = False,
         replies: int = 1,
         business_connection_id: Optional[str] = None,
         raw_reply_to_message: Optional["raw.base.Message"] = None
-    ):
+    ) -> "Message":
         if isinstance(message, raw.types.MessageEmpty):
             return Message(
                 id=message.id,
@@ -1602,7 +1606,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         message_thread_id: Optional[int] = None,
         effect_id: Optional[int] = None,
@@ -1795,7 +1800,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -1970,7 +1976,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "Message":
         """Bound method *reply_cached_media* of :obj:`~pyrogram.types.Message`.
@@ -2141,7 +2148,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "Message":
         """Bound method *reply_contact* of :obj:`~pyrogram.types.Message`.
@@ -2277,7 +2285,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -2458,7 +2467,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "Message":
         """Bound method *reply_game* of :obj:`~pyrogram.types.Message`.
@@ -2643,7 +2653,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "Message":
         """Bound method *reply_location* of :obj:`~pyrogram.types.Message`.
@@ -2873,7 +2884,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -3064,7 +3076,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "Message":
         """Bound method *reply_poll* of :obj:`~pyrogram.types.Message`.
@@ -3265,7 +3278,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -3429,7 +3443,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "Message":
         """Bound method *reply_venue* of :obj:`~pyrogram.types.Message`.
@@ -3582,7 +3597,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -3796,7 +3812,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -3971,7 +3988,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -4145,7 +4163,8 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "types.Message":
         """Bound method *reply_web_page* of :obj:`~pyrogram.types.Message`.
@@ -4572,8 +4591,10 @@ class Message(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
-        ] = object
+            "types.ForceReply",
+            None,
+            KeepReplyMarkup
+        ] = KeepReplyMarkup()
     ) -> Union["types.Message", List["types.Message"]]:
         """Bound method *copy* of :obj:`~pyrogram.types.Message`.
 
@@ -4685,7 +4706,7 @@ class Message(Object, Update):
                 protect_content=protect_content,
                 business_connection_id=business_connection_id,
                 allow_paid_broadcast=allow_paid_broadcast,
-                reply_markup=self.reply_markup if reply_markup is object else reply_markup
+                reply_markup=self.reply_markup if isinstance(reply_markup, KeepReplyMarkup) else reply_markup
             )
         elif self.media:
             send_media = partial(
@@ -4703,7 +4724,7 @@ class Message(Object, Update):
                 show_caption_above_media=self.show_caption_above_media if show_caption_above_media is None else show_caption_above_media,
                 business_connection_id=business_connection_id,
                 allow_paid_broadcast=allow_paid_broadcast,
-                reply_markup=self.reply_markup if reply_markup is object else reply_markup
+                reply_markup=self.reply_markup if isinstance(reply_markup, KeepReplyMarkup) else reply_markup
             )
 
             if self.photo:
@@ -4806,8 +4827,8 @@ class Message(Object, Update):
     async def copy_media_group(
         self,
         chat_id: Union[int, str],
-        captions: Union[List[str], str] = None,
-        has_spoilers: Union[List[bool], bool] = None,
+        captions: Optional[Union[List[str], str]] = None,
+        has_spoilers: Optional[Union[List[bool], bool]] = None,
         disable_notification: Optional[bool] = None,
         message_thread_id: Optional[int] = None,
         reply_to_message_id: Optional[int] = None,
@@ -4954,7 +4975,12 @@ class Message(Object, Update):
         timeout: int = 10,
         request_write_access: bool = True,
         password: Optional[str] = None
-    ):
+    ) -> Union[
+        "raw.base.messages.BotCallbackAnswer",
+        "Message",
+        str,
+        "types.Chat"
+    ]:
         """Bound method *click* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for clicking a button attached to the message instead of:
@@ -5131,7 +5157,11 @@ class Message(Object, Update):
         else:
             await self.reply(text=button, quote=quote)
 
-    async def react(self, emoji: Union[int, str, List[Union[int, str]]] = None, big: bool = False) -> bool:
+    async def react(
+        self,
+        emoji: Optional[Union[int, str, List[Union[int, str]]]] = None,
+        big: bool = False
+    ) -> bool:
         """Bound method *react* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:

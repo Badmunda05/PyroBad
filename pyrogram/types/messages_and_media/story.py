@@ -223,7 +223,7 @@ class Story(Object, Update):
 
     @staticmethod
     async def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         story: "raw.types.StoryItem",
         users: dict,
         chats: dict,
@@ -541,7 +541,8 @@ class Story(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -675,7 +676,8 @@ class Story(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -800,7 +802,8 @@ class Story(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> Optional["types.Message"]:
         """Bound method *reply_cached_media* of :obj:`~pyrogram.types.Story`.
@@ -925,7 +928,8 @@ class Story(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -1038,7 +1042,8 @@ class Story(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -1140,7 +1145,8 @@ class Story(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -1297,7 +1303,8 @@ class Story(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -1407,7 +1414,8 @@ class Story(Object, Update):
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()
@@ -1711,8 +1719,8 @@ class Story(Object, Update):
     async def edit_privacy(
         self,
         privacy: "enums.StoriesPrivacyRules" = enums.StoriesPrivacyRules.PUBLIC,
-        allowed_users: List[Union[int, str]] = None,
-        disallowed_users: List[Union[int, str]] = None,
+        allowed_users: Optional[List[Union[int, str]]] = None,
+        disallowed_users: Optional[List[Union[int, str]]] = None,
     ) -> "types.Story":
         """Bound method *edit_privacy* of :obj:`~pyrogram.types.Story`.
 

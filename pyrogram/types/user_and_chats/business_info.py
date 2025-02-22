@@ -16,8 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Optional, Dict
 
+import pyrogram
 from pyrogram import types, raw
 from ..object import Object
 
@@ -60,9 +61,9 @@ class BusinessInfo(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         user: Optional["raw.types.UserFull"] = None,
-        users: Optional[dict] = None
+        users: Optional[Dict[int, "raw.base.User"]] = None
     ) -> Optional["BusinessInfo"]:
         working_hours = getattr(user, "business_work_hours", None)
         location = getattr(user, "business_location", None)

@@ -107,7 +107,7 @@ class Video(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         video: "raw.types.Document",
         video_attributes: "raw.types.DocumentAttributeVideo",
         file_name: Optional[str] = None,

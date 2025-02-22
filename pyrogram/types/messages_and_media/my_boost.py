@@ -17,6 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
+from typing import Optional, Dict
 
 import pyrogram
 from pyrogram import raw, types, utils
@@ -62,7 +63,12 @@ class MyBoost(Object):
         self.cooldown_until_date = cooldown_until_date
 
     @staticmethod
-    def _parse(client: "pyrogram.Client", my_boost: "raw.types.MyBoost", users, chats) -> "MyBoost":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        my_boost: "raw.types.MyBoost",
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
+    ) -> "MyBoost":
         peer_id = utils.get_raw_peer_id(my_boost.peer)
 
         if isinstance(my_boost.peer, raw.types.PeerChannel):

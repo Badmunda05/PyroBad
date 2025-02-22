@@ -67,7 +67,7 @@ class GiveawayCompleted(Object):
 
     @staticmethod
     async def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         giveaway_results: "raw.types.MessageActionGiveawayResults",
         chat: Optional["types.Chat"] = None,
         message_id: Optional[int] = None

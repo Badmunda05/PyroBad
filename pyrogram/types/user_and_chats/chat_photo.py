@@ -73,7 +73,7 @@ class ChatPhoto(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         chat_photo: Union["raw.types.UserProfilePhoto", "raw.types.ChatPhoto"],
         peer_id: int,
         peer_access_hash: int

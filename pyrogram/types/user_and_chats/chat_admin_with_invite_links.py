@@ -52,9 +52,9 @@ class ChatAdminWithInviteLinks(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         admin: "raw.types.ChatAdminWithInvites",
-        users: Dict[int, "raw.types.User"] = None
+        users: Optional[Dict[int, "raw.base.User"]] = None
     ) -> "ChatAdminWithInviteLinks":
         return ChatAdminWithInviteLinks(
             admin=types.User._parse(client, users[admin.admin_id]),

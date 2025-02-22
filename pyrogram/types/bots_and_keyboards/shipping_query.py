@@ -59,7 +59,7 @@ class ShippingQuery(Object, Update):
 
     @staticmethod
     async def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         shipping_query: "raw.types.UpdateBotShippingQuery",
         users: dict
     ) -> "ShippingQuery":

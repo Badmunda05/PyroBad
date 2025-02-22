@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Dict
 
 import pyrogram
 from pyrogram import enums
@@ -117,7 +117,12 @@ class Folder(Object):
         self.has_my_invites = has_my_invites
 
     @staticmethod
-    def _parse(client, folder: "raw.types.DialogFilter", users, chats) -> "Folder":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        folder: "raw.types.DialogFilter",
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
+    ) -> "Folder":
         included_chats = []
         excluded_chats = []
         pinned_chats = []

@@ -53,7 +53,10 @@ class Location(Object):
         self.accuracy_radius = accuracy_radius
 
     @staticmethod
-    def _parse(client, geo_point: "raw.types.GeoPoint") -> "Location":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        geo_point: "raw.types.GeoPoint"
+    ) -> "Location":
         if isinstance(geo_point, raw.types.GeoPoint):
             return Location(
                 longitude=geo_point.long,

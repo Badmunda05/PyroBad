@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 import pyrogram
 from pyrogram import raw, utils
@@ -88,9 +88,9 @@ class Giveaway(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         giveaway: "raw.types.MessageMediaGiveaway",
-        chats: dict
+        chats: Dict[int, "raw.base.Chat"]
     ) -> "Giveaway":
         return Giveaway(
             chats=types.List(types.Chat._parse_channel_chat(client, chats.get(i)) for i in giveaway.channels),

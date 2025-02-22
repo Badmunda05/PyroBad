@@ -123,7 +123,10 @@ class Poll(Object, Update):
         self.voter = voter
 
     @staticmethod
-    def _parse(client, media_poll: Union["raw.types.MessageMediaPoll", "raw.types.UpdateMessagePoll"]) -> "Poll":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        media_poll: Union["raw.types.MessageMediaPoll", "raw.types.UpdateMessagePoll"]
+    ) -> "Poll":
         poll: raw.types.Poll = media_poll.poll
         poll_results: raw.types.PollResults = media_poll.results
         results: List[raw.types.PollAnswerVoters] = poll_results.results

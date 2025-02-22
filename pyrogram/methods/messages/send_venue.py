@@ -50,7 +50,8 @@ class SendVenue:
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "types.Message":
         """Send information about a venue.

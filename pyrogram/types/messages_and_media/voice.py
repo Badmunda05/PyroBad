@@ -80,7 +80,12 @@ class Voice(Object):
         self.ttl_seconds = ttl_seconds
 
     @staticmethod
-    def _parse(client, voice: "raw.types.Document", attributes: "raw.types.DocumentAttributeAudio", ttl_seconds: Optional[int] = None) -> "Voice":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        voice: "raw.types.Document",
+        attributes: "raw.types.DocumentAttributeAudio",
+        ttl_seconds: Optional[int] = None
+    ) -> "Voice":
         return Voice(
             file_id=FileId(
                 file_type=FileType.VOICE,

@@ -40,7 +40,8 @@ class SendGame:
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "types.Message":
         """Send a game.

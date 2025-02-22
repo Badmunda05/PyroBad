@@ -50,9 +50,9 @@ class ChatBoostUpdated(Object, Update):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         update: "raw.types.UpdateBotChatBoost",
-        users: Dict[int, "raw.types.User"],
+        users: Dict[int, "raw.base.User"],
         chats: Dict[int, "raw.types.Channel"],
     ) -> "ChatBoostUpdated":
         return ChatBoostUpdated(

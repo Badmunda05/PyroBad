@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict
 
 import pyrogram
 from pyrogram import types, raw, utils
@@ -117,7 +117,13 @@ class ForumTopic(Object):
         self.is_deleted = is_deleted
 
     @staticmethod
-    def _parse(client: "pyrogram.Client", forum_topic: "raw.types.ForumTopic", messages: dict = {},  users: dict = {}, chats: dict = {}) -> "ForumTopic":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        forum_topic: "raw.types.ForumTopic",
+        messages: Dict[int, "raw.base.Message"] = {},
+        users: Dict[int, "raw.base.User"] = {},
+        chats: Dict[int, "raw.base.Chat"] = {}
+    ) -> "ForumTopic":
         if not forum_topic:
             return None
 

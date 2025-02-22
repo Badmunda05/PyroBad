@@ -66,10 +66,10 @@ class ChatJoinRequest(Object, Update):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         update: "raw.types.UpdateBotChatInviteRequester",
-        users: Dict[int, "raw.types.User"],
-        chats: Dict[int, "raw.types.Chat"]
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
     ) -> "ChatJoinRequest":
         chat_id = utils.get_raw_peer_id(update.peer)
 

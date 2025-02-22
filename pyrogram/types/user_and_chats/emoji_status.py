@@ -89,7 +89,9 @@ class EmojiStatus(Object):
         self.text_color = text_color
 
     @staticmethod
-    def _parse(client, emoji_status: "raw.base.EmojiStatus") -> Optional["EmojiStatus"]:
+    def _parse(
+        client: Optional["pyrogram.Client"], emoji_status: "raw.base.EmojiStatus"
+    ) -> Optional["EmojiStatus"]:
         if isinstance(emoji_status, raw.types.EmojiStatus):
             return EmojiStatus(
                 client=client,

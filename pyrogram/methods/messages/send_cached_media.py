@@ -51,7 +51,8 @@ class SendCachedMedia:
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> Optional["types.Message"]:
         """Send any media stored on the Telegram servers using a file_id.

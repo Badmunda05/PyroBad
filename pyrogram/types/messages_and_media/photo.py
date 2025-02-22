@@ -81,7 +81,11 @@ class Photo(Object):
         self.thumbs = thumbs
 
     @staticmethod
-    def _parse(client, photo: "raw.types.Photo", ttl_seconds: Optional[int] = None) -> "Photo":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        photo: "raw.types.Photo",
+        ttl_seconds: Optional[int] = None
+    ) -> "Photo":
         if isinstance(photo, raw.types.Photo):
             photos: List[raw.types.PhotoSize] = []
 

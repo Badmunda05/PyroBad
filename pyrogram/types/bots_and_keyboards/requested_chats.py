@@ -49,7 +49,7 @@ class RequestedChats(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         action: Union[
             "raw.types.MessageActionRequestedPeer",
             "raw.types.MessageActionRequestedPeerSentMe"

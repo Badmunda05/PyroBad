@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 import pyrogram
 from pyrogram import raw, types, utils
@@ -96,7 +96,10 @@ class GiftCode(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client", giftcode: "raw.types.MessageActionGiftCode", users, chats
+        client: Optional["pyrogram.Client"],
+        giftcode: "raw.types.MessageActionGiftCode",
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
     ) -> "GiftCode":
         peer = chats.get(utils.get_raw_peer_id(getattr(giftcode, "boost_peer")))
 

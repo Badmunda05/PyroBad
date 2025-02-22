@@ -52,7 +52,8 @@ class SendWebPage:
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "types.Message":
         """Send Web Page Preview.

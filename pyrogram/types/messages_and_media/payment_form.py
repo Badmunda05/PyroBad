@@ -99,7 +99,10 @@ class PaymentForm(Object):
         self.raw = raw
 
     @staticmethod
-    def _parse(client, payment_form: "raw.base.payments.PaymentForm") -> "PaymentForm":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        payment_form: "raw.base.payments.PaymentForm"
+    ) -> "PaymentForm":
         users = {i.id: i for i in payment_form.users}
 
         return PaymentForm(

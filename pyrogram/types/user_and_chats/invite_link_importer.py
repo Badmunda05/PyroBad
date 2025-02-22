@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 import pyrogram
 from pyrogram import raw, utils
@@ -48,7 +48,7 @@ class InviteLinkImporter(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         invite_importers: "raw.types.messages.ChatInviteImporters"
     ) -> List["InviteLinkImporter"]:
         importers = types.List()

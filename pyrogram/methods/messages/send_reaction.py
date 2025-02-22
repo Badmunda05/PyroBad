@@ -27,7 +27,7 @@ class SendReaction:
         self: "pyrogram.Client",
         chat_id: Union[int, str],
         message_id: Optional[int] = None,
-        emoji: Union[int, str, List[Union[int, str]]] = None,
+        emoji: Optional[Union[int, str, List[Union[int, str]]]] = None,
         story_id: Optional[int] = None,
         big: bool = False
     ) -> bool:

@@ -38,8 +38,8 @@ class SendStory:
         supports_streaming: bool = True,
         file_name: Optional[str] = None,
         privacy: Optional["enums.StoriesPrivacyRules"] = None,
-        allowed_users: List[Union[int, str]] = None,
-        disallowed_users: List[Union[int, str]] = None,
+        allowed_users: Optional[List[Union[int, str]]] = None,
+        disallowed_users: Optional[List[Union[int, str]]] = None,
         pinned: Optional[bool] = None,
         protect_content: Optional[bool] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
@@ -47,7 +47,7 @@ class SendStory:
         progress: Optional[Callable] = None,
         progress_args: tuple = (),
         media_areas: Optional[List["types.MediaArea"]] = None
-    ) -> "types.Story":
+    ) -> Optional["types.Story"]:
         """Post new story.
 
         .. include:: /_includes/usable-by/users.rst
@@ -136,7 +136,8 @@ class SendStory:
                 List of media areas to add to the story.
 
         Returns:
-            :obj:`~pyrogram.types.Story` a single story is returned.
+            :obj:`~pyrogram.types.Story` | ``None``: On success, a single story is returned, otherwise, in
+            case the upload is deliberately stopped with :meth:`~pyrogram.Client.stop_transmission`, None is returned.
 
         Example:
             .. code-block:: python

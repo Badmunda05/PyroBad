@@ -18,6 +18,7 @@
 
 from typing import Optional
 
+import pyrogram
 from pyrogram import raw, types
 from ..object import Object
 
@@ -49,7 +50,7 @@ class BotVerification(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         verification: "raw.types.BotVerification",
         users
     ) -> Optional["BotVerification"]:

@@ -60,7 +60,8 @@ class SendAudio:
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
         progress: Optional[Callable] = None,
         progress_args: tuple = ()

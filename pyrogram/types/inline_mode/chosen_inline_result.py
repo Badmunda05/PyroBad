@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Optional, Dict
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
@@ -71,7 +71,11 @@ class ChosenInlineResult(Object, Update):
         self.inline_message_id = inline_message_id
 
     @staticmethod
-    def _parse(client, chosen_inline_result: raw.types.UpdateBotInlineSend, users) -> "ChosenInlineResult":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        chosen_inline_result: raw.types.UpdateBotInlineSend,
+        users: Dict[int, "raw.base.User"]
+    ) -> "ChosenInlineResult":
         return ChosenInlineResult(
             result_id=str(chosen_inline_result.id),
             from_user=types.User._parse(client, users[chosen_inline_result.user_id]),

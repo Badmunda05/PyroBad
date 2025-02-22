@@ -49,7 +49,7 @@ class Link(str):
         return fmt.format(url=url, text=html.escape(text))
 
     # noinspection PyArgumentList
-    def __new__(cls, url, text, style):
+    def __new__(cls, url, text, style) -> "Link":
         return str.__new__(cls, Link.format(url, text, style))
 
     def __call__(
@@ -57,7 +57,7 @@ class Link(str):
     ) -> str:
         return Link.format(self.url, other or self.text, style or self.style)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return Link.format(self.url, self.text, self.style)
 
 
@@ -311,7 +311,10 @@ class User(Object, Update):
         )
 
     @staticmethod
-    def _parse(client, user: "raw.base.User") -> Optional["User"]:
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        user: "raw.base.User"
+    ) -> Optional["User"]:
         if user is None or isinstance(user, raw.types.UserEmpty):
             return None
 

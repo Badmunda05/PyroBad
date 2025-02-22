@@ -36,8 +36,8 @@ class CopyStory:
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         period: Optional[int] = None,
         privacy: Optional["enums.StoriesPrivacyRules"] = None,
-        allowed_users: List[Union[int, str]] = None,
-        disallowed_users: List[Union[int, str]] = None,
+        allowed_users: Optional[List[Union[int, str]]] = None,
+        disallowed_users: Optional[List[Union[int, str]]] = None,
         protect_content: Optional[bool] = None
     ) -> "types.Story":
         """Copy story.

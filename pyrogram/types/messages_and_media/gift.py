@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Dict
 
 import pyrogram
 from pyrogram import raw, types, utils
@@ -231,7 +231,12 @@ class Gift(Object):
         self.raw = raw
 
     @staticmethod
-    async def _parse(client, gift, users={}, chats={}):
+    async def _parse(
+        client: Optional["pyrogram.Client"],
+        gift: "raw.base.StarGift",
+        users: Dict[int, "raw.base.User"] = {},
+        chats: Dict[int, "raw.base.Chat"] = {}
+    ):
         if isinstance(gift, raw.types.StarGift):
             return await Gift._parse_regular(client, gift)
         elif isinstance(gift, raw.types.StarGiftUnique):
@@ -241,7 +246,7 @@ class Gift(Object):
 
     @staticmethod
     async def _parse_regular(
-        client,
+        client: Optional["pyrogram.Client"],
         star_gift: "raw.types.StarGift",
     ) -> "Gift":
         doc = star_gift.sticker
@@ -266,10 +271,10 @@ class Gift(Object):
 
     @staticmethod
     async def _parse_unique(
-        client,
+        client: Optional["pyrogram.Client"],
         star_gift: "raw.types.StarGiftUnique",
-        users: dict = {},
-        chats: dict = {}
+        users: Dict[int, "raw.base.User"] = {},
+        chats: Dict[int, "raw.base.Chat"] = {}
     ) -> "Gift":
         owner_id = utils.get_raw_peer_id(getattr(star_gift, "owner_id", None))
 
@@ -294,10 +299,10 @@ class Gift(Object):
 
     @staticmethod
     async def _parse_saved(
-        client,
+        client: Optional["pyrogram.Client"],
         saved_gift: "raw.types.SavedStarGift",
-        users: dict = {},
-        chats: dict = {}
+        users: Dict[int, "raw.base.User"] = {},
+        chats: Dict[int, "raw.base.Chat"] = {}
     ) -> "Gift":
         caption, caption_entities = (
             utils.parse_text_with_entities(
@@ -328,10 +333,10 @@ class Gift(Object):
 
     @staticmethod
     async def _parse_action(
-        client,
+        client: Optional["pyrogram.Client"],
         message: "raw.base.Message",
-        users: dict = {},
-        chats: dict = {}
+        users: Dict[int, "raw.base.User"] = {},
+        chats: Dict[int, "raw.base.Chat"] = {}
     ) -> "Gift":
         action = message.action  # type: raw.types.MessageActionStarGift
 

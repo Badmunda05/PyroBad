@@ -113,7 +113,7 @@ class ChatMember(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         member: Union["raw.base.ChatParticipant", "raw.base.ChannelParticipant"],
         users: Dict[int, "raw.base.User"],
         chats: Dict[int, "raw.base.Chat"]

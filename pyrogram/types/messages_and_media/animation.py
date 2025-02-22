@@ -115,7 +115,7 @@ class Animation(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         animation: "raw.types.Document",
         video_attributes: "raw.types.DocumentAttributeVideo",
         file_name: str

@@ -16,6 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional, Dict
+
+import pyrogram
 from pyrogram import raw, types
 
 from ..object import Object
@@ -44,7 +47,11 @@ class PurchasedPaidMedia(Object, Update):
         self.payload = payload
 
     @staticmethod
-    def _parse(client, purchased_media: "raw.types.UpdateBotPurchasedPaidMedia", users) -> "PurchasedPaidMedia":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        purchased_media: "raw.types.UpdateBotPurchasedPaidMedia",
+        users: Dict[int, "raw.base.User"]
+    ) -> "PurchasedPaidMedia":
         return PurchasedPaidMedia(
             from_user=types.User._parse(client, users.get(purchased_media.user_id)),
             payload=purchased_media.payload

@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List, Match, Optional
+from typing import Union, List, Match, Optional, Dict
 
 import pyrogram
 from pyrogram import raw, enums, types
@@ -87,7 +87,16 @@ class CallbackQuery(Object, Update):
         self.matches = matches
 
     @staticmethod
-    async def _parse(client: "pyrogram.Client", callback_query, users, chats) -> "CallbackQuery":
+    async def _parse(
+        client: Optional["pyrogram.Client"],
+        callback_query: Union[
+            "raw.types.UpdateBotCallbackQuery",
+            "raw.types.UpdateInlineBotCallbackQuery",
+            "raw.types.UpdateBusinessBotCallbackQuery"
+        ],
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
+    ) -> "CallbackQuery":
         message = None
         inline_message_id = None
 

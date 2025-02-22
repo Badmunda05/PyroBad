@@ -43,7 +43,7 @@ class MessageReactions(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         message_reactions: Optional["raw.base.MessageReactions"] = None
     ) -> Optional["MessageReactions"]:
         if not message_reactions:

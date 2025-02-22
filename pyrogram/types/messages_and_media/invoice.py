@@ -136,7 +136,10 @@ class Invoice(Object):
         self.raw = raw
 
     @staticmethod
-    def _parse(client, invoice: Union["raw.types.MessageMediaInvoice", "raw.types.Invoice"]) -> "Invoice":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        invoice: Union["raw.types.MessageMediaInvoice", "raw.types.Invoice"]
+    ) -> "Invoice":
         return Invoice(
             currency=invoice.currency,
             is_test=invoice.test,

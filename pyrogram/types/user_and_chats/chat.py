@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, List, Optional, AsyncGenerator, BinaryIO
+from typing import Union, List, Optional, AsyncGenerator, BinaryIO, Dict
 
 import pyrogram
 from pyrogram import raw, enums
@@ -533,10 +533,10 @@ class Chat(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         message: Union[raw.types.Message, raw.types.MessageService],
-        users: dict,
-        chats: dict,
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"],
         is_chat: bool
     ) -> "Chat":
         from_id = utils.get_raw_peer_id(message.from_id)

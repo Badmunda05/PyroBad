@@ -51,7 +51,9 @@ class ChatReactions(Object):
         self.reactions = reactions
 
     @staticmethod
-    def _parse(client, chat_reactions: "raw.base.ChatReactions") -> Optional["ChatReactions"]:
+    def _parse(
+        client: Optional["pyrogram.Client"], chat_reactions: "raw.base.ChatReactions"
+    ) -> Optional["ChatReactions"]:
         if isinstance(chat_reactions, raw.types.ChatReactionsAll):
             return ChatReactions(
                 client=client,

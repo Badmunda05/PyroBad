@@ -17,6 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Optional
+import pyrogram
 from pyrogram import types, raw
 from ..object import Object
 
@@ -52,7 +53,7 @@ class BusinessIntro(Object):
 
     @staticmethod
     async def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         business_intro: "raw.types.BusinessIntro"
     ) -> "BusinessIntro":
         if not business_intro:

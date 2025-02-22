@@ -19,6 +19,7 @@
 from datetime import datetime
 from typing import Optional
 
+import pyrogram
 from pyrogram import types, raw, utils
 from ..object import Object
 
@@ -65,7 +66,7 @@ class BusinessConnection(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         connection: Optional["raw.types.BotBusinessConnection"] = None,
         users = {}
     ) -> Optional["BusinessConnection"]:

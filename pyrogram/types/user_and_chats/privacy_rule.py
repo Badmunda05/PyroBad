@@ -16,8 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Optional
+from typing import List, Optional, Dict
 
+import pyrogram
 from pyrogram import raw, types
 from ..object import Object
 
@@ -69,7 +70,12 @@ class PrivacyRule(Object):
         self.chats = chats
 
     @staticmethod
-    def _parse(client, rule: "raw.base.PrivacyRule", users, chats) -> "PrivacyRule":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        rule: "raw.base.PrivacyRule",
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
+    ) -> "PrivacyRule":
         parsed_users = None
         parsed_chats = None
 

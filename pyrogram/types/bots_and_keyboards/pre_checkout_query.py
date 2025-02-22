@@ -74,7 +74,7 @@ class PreCheckoutQuery(Object, Update):
 
     @staticmethod
     async def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         pre_checkout_query: "raw.types.UpdateBotPrecheckoutQuery",
         users: dict
     ) -> "PreCheckoutQuery":

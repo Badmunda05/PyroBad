@@ -114,7 +114,7 @@ class GroupCallMember(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         member: "raw.types.GroupCallParticipant",
         users: Dict[int, "raw.base.User"],
         chats: Dict[int, "raw.base.Chat"]

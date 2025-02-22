@@ -17,8 +17,9 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Optional, Union, List
+from typing import Optional, Union, List, Dict
 
+import pyrogram
 from pyrogram import types, enums, raw, utils
 from ..object import Object
 
@@ -81,9 +82,9 @@ class BusinessMessage(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         message: Union["raw.types.BusinessGreetingMessage", "raw.types.BusinessAwayMessage", None] = None,
-        users: Optional[dict] = None
+        users: Optional[Dict[int, "raw.base.User"]] = None
     ) -> Optional["BusinessMessage"]:
         if not message:
             return None
