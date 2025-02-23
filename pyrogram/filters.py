@@ -22,6 +22,7 @@ from typing import Callable, Union, List, Pattern, Optional
 
 import pyrogram
 from pyrogram import enums
+from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message, CallbackQuery, InlineQuery, PreCheckoutQuery, InlineKeyboardMarkup, ReplyKeyboardMarkup, Update
 
 
@@ -912,17 +913,17 @@ def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = "
 
     async def func(flt, client: pyrogram.Client, message: Message):
         username = client.me.username or ""
-        text = message.text or message.caption
-        message.command = None
+        _text = message.text or message.caption
 
-        if not text:
+        if not _text and not (
+                message.entities and message.entities[0].type == MessageEntityType.BOT_COMMAND or _text.startswith(
+                tuple(prefixes))):
             return False
 
-        for prefix in flt.prefixes:
-            if not text.startswith(prefix):
-                continue
+        message.command = None
 
-            without_prefix = text[len(prefix):]
+        for prefix in flt.prefixes:
+            without_prefix = _text[len(prefix):]
 
             for cmd in flt.commands:
                 if not re.match(rf"^(?:{cmd}(?:@?{username})?)(?:\s|$)", without_prefix,
