@@ -237,12 +237,6 @@ class Message(Object, Update):
         video (:obj:`~pyrogram.types.Video`, *optional*):
             Message is a video, information about the video.
 
-        video_cover (:obj:`~pyrogram.types.Photo`, *optional*):
-            Video cover.
-
-        video_start_timestamp (``int``, *optional*):
-            Video startpoint, in seconds.
-
         video_processing_pending (``bool``, *optional*):
             True, if the video is still processing.
 
@@ -527,8 +521,6 @@ class Message(Object, Update):
         invoice: "types.Invoice" = None,
         story: "types.Story" = None,
         video: "types.Video" = None,
-        video_cover: "types.Photo" = None,
-        video_start_timestamp: int = None,
         video_processing_pending: bool = None,
         alternative_videos: List["types.Video"] = None,
         voice: "types.Voice" = None,
@@ -653,8 +645,6 @@ class Message(Object, Update):
         self.invoice = invoice
         self.story = story
         self.video = video
-        self.video_cover = video_cover
-        self.video_start_timestamp = video_start_timestamp
         self.video_processing_pending = video_processing_pending
         self.alternative_videos = alternative_videos
         self.voice = voice
@@ -1071,8 +1061,6 @@ class Message(Object, Update):
             voice = None
             animation = None
             video = None
-            video_cover = None
-            video_start_timestamp = None
             alternative_videos = []
             video_note = None
             sticker = None
@@ -1142,9 +1130,7 @@ class Message(Object, Update):
                                 video_note = types.VideoNote._parse(client, doc, video_attributes, media.ttl_seconds)
                                 media_type = enums.MessageMediaType.VIDEO_NOTE
                             else:
-                                video = types.Video._parse(client, doc, video_attributes, file_name, media.ttl_seconds)
-                                video_cover = types.Photo._parse(client, media.video_cover)
-                                video_start_timestamp = media.video_timestamp
+                                video = types.Video._parse(client, doc, video_attributes, file_name, media.ttl_seconds, media.video_cover, media.video_timestamp)
                                 media_type = enums.MessageMediaType.VIDEO
                                 has_media_spoiler = media.spoiler
 
@@ -1283,8 +1269,6 @@ class Message(Object, Update):
                 invoice=invoice,
                 story=story,
                 video=video,
-                video_cover=video_cover,
-                video_start_timestamp=video_start_timestamp,
                 video_processing_pending=getattr(message, "video_processing_pending", None),
                 alternative_videos=types.List(alternative_videos) if alternative_videos else None,
                 video_note=video_note,
