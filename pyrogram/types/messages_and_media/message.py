@@ -2755,7 +2755,12 @@ class Message(Object, Update):
 
     async def reply_media_group(
         self,
-        media: List[Union["types.InputMediaPhoto", "types.InputMediaVideo"]],
+        media: List[Union[
+            "types.InputMediaPhoto",
+            "types.InputMediaVideo",
+            "types.InputMediaAudio",
+            "types.InputMediaDocument"
+        ]],
         quote: Optional[bool] = None,
         disable_notification: Optional[bool] = None,
         message_thread_id: Optional[int] = None,
