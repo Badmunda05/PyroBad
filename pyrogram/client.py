@@ -1241,7 +1241,7 @@ class Client(Methods):
     def guess_extension(self, mime_type: str) -> Optional[str]:
         return self.mimetypes.guess_extension(mime_type)
 
-Client.get_file()
+
 class Cache:
     def __init__(self, capacity: int) -> None:
         self.capacity = capacity

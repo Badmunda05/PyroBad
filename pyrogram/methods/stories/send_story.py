@@ -45,7 +45,7 @@ class SendStory:
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
         progress: Optional[Callable[[int, int], Any]] = None,
-        progress_args: Tuple[Any, ...] = ()
+        progress_args: Tuple[Any, ...] = (),
         media_areas: Optional[List["types.MediaArea"]] = None
     ) -> Optional["types.Story"]:
         """Post new story.
