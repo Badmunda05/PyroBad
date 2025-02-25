@@ -236,7 +236,7 @@ class Gift(Object):
         gift: "raw.base.StarGift",
         users: Dict[int, "raw.base.User"] = {},
         chats: Dict[int, "raw.base.Chat"] = {}
-    ):
+    ) -> "Gift":
         if isinstance(gift, raw.types.StarGift):
             return await Gift._parse_regular(client, gift)
         elif isinstance(gift, raw.types.StarGiftUnique):

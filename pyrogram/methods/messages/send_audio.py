@@ -19,7 +19,7 @@
 import os
 import re
 from datetime import datetime
-from typing import Union, BinaryIO, List, Optional, Callable
+from typing import Any, Tuple, Union, BinaryIO, List, Optional, Callable
 
 import pyrogram
 from pyrogram import StopTransmission, enums
@@ -63,8 +63,8 @@ class SendAudio:
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Send audio files.
 

@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from typing import BinaryIO, Callable, List, Union, Optional
+from typing import Any, Tuple, BinaryIO, Callable, List, Union, Optional
 
 import pyrogram
 from pyrogram import StopTransmission, enums, raw, types, utils
@@ -44,8 +44,8 @@ class SendStory:
         protect_content: Optional[bool] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = (),
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
         media_areas: Optional[List["types.MediaArea"]] = None
     ) -> Optional["types.Story"]:
         """Post new story.

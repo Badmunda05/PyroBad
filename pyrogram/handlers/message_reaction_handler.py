@@ -53,6 +53,6 @@ class MessageReactionHandler(Handler[Callable[["pyrogram.Client", MessageReactio
     def __init__(
         self,
         callback: Callable[["pyrogram.Client", MessageReactionUpdated], Any],
-        filters: Optional[Filter[MessageReactionUpdated]] = None
+        filters: Optional[Filter] = None
     ) -> None:
         super().__init__(callback, filters)

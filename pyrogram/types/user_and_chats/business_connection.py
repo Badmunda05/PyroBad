@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict
 
 import pyrogram
 from pyrogram import types, raw, utils
@@ -68,7 +68,7 @@ class BusinessConnection(Object):
     def _parse(
         client: Optional["pyrogram.Client"],
         connection: Optional["raw.types.BotBusinessConnection"] = None,
-        users = {}
+        users: Dict[int, "raw.base.User"] = {}
     ) -> Optional["BusinessConnection"]:
         if not connection:
             return None

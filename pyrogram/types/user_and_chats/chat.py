@@ -303,9 +303,9 @@ class Chat(Object):
         has_visible_history: Optional[bool] = None,
         has_aggressive_anti_spam_enabled: Optional[bool] = None,
         invite_link: Optional[str] = None,
-        pinned_message=None,
+        pinned_message: Optional["types.Message"] = None,
         sticker_set_name: Optional[str] = None,
-        custom_emoji_sticker_set_name = None,
+        custom_emoji_sticker_set_name: Optional[str] = None,
         can_set_sticker_set: Optional[bool] = None,
         can_send_paid_media: Optional[bool] = None,
         members: Optional[List["types.User"]] = None,
@@ -323,9 +323,9 @@ class Chat(Object):
         business_info: Optional["types.BusinessInfo"] = None,
         business_intro: Optional["types.BusinessIntro"] = None,
         birthday: Optional["types.Birthday"] = None,
-        message_auto_delete_time = None,
-        unrestrict_boost_count = None,
-        slow_mode_delay = None,
+        message_auto_delete_time: Optional[int] = None,
+        unrestrict_boost_count: Optional[int] = None,
+        slow_mode_delay: Optional[int] = None,
         slowmode_next_send_date: Optional[datetime] = None,
         join_by_request: Optional[bool] = None,
         join_requests_count: Optional[int] = None,
@@ -410,7 +410,9 @@ class Chat(Object):
         self.raw = raw
 
     @staticmethod
-    def _parse_user_chat(client, user: raw.types.User) -> Optional["Chat"]:
+    def _parse_user_chat(
+        client: Optional["pyrogram.Client"], user: raw.types.User
+    ) -> Optional["Chat"]:
         if user is None or isinstance(user, raw.types.UserEmpty):
             return None
 
@@ -441,7 +443,9 @@ class Chat(Object):
         )
 
     @staticmethod
-    def _parse_chat_chat(client, chat: raw.types.Chat) -> Optional["Chat"]:
+    def _parse_chat_chat(
+        client: Optional["pyrogram.Client"], chat: raw.types.Chat
+    ) -> Optional["Chat"]:
         if chat is None or isinstance(chat, raw.types.ChatEmpty):
             return None
 
@@ -479,7 +483,9 @@ class Chat(Object):
         )
 
     @staticmethod
-    def _parse_channel_chat(client, channel: raw.types.Channel) -> Optional["Chat"]:
+    def _parse_channel_chat(
+        client: Optional["pyrogram.Client"], channel: raw.types.Channel
+    ) -> Optional["Chat"]:
         if channel is None:
             return None
 
@@ -552,7 +558,12 @@ class Chat(Object):
         return Chat._parse_channel_chat(client, chats[chat_id])
 
     @staticmethod
-    def _parse_dialog(client, peer, users: dict, chats: dict) -> Optional["Chat"]:
+    def _parse_dialog(
+        client: Optional["pyrogram.Client"],
+        peer: "raw.base.Peer",
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
+    ) -> Optional["Chat"]:
         if isinstance(peer, (raw.types.PeerUser, raw.types.InputPeerUser)):
             return Chat._parse_user_chat(client, users[peer.user_id])
         elif isinstance(peer, (raw.types.PeerChat, raw.types.InputPeerChat)):
@@ -561,7 +572,10 @@ class Chat(Object):
             return Chat._parse_channel_chat(client, chats[peer.channel_id])
 
     @staticmethod
-    async def _parse_full(client, chat_full: Union[raw.types.messages.ChatFull, raw.types.users.UserFull]) -> "Chat":
+    async def _parse_full(
+        client: Optional["pyrogram.Client"],
+        chat_full: Union[raw.types.messages.ChatFull, raw.types.users.UserFull]
+    ) -> "Chat":
         users = {u.id: u for u in chat_full.users}
         chats = {c.id: c for c in chat_full.chats}
 
@@ -690,7 +704,10 @@ class Chat(Object):
         return parsed_chat
 
     @staticmethod
-    def _parse_chat(client, chat: Union[raw.types.Chat, raw.types.User, raw.types.Channel]) -> "Chat":
+    def _parse_chat(
+        client: Optional["pyrogram.Client"],
+        chat: Union[raw.types.Chat, raw.types.User, raw.types.Channel]
+    ) -> "Chat":
         if isinstance(chat, raw.types.Chat):
             return Chat._parse_chat_chat(client, chat)
         elif isinstance(chat, raw.types.User):
@@ -699,7 +716,9 @@ class Chat(Object):
             return Chat._parse_channel_chat(client, chat)
 
     @staticmethod
-    def _parse_preview(client, chat_invite: "raw.types.ChatInvite") -> "Chat":
+    def _parse_preview(
+        client: Optional["pyrogram.Client"], chat_invite: "raw.types.ChatInvite"
+    ) -> "Chat":
         return Chat(
             type=(
                 enums.ChatType.SUPERGROUP if getattr(chat_invite, "megagroup", None) else
@@ -1167,7 +1186,7 @@ class Chat(Object):
 
         return await self._client.leave_chat(self.id)
 
-    async def export_invite_link(self) -> types.ChatInviteLink:
+    async def export_invite_link(self) -> "types.ChatInviteLink":
         """Bound method *export_invite_link* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:

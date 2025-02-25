@@ -25,8 +25,8 @@ from pyrogram.types import PreCheckoutQuery
 
 class OnPreCheckoutQuery:
     def on_pre_checkout_query(
-        self: Union["OnPreCheckoutQuery", Filter[PreCheckoutQuery], None] = None,
-        filters: Optional[Filter[PreCheckoutQuery]] = None,
+        self: Union["OnPreCheckoutQuery", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", PreCheckoutQuery], Any]],

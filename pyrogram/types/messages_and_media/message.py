@@ -19,7 +19,7 @@
 import logging
 from datetime import datetime
 from functools import partial
-from typing import List, Match, Union, BinaryIO, Optional, Callable, Dict
+from typing import Any, Tuple, List, Match, Union, BinaryIO, Optional, Callable, Dict
 
 import pyrogram
 from pyrogram import raw, enums
@@ -1614,8 +1614,8 @@ class Message(Object, Update):
         reply_to_message_id: Optional[int] = None,
         quote_text: Optional[str] = None,
         quote_entities: Optional[List["types.MessageEntity"]] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> "Message":
         """Bound method *reply_animation* :obj:`~pyrogram.types.Message`.
 
@@ -1803,8 +1803,8 @@ class Message(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> "Message":
         """Bound method *reply_audio* of :obj:`~pyrogram.types.Message`.
 
@@ -2288,8 +2288,8 @@ class Message(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> "Message":
         """Bound method *reply_document* of :obj:`~pyrogram.types.Message`.
 
@@ -2887,8 +2887,8 @@ class Message(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> "Message":
         """Bound method *reply_photo* of :obj:`~pyrogram.types.Message`.
 
@@ -3281,8 +3281,8 @@ class Message(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> "Message":
         """Bound method *reply_sticker* of :obj:`~pyrogram.types.Message`.
 
@@ -3600,8 +3600,8 @@ class Message(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> "Message":
         """Bound method *reply_video* of :obj:`~pyrogram.types.Message`.
 
@@ -3815,8 +3815,8 @@ class Message(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> "Message":
         """Bound method *reply_video_note* of :obj:`~pyrogram.types.Message`.
 
@@ -3991,8 +3991,8 @@ class Message(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> "Message":
         """Bound method *reply_voice* of :obj:`~pyrogram.types.Message`.
 
@@ -5239,8 +5239,8 @@ class Message(Object, Update):
         file_name: str = "",
         in_memory: bool = False,
         block: bool = True,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> str:
         """Bound method *download* of :obj:`~pyrogram.types.Message`.
 

@@ -25,8 +25,8 @@ from pyrogram.types import ChatJoinRequest
 
 class OnChatJoinRequest:
     def on_chat_join_request(
-        self: Union["OnChatJoinRequest", Filter[ChatJoinRequest], None] = None,
-        filters: Optional[Filter[ChatJoinRequest]] = None,
+        self: Union["OnChatJoinRequest", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", ChatJoinRequest], Any]],

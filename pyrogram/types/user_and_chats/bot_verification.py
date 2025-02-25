@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Optional, Dict
 
 import pyrogram
 from pyrogram import raw, types
@@ -52,7 +52,7 @@ class BotVerification(Object):
     def _parse(
         client: Optional["pyrogram.Client"],
         verification: "raw.types.BotVerification",
-        users
+        users: Dict[int, "raw.base.User"]
     ) -> Optional["BotVerification"]:
         if not verification:
             return None

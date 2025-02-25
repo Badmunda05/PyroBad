@@ -19,7 +19,7 @@
 import os
 import re
 from datetime import datetime
-from typing import BinaryIO, Callable, List, Optional, Union
+from typing import Any, Tuple, BinaryIO, Callable, List, Optional, Union
 
 import pyrogram
 from pyrogram import StopTransmission, enums, raw, types, utils
@@ -67,8 +67,8 @@ class SendVideo:
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Send video files.
 

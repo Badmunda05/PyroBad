@@ -25,8 +25,8 @@ from pyrogram.types import Story
 
 class OnStory:
     def on_story(
-        self: Union["OnStory", Filter[Story], None] = None,
-        filters: Optional[Filter[Story]] = None,
+        self: Union["OnStory", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", Story], Any]],

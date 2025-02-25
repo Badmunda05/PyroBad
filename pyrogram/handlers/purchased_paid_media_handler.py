@@ -51,6 +51,6 @@ class PurchasedPaidMediaHandler(Handler[Callable[["pyrogram.Client", PurchasedPa
     def __init__(
         self,
         callback: Callable[["pyrogram.Client", PurchasedPaidMedia], Any],
-        filters: Optional[Filter[PurchasedPaidMedia]] = None
+        filters: Optional[Filter] = None
     ) -> None:
         super().__init__(callback, filters)

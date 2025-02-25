@@ -25,8 +25,8 @@ from pyrogram.types import MessageReactionUpdated
 
 class OnMessageReaction:
     def on_message_reaction(
-        self: Union["OnMessageReaction", Filter[MessageReactionUpdated], None] = None,
-        filters: Optional[Filter[MessageReactionUpdated]] = None,
+        self: Union["OnMessageReaction", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0
     ) -> Callable[
         [Callable[["pyrogram.Client", MessageReactionUpdated], Any]],

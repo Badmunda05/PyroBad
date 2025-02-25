@@ -25,8 +25,8 @@ from pyrogram.types import User
 
 class OnUserStatus:
     def on_user_status(
-        self: Union["OnUserStatus", Filter[User], None] = None,
-        filters: Optional[Filter[User]] = None,
+        self: Union["OnUserStatus", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", User], Any]],

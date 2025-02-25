@@ -25,8 +25,8 @@ from pyrogram.types import ChatBoostUpdated
 
 class OnChatBoost:
     def on_chat_boost(
-        self: Union["OnChatBoost", Filter[ChatBoostUpdated], None] = None,
-        filters: Optional[Filter[ChatBoostUpdated]] = None,
+        self: Union["OnChatBoost", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", ChatBoostUpdated], Any]],

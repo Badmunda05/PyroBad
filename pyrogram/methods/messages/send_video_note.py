@@ -18,7 +18,7 @@
 
 import os
 from datetime import datetime
-from typing import Union, BinaryIO, Optional, Callable, List
+from typing import Any, Tuple, Union, BinaryIO, Optional, Callable, List
 
 import pyrogram
 from pyrogram import StopTransmission
@@ -60,8 +60,8 @@ class SendVideoNote:
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Send video messages.
 

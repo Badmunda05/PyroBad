@@ -52,6 +52,6 @@ class ChosenInlineResultHandler(Handler[Callable[["pyrogram.Client", ChosenInlin
     def __init__(
         self,
         callback: Callable[["pyrogram.Client", ChosenInlineResult], Any],
-        filters: Optional[Filter[ChosenInlineResult]] = None
+        filters: Optional[Filter] = None
     ) -> None:
         super().__init__(callback, filters)

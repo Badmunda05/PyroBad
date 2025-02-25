@@ -77,7 +77,7 @@ class CheckedGiftCode(Object):
         checked_gift_code: "raw.types.payments.CheckedGiftCode",
         users: Dict[int, "raw.base.User"],
         chats: Dict[int, "raw.base.Chat"]
-    ):
+    ) -> "CheckedGiftCode":
         from_chat = None
         winner = None
 

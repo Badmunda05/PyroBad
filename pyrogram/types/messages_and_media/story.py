@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import BinaryIO, Callable, List, Optional, Union
+from typing import Any, Tuple, BinaryIO, Callable, List, Optional, Union
 
 import pyrogram
 from pyrogram import enums, raw, types, utils
@@ -454,7 +454,13 @@ class Story(Object, Update):
         disable_notification: Optional[bool] = None,
         schedule_date: Optional[datetime] = None,
         protect_content: Optional[bool] = None,
-        reply_markup=None
+        reply_markup: Union[
+            "types.InlineKeyboardMarkup",
+            "types.ReplyKeyboardMarkup",
+            "types.ReplyKeyboardRemove",
+            "types.ForceReply",
+            None
+        ] = None
     ) -> "types.Message":
         """Bound method *reply_text* of :obj:`~pyrogram.types.Story`.
 
@@ -544,8 +550,8 @@ class Story(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Bound method *reply_animation* :obj:`~pyrogram.types.Story`.
 
@@ -679,8 +685,8 @@ class Story(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Bound method *reply_audio* of :obj:`~pyrogram.types.Story`.
 
@@ -931,8 +937,8 @@ class Story(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Bound method *reply_photo* of :obj:`~pyrogram.types.Story`.
 
@@ -1045,8 +1051,8 @@ class Story(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Bound method *reply_sticker* of :obj:`~pyrogram.types.Story`.
 
@@ -1148,8 +1154,8 @@ class Story(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Bound method *reply_video* of :obj:`~pyrogram.types.Story`.
 
@@ -1306,8 +1312,8 @@ class Story(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Bound method *reply_video_note* of :obj:`~pyrogram.types.Story`.
 
@@ -1417,8 +1423,8 @@ class Story(Object, Update):
             "types.ForceReply",
             None
         ] = None,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Bound method *reply_voice* of :obj:`~pyrogram.types.Story`.
 
@@ -1863,8 +1869,8 @@ class Story(Object, Update):
         file_name: str = "",
         in_memory: bool = False,
         block: bool = True,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional[Union[str, BinaryIO]]:
         """Bound method *download* of :obj:`~pyrogram.types.Story`.
 

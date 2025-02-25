@@ -25,7 +25,7 @@ import math
 import os
 from hashlib import md5
 from pathlib import PurePath
-from typing import Union, BinaryIO, Callable, Optional
+from typing import Any, Tuple, Union, BinaryIO, Callable, Optional
 
 import pyrogram
 from pyrogram import StopTransmission
@@ -41,8 +41,8 @@ class SaveFile:
         path: Union[str, BinaryIO],
         file_id: Optional[int] = None,
         file_part: int = 0,
-        progress: Optional[Callable] = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ):
         """Upload a file onto Telegram servers, without actually sending the message to anyone.
         Useful whenever an InputFile type is required.

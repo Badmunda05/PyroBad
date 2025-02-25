@@ -25,8 +25,8 @@ from pyrogram.types import Poll
 
 class OnPoll:
     def on_poll(
-        self: Union["OnPoll", Filter[Poll], None] = None,
-        filters: Optional[Filter[Poll]] = None,
+        self: Union["OnPoll", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", Poll], Any]],

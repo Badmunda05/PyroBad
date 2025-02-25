@@ -25,8 +25,8 @@ from pyrogram.types import ChosenInlineResult
 
 class OnChosenInlineResult:
     def on_chosen_inline_result(
-        self: Union["OnChosenInlineResult", Filter[ChosenInlineResult], None] = None,
-        filters: Optional[Filter[ChosenInlineResult]] = None,
+        self: Union["OnChosenInlineResult", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0,
     ) -> Callable[
         [Callable[["pyrogram.Client", ChosenInlineResult], Any]],

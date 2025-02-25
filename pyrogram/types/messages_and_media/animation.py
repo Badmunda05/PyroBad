@@ -145,7 +145,7 @@ class Animation(Object):
 
     @staticmethod
     def _parse_chat_animation(
-        client,
+        client: Optional["pyrogram.Client"],
         video: "raw.types.Photo",
         file_name: str
     ) -> Optional["Animation"]:

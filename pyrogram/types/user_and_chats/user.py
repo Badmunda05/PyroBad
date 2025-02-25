@@ -49,7 +49,7 @@ class Link(str):
         return fmt.format(url=url, text=html.escape(text))
 
     # noinspection PyArgumentList
-    def __new__(cls, url, text, style) -> "Link":
+    def __new__(cls, url: str, text: str, style: Optional[enums.ParseMode]) -> "Link":
         return str.__new__(cls, Link.format(url, text, style))
 
     def __call__(
@@ -398,7 +398,9 @@ class User(Object, Update):
         }
 
     @staticmethod
-    def _parse_user_status(client, user_status: "raw.types.UpdateUserStatus") -> "User":
+    def _parse_user_status(
+        client: Optional["pyrogram.Client"], user_status: "raw.types.UpdateUserStatus"
+    ) -> "User":
         return User(
             id=user_status.user_id,
             **User._parse_status(user_status.status),
