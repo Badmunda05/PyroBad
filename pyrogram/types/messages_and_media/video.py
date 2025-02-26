@@ -112,6 +112,8 @@ class Video(Object):
         self.ttl_seconds = ttl_seconds
         self.date = date
         self.thumbs = thumbs
+        self.video_cover = video_cover
+        self.video_start_timestamp = video_start_timestamp
 
     @staticmethod
     def _parse(
@@ -121,7 +123,7 @@ class Video(Object):
         file_name: Optional[str] = None,
         ttl_seconds: Optional[int] = None,
         video_cover: Optional["raw.base.Photo"] = None,
-        video_start_timestamp: Optional[int] = None,
+        video_start_timestamp: Optional[int] = None
     ) -> "Video":
         return Video(
             file_id=FileId(

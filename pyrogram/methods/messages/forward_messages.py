@@ -115,8 +115,8 @@ class ForwardMessages:
                 drop_media_captions=hide_captions,
                 noforwards=protect_content,
                 allow_paid_floodskip=allow_paid_broadcast,
-                video_start_timestamp=video_start_timestamp,
-                top_msg_id=message_thread_id
+                top_msg_id=message_thread_id,
+                video_timestamp=video_start_timestamp
             )
         )
 
