@@ -69,6 +69,12 @@ class Video(Object):
 
         thumbs (List of :obj:`~pyrogram.types.Thumbnail`, *optional*):
             Video thumbnails.
+
+        video_cover (:obj:`~pyrogram.types.Photo`, *optional*):
+            Video cover.
+
+        video_start_timestamp (``int``, *optional*):
+            Video startpoint, in seconds.
     """
 
     def __init__(
@@ -87,7 +93,9 @@ class Video(Object):
         supports_streaming: Optional[bool] = None,
         ttl_seconds: Optional[int] = None,
         date: Optional[datetime] = None,
-        thumbs: Optional[List["types.Thumbnail"]] = None
+        thumbs: Optional[List["types.Thumbnail"]] = None,
+        video_cover: Optional["types.Photo"] = None,
+        video_start_timestamp: Optional[int] = None,
     ) -> None:
         super().__init__(client)
 
@@ -111,7 +119,9 @@ class Video(Object):
         video: "raw.types.Document",
         video_attributes: "raw.types.DocumentAttributeVideo",
         file_name: Optional[str] = None,
-        ttl_seconds: Optional[int] = None
+        ttl_seconds: Optional[int] = None,
+        video_cover: Optional["raw.base.Photo"] = None,
+        video_start_timestamp: Optional[int] = None,
     ) -> "Video":
         return Video(
             file_id=FileId(
@@ -136,5 +146,7 @@ class Video(Object):
             date=utils.timestamp_to_datetime(video.date),
             ttl_seconds=ttl_seconds,
             thumbs=types.Thumbnail._parse(client, video),
+            video_cover=types.Photo._parse(client, video_cover),
+            video_start_timestamp=video_start_timestamp,
             client=client
         )

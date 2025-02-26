@@ -1135,7 +1135,7 @@ class Message(Object, Update):
                                 video_note = types.VideoNote._parse(client, doc, video_attributes, media.ttl_seconds)
                                 media_type = enums.MessageMediaType.VIDEO_NOTE
                             else:
-                                video = types.Video._parse(client, doc, video_attributes, file_name, media.ttl_seconds)
+                                video = types.Video._parse(client, doc, video_attributes, file_name, media.ttl_seconds, media.video_cover, media.video_timestamp)
                                 media_type = enums.MessageMediaType.VIDEO
                                 has_media_spoiler = media.spoiler
 
@@ -4508,7 +4508,8 @@ class Message(Object, Update):
         hide_sender_name: Optional[bool] = None,
         hide_captions: Optional[bool] = None,
         schedule_date: Optional[datetime] = None,
-        allow_paid_broadcast: Optional[bool] = None
+        allow_paid_broadcast: Optional[bool] = None,
+        video_start_timestamp: Optional[int] = None
     ) -> Union["types.Message", List["types.Message"]]:
         """Bound method *forward* of :obj:`~pyrogram.types.Message`.
 
@@ -4556,6 +4557,9 @@ class Message(Object, Update):
                 The relevant Stars will be withdrawn from the bot's balance.
                 For bots only.
 
+            video_start_timestamp (``int``, *optional*):
+                Video startpoint, in seconds.
+
         Returns:
             On success, the forwarded Message is returned.
 
@@ -4571,7 +4575,8 @@ class Message(Object, Update):
             schedule_date=schedule_date,
             hide_sender_name=hide_sender_name,
             hide_captions=hide_captions,
-            allow_paid_broadcast=allow_paid_broadcast
+            allow_paid_broadcast=allow_paid_broadcast,
+            video_start_timestamp=video_start_timestamp
         )
 
     async def copy(
