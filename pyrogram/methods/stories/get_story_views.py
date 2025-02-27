@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List
+from typing import List, Optional
 
 import pyrogram
 from pyrogram import raw, types
@@ -25,16 +25,16 @@ class GetStoryViews:
     async def get_story_views(
         self: "pyrogram.Client",
         story_id: int,
-        limit: int = 100,
+        limit: int = 0,
         contacts_only: bool = None,
         reactions_first: bool = None,
         query: str = None
-    ) -> Union["types.User", List["types.User"], None]:
+    ) -> Optional[List["types.User"]]:
         """Get story views
 
         Parameters:
             story_id (``int``):
-                Pass a single story identifier to get the story views.
+                Pass a story identifier to get the story views.
 
             limit (``int``, *optional*):
                 Maximum number of views to return.
@@ -49,7 +49,7 @@ class GetStoryViews:
                 Search for specific users.
         
         Returns:
-            :obj:`~pyrogram.types.User` | List of :obj:`~pyrogram.types.User`.
+            :obj: List of :obj:`~pyrogram.types.User`.
         
         Example:
             .. code-block:: python
@@ -79,4 +79,4 @@ class GetStoryViews:
         for i in r.users:
             users.append(types.User._parse(self, i))
         
-        return users if len(users) != 1 else users[0]
+        return users
