@@ -426,6 +426,7 @@ def pyrogram_api():
             get_pinned_stories
             get_archived_stories
             get_stories
+            get_story_views
             hide_chat_stories
             show_chat_stories
             view_stories
