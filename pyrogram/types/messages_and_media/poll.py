@@ -85,15 +85,15 @@ class Poll(Object, Update):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         id: str,
         question: str,
         options: List["types.PollOption"],
         total_voter_count: int,
         is_closed: bool,
-        is_anonymous: bool = None,
-        type: "enums.PollType" = None,
-        allows_multiple_answers: bool = None,
+        is_anonymous: Optional[bool] = None,
+        type: Optional["enums.PollType"] = None,
+        allows_multiple_answers: Optional[bool] = None,
         chosen_option_id: Optional[int] = None,
         correct_option_id: Optional[int] = None,
         question_entities: Optional[List["types.MessageEntity"]] = None,
@@ -102,7 +102,7 @@ class Poll(Object, Update):
         open_period: Optional[int] = None,
         close_date: Optional[datetime] = None,
         voter: Optional["types.User"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id
@@ -123,7 +123,10 @@ class Poll(Object, Update):
         self.voter = voter
 
     @staticmethod
-    def _parse(client, media_poll: Union["raw.types.MessageMediaPoll", "raw.types.UpdateMessagePoll"]) -> "Poll":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        media_poll: Union["raw.types.MessageMediaPoll", "raw.types.UpdateMessagePoll"]
+    ) -> "Poll":
         poll: raw.types.Poll = media_poll.poll
         poll_results: raw.types.PollResults = media_poll.results
         results: List[raw.types.PollAnswerVoters] = poll_results.results

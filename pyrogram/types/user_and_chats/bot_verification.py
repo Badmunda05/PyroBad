@@ -16,8 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Optional, Dict
 
+import pyrogram
 from pyrogram import raw, types
 from ..object import Object
 
@@ -42,16 +43,16 @@ class BotVerification(Object):
         bot: int,
         custom_emoji_id: int,
         description: str
-    ):
+    ) -> None:
         self.bot = bot
         self.custom_emoji_id = custom_emoji_id
         self.description = description
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         verification: "raw.types.BotVerification",
-        users
+        users: Dict[int, "raw.base.User"]
     ) -> Optional["BotVerification"]:
         if not verification:
             return None

@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from typing import Union, Optional, AsyncGenerator
+from typing import Union, Optional, AsyncGenerator, List
 
 import pyrogram
 from pyrogram import raw, types, enums
@@ -32,7 +32,7 @@ async def get_chunk(
     filter: "enums.ChatMembersFilter",
     limit: int,
     query: str,
-):
+) -> List["types.ChatMember"]:
     is_queryable = filter in [enums.ChatMembersFilter.SEARCH,
                               enums.ChatMembersFilter.BANNED,
                               enums.ChatMembersFilter.RESTRICTED]

@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List
+from typing import List, Optional, Dict
 
 import pyrogram
 from pyrogram import raw, utils
@@ -63,17 +63,17 @@ class Giveaway(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
-        chats: List["types.Chat"] = None,
-        quantity: int = None,
-        months: int = None,
-        until_date: datetime = None,
-        description: str = None,
-        only_new_subscribers: bool = None,
-        only_for_countries: List[str] = None,
-        winners_are_visible: bool = None,
-        stars: int = None
-    ):
+        client: Optional["pyrogram.Client"] = None,
+        chats: Optional[List["types.Chat"]] = None,
+        quantity: Optional[int] = None,
+        months: Optional[int] = None,
+        until_date: Optional[datetime] = None,
+        description: Optional[str] = None,
+        only_new_subscribers: Optional[bool] = None,
+        only_for_countries: Optional[List[str]] = None,
+        winners_are_visible: Optional[bool] = None,
+        stars: Optional[int] = None
+    ) -> None:
         super().__init__(client)
 
         self.chats = chats
@@ -88,9 +88,9 @@ class Giveaway(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         giveaway: "raw.types.MessageMediaGiveaway",
-        chats: dict
+        chats: Dict[int, "raw.base.Chat"]
     ) -> "Giveaway":
         return Giveaway(
             chats=types.List(types.Chat._parse_channel_chat(client, chats.get(i)) for i in giveaway.channels),

@@ -20,7 +20,7 @@ from datetime import datetime
 import io
 import os
 import re
-from typing import Union
+from typing import Union, Optional
 
 import pyrogram
 from pyrogram import raw
@@ -35,10 +35,10 @@ class EditMessageMedia:
         chat_id: Union[int, str],
         message_id: int,
         media: "types.InputMedia",
-        show_caption_above_media: bool = None,
-        schedule_date: datetime = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None,
-        file_name: str = None
+        show_caption_above_media: Optional[bool] = None,
+        schedule_date: Optional[datetime] = None,
+        reply_markup: Optional["types.InlineKeyboardMarkup"] = None,
+        file_name: Optional[str] = None
     ) -> "types.Message":
         """Edit animation, audio, document, photo or video messages, or to add media to text messages.
 

@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Union
+from typing import List, Union, Optional
 
 import pyrogram
 from pyrogram import enums
@@ -38,10 +38,10 @@ class RequestedChats(Object):
 
     def __init__(
         self, *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         button_id: int,
         chats: List["types.Chat"],
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.button_id = button_id
@@ -49,7 +49,7 @@ class RequestedChats(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         action: Union[
             "raw.types.MessageActionRequestedPeer",
             "raw.types.MessageActionRequestedPeerSentMe"

@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 import pyrogram
 from pyrogram import raw
 from ..object import Object
@@ -32,14 +33,16 @@ class Dice(Object):
             Value of the dice, 1-6 for currently supported base emoji.
     """
 
-    def __init__(self, *, client: "pyrogram.Client" = None, emoji: str, value: int):
+    def __init__(self, *, client: Optional["pyrogram.Client"] = None, emoji: str, value: int) -> None:
         super().__init__(client)
 
         self.emoji = emoji
         self.value = value
 
     @staticmethod
-    def _parse(client, dice: "raw.types.MessageMediaDice") -> "Dice":
+    def _parse(
+        client: Optional["pyrogram.Client"], dice: "raw.types.MessageMediaDice"
+    ) -> "Dice":
         return Dice(
             emoji=dice.emoticon,
             value=dice.value,

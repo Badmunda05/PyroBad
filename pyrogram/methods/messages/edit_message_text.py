@@ -32,11 +32,11 @@ class EditMessageText:
         message_id: int,
         text: str,
         parse_mode: Optional["enums.ParseMode"] = None,
-        entities: List["types.MessageEntity"] = None,
-        disable_web_page_preview: bool = None,
-        show_caption_above_media: bool = None,
-        schedule_date: datetime = None,
-        reply_markup: "types.InlineKeyboardMarkup" = None
+        entities: Optional[List["types.MessageEntity"]] = None,
+        disable_web_page_preview: Optional[bool] = None,
+        show_caption_above_media: Optional[bool] = None,
+        schedule_date: Optional[datetime] = None,
+        reply_markup: Optional["types.InlineKeyboardMarkup"] = None
     ) -> "types.Message":
         """Edit the text of messages.
 

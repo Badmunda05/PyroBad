@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 from pyrogram import raw
 from ..object import Object
 
@@ -38,10 +39,10 @@ class WriteAccessAllowed(Object):
     def __init__(
         self,
         *,
-        from_request: bool = None,
-        web_app_name: str = None,
-        from_attachment_menu: bool = None,
-    ):
+        from_request: Optional[bool] = None,
+        web_app_name: Optional[str] = None,
+        from_attachment_menu: Optional[bool] = None,
+    ) -> None:
         super().__init__()
 
         self.from_request = from_request
@@ -49,7 +50,7 @@ class WriteAccessAllowed(Object):
         self.from_attachment_menu = from_attachment_menu
 
     @staticmethod
-    def _parse(action: "raw.types.MessageActionBotAllowed"):
+    def _parse(action: "raw.types.MessageActionBotAllowed") -> "WriteAccessAllowed":
         return WriteAccessAllowed(
             from_request=action.from_request if action.from_request else None,
             web_app_name=action.app.short_name if action.app is not None else None,

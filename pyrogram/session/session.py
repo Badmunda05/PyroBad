@@ -40,7 +40,7 @@ log = logging.getLogger(__name__)
 
 
 class Result:
-    def __init__(self):
+    def __init__(self) -> None:
         self.value = None
         self.event = asyncio.Event()
 
@@ -68,7 +68,7 @@ class Session:
         test_mode: bool,
         is_media: bool = False,
         is_cdn: bool = False
-    ):
+    ) -> None:
         self.client = client
         self.dc_id = dc_id
         self.auth_key = auth_key

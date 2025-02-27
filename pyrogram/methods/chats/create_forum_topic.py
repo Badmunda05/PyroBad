@@ -19,7 +19,7 @@
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
-from typing import Union
+from typing import Union, Optional
 
 
 class CreateForumTopic:
@@ -27,8 +27,8 @@ class CreateForumTopic:
         self: "pyrogram.Client",
         chat_id: Union[int, str],
         title: str,
-        icon_color: int = None,
-        icon_emoji_id: int = None
+        icon_color: Optional[int] = None,
+        icon_emoji_id: Optional[int] = None
     ) -> "types.ForumTopicCreated":
         """Create a new forum topic.
 

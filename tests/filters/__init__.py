@@ -16,8 +16,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 class Client:
-    def __init__(self):
+    def __init__(self) -> None:
         self.me = User("username")
 
     async def get_me(self):
@@ -25,12 +27,12 @@ class Client:
 
 
 class User:
-    def __init__(self, username: str = None):
+    def __init__(self, username: Optional[str] = None) -> None:
         self.username = username
 
 
 class Message:
-    def __init__(self, text: str = None, caption: str = None):
+    def __init__(self, text: Optional[str] = None, caption: Optional[str] = None) -> None:
         self.text = text
         self.caption = caption
         self.command = None

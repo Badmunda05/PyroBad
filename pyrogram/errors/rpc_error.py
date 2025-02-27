@@ -19,7 +19,7 @@
 import re
 from datetime import datetime
 from importlib import import_module
-from typing import Type, Union
+from typing import Type, Union, Optional
 
 from pyrogram import raw
 from pyrogram.raw.core import TLObject
@@ -34,11 +34,11 @@ class RPCError(Exception):
 
     def __init__(
         self,
-        value: Union[int, str, raw.types.RpcError] = None,
-        rpc_name: str = None,
+        value: Union[int, str, raw.types.RpcError, None] = None,
+        rpc_name: Optional[str] = None,
         is_unknown: bool = False,
         is_signed: bool = False
-    ):
+    ) -> None:
         super().__init__("Telegram says: [{}{} {}] - {} {}".format(
             "-" if is_signed else "",
             self.CODE,

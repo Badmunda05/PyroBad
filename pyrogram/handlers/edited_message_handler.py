@@ -16,12 +16,15 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Optional
 
+import pyrogram
+from pyrogram.filters import Filter
+from pyrogram.types import Message
 from .handler import Handler
 
 
-class EditedMessageHandler(Handler):
+class EditedMessageHandler(Handler[Callable[["pyrogram.Client", Message], Any]]):
     """The EditedMessage handler class. Used to handle edited messages.
      It is intended to be used with :meth:`~pyrogram.Client.add_handler`
 
@@ -45,5 +48,9 @@ class EditedMessageHandler(Handler):
             The received edited message.
     """
 
-    def __init__(self, callback: Callable, filters=None):
+    def __init__(
+        self,
+        callback: Callable[["pyrogram.Client", Message], Any],
+        filters: Optional[Filter] = None
+    ) -> None:
         super().__init__(callback, filters)

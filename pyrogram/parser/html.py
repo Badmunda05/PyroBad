@@ -34,7 +34,7 @@ log = logging.getLogger(__name__)
 class Parser(HTMLParser):
     MENTION_RE = re.compile(r"tg://user\?id=(\d+)")
 
-    def __init__(self, client: "pyrogram.Client"):
+    def __init__(self, client: "pyrogram.Client") -> None:
         super().__init__()
 
         self.client = client
@@ -114,7 +114,7 @@ class Parser(HTMLParser):
 
 
 class HTML:
-    def __init__(self, client: Optional["pyrogram.Client"]):
+    def __init__(self, client: Optional["pyrogram.Client"]) -> None:
         self.client = client
 
     async def parse(self, text: str) -> dict:

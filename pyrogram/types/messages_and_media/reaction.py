@@ -47,13 +47,13 @@ class Reaction(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         emoji: Optional[str] = None,
         custom_emoji_id: Optional[int] = None,
         count: Optional[int] = None,
         chosen_order: Optional[int] = None,
         is_paid: Optional[bool] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.emoji = emoji
@@ -64,7 +64,7 @@ class Reaction(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         reaction: "raw.base.Reaction"
     ) -> "Reaction":
         if isinstance(reaction, raw.types.ReactionEmoji):

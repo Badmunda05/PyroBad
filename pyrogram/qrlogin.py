@@ -29,7 +29,7 @@ from pyrogram.methods.messages.inline_session import get_session
 log = logging.getLogger(__name__)
 
 class QRLogin:
-    def __init__(self, client, except_ids: List[int] = []):
+    def __init__(self, client, except_ids: List[int] = []) -> None:
         self.client = client
         self.request = raw.functions.auth.ExportLoginToken(
             api_id=client.api_id,
@@ -43,7 +43,7 @@ class QRLogin:
 
         return self.r
 
-    async def wait(self, timeout: float = None) -> Optional["types.User"]:
+    async def wait(self, timeout: Optional[float] = None) -> Optional["types.User"]:
         if timeout is None:
             if not self.r:
                 raise asyncio.TimeoutError

@@ -16,8 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
+from typing import List, Optional, Dict
 
+import pyrogram
 from pyrogram import types, raw
 from ..object import Object
 
@@ -48,13 +49,13 @@ class BusinessRecipients(Object):
     def __init__(
         self,
         *,
-        existing_chats: bool = None,
-        new_chats: bool = None,
-        contacts: bool = None,
-        non_contacts: bool = None,
-        exclude_selected: bool = None,
-        users: List[int] = None
-    ):
+        existing_chats: Optional[bool] = None,
+        new_chats: Optional[bool] = None,
+        contacts: Optional[bool] = None,
+        non_contacts: Optional[bool] = None,
+        exclude_selected: Optional[bool] = None,
+        users: Optional[List[int]] = None
+    ) -> None:
         self.existing_chats = existing_chats
         self.new_chats = new_chats
         self.contacts = contacts
@@ -64,9 +65,9 @@ class BusinessRecipients(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         recipients: "raw.types.BusinessRecipients",
-        users: dict = None
+        users: Optional[Dict[int, "raw.base.User"]] = None
     ) -> "BusinessRecipients":
         return BusinessRecipients(
             existing_chats=getattr(recipients, "existing_chats", None),

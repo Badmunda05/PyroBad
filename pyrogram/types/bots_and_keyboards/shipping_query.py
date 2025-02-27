@@ -44,12 +44,12 @@ class ShippingQuery(Object, Update):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         id: str,
         from_user: "types.User",
         invoice_payload: str,
         shipping_address: Optional["types.ShippingAddress"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.id = id
@@ -59,7 +59,7 @@ class ShippingQuery(Object, Update):
 
     @staticmethod
     async def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         shipping_query: "raw.types.UpdateBotShippingQuery",
         users: dict
     ) -> "ShippingQuery":
@@ -81,8 +81,8 @@ class ShippingQuery(Object, Update):
     async def answer(
         self,
         ok: bool,
-        shipping_options: "types.ShippingOptions" = None,
-        error_message: str = None
+        shipping_options: Optional["types.ShippingOptions"] = None,
+        error_message: Optional[str] = None
     ):
         """Bound method *answer* of :obj:`~pyrogram.types.ShippingQuery`.
 

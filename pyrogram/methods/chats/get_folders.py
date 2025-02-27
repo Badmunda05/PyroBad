@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, List, Iterable
+from typing import Union, List, Iterable, Optional
 
 import pyrogram
 from pyrogram import types, raw, utils
@@ -25,7 +25,7 @@ from pyrogram import types, raw, utils
 class GetFolders:
     async def get_folders(
         self: "pyrogram.Client",
-        folder_ids: Union[int, Iterable[int]] = None
+        folder_ids: Optional[Union[int, Iterable[int]]] = None
     ) -> Union["types.Folder", List["types.Folder"]]:
         """Get one or more folders by using folder identifiers.
 

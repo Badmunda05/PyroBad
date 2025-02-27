@@ -51,7 +51,7 @@ class InlineQueryResult(Object):
         id: str,
         input_message_content: "types.InputMessageContent",
         reply_markup: "types.InlineKeyboardMarkup"
-    ):
+    ) -> None:
         super().__init__()
 
         self.type = type

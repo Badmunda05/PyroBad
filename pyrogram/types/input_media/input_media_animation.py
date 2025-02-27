@@ -67,15 +67,15 @@ class InputMediaAnimation(InputMedia):
     def __init__(
         self,
         media: Union[str, BinaryIO],
-        thumb: str = None,
+        thumb: Optional[str] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List[MessageEntity] = None,
+        caption_entities: Optional[List[MessageEntity]] = None,
         width: int = 0,
         height: int = 0,
         duration: int = 0,
-        has_spoiler: bool = None
-    ):
+        has_spoiler: Optional[bool] = None
+    ) -> None:
         super().__init__(media, caption, parse_mode, caption_entities)
 
         self.thumb = thumb

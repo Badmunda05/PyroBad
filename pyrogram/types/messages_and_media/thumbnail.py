@@ -48,13 +48,13 @@ class Thumbnail(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         file_id: str,
         file_unique_id: str,
         width: int,
         height: int,
         file_size: int
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.file_id = file_id
@@ -64,7 +64,10 @@ class Thumbnail(Object):
         self.file_size = file_size
 
     @staticmethod
-    def _parse(client, media: Union["raw.types.Photo", "raw.types.Document"]) -> Optional[List["Thumbnail"]]:
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        media: Union["raw.types.Photo", "raw.types.Document"]
+    ) -> Optional[List["Thumbnail"]]:
         if isinstance(media, raw.types.Photo):
             raw_thumbs = [i for i in media.sizes if isinstance(i, raw.types.PhotoSize)]
             raw_thumbs.sort(key=lambda p: p.size)

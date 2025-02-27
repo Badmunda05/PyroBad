@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 import pyrogram
 from pyrogram import raw
 from ..object import Object
@@ -32,15 +33,18 @@ class StrippedThumbnail(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         data: bytes
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.data = data
 
     @staticmethod
-    def _parse(client, stripped_thumbnail: "raw.types.PhotoStrippedSize") -> "StrippedThumbnail":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        stripped_thumbnail: "raw.types.PhotoStrippedSize"
+    ) -> "StrippedThumbnail":
         return StrippedThumbnail(
             data=stripped_thumbnail.bytes,
             client=client

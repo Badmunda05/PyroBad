@@ -16,12 +16,15 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Optional
 
+import pyrogram
+from pyrogram.filters import Filter
+from pyrogram.types import CallbackQuery
 from .handler import Handler
 
 
-class CallbackQueryHandler(Handler):
+class CallbackQueryHandler(Handler[Callable[["pyrogram.Client", CallbackQuery], Any]]):
     """The CallbackQuery handler class. Used to handle callback queries coming from inline buttons.
     It is intended to be used with :meth:`~pyrogram.Client.add_handler`
 
@@ -45,5 +48,9 @@ class CallbackQueryHandler(Handler):
             The received callback query.
     """
 
-    def __init__(self, callback: Callable, filters=None):
+    def __init__(
+        self,
+        callback: Callable[["pyrogram.Client", CallbackQuery], Any],
+        filters: Optional[Filter] = None
+    ) -> None:
         super().__init__(callback, filters)

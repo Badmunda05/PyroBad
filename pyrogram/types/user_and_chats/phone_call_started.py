@@ -35,7 +35,7 @@ class PhoneCallStarted(Object):
         self, *,
         id: int,
         is_video: bool
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

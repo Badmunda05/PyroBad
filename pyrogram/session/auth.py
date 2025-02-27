@@ -43,7 +43,7 @@ class Auth:
         client: "pyrogram.Client",
         dc_id: int,
         test_mode: bool
-    ):
+    ) -> None:
         self.dc_id = dc_id
         self.test_mode = test_mode
         self.ipv6 = client.ipv6

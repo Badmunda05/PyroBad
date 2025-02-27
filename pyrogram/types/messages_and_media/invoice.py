@@ -92,7 +92,7 @@ class Invoice(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         currency: str,
         is_test: bool,
         title: Optional[str] = None,
@@ -111,8 +111,8 @@ class Invoice(Object):
         max_tip_amount: Optional[int] = None,
         suggested_tip_amounts: Optional[List[int]] = None,
         terms_url: Optional[str] = None,
-        raw: Union["raw.types.MessageMediaInvoice", "raw.types.Invoice"] = None
-    ):
+        raw: Union["raw.types.MessageMediaInvoice", "raw.types.Invoice", None] = None
+    ) -> None:
         super().__init__(client)
 
         self.currency = currency
@@ -136,7 +136,10 @@ class Invoice(Object):
         self.raw = raw
 
     @staticmethod
-    def _parse(client, invoice: Union["raw.types.MessageMediaInvoice", "raw.types.Invoice"]) -> "Invoice":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        invoice: Union["raw.types.MessageMediaInvoice", "raw.types.Invoice"]
+    ) -> "Invoice":
         return Invoice(
             currency=invoice.currency,
             is_test=invoice.test,

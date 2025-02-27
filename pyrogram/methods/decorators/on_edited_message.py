@@ -16,10 +16,11 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 import pyrogram
 from pyrogram.filters import Filter
+from pyrogram.types import Message
 
 
 class OnEditedMessage:
@@ -27,7 +28,10 @@ class OnEditedMessage:
         self: Union["OnEditedMessage", Filter, None] = None,
         filters: Optional[Filter] = None,
         group: int = 0,
-    ) -> Callable:
+    ) -> Callable[
+        [Callable[["pyrogram.Client", Message], Any]],
+        Callable[["pyrogram.Client", Message], Any]
+    ]:
         """Decorator for handling edited messages.
 
         This does the same thing as :meth:`~pyrogram.Client.add_handler` using the
@@ -42,7 +46,9 @@ class OnEditedMessage:
                 The group identifier, defaults to 0.
         """
 
-        def decorator(func: Callable) -> Callable:
+        def decorator(
+            func: Callable[["pyrogram.Client", Message], Any]
+        ) -> Callable[["pyrogram.Client", Message], Any]:
             if isinstance(self, pyrogram.Client):
                 self.add_handler(pyrogram.handlers.EditedMessageHandler(func, filters), group)
             elif isinstance(self, Filter) or self is None:

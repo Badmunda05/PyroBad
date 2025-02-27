@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict, Union
+from typing import Dict, Union, Optional
 
 import pyrogram
 from pyrogram import raw, utils
@@ -55,15 +55,15 @@ class ChatMemberUpdated(Object, Update):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         chat: "types.Chat",
         from_user: "types.User",
         date: datetime,
         old_chat_member: "types.ChatMember",
         new_chat_member: "types.ChatMember",
-        invite_link: "types.ChatInviteLink" = None,
-        via_join_request: bool = None
-    ):
+        invite_link: Optional["types.ChatInviteLink"] = None,
+        via_join_request: Optional[bool] = None
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat
@@ -76,10 +76,10 @@ class ChatMemberUpdated(Object, Update):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         update: Union["raw.types.UpdateChatParticipant", "raw.types.UpdateChannelParticipant"],
-        users: Dict[int, "raw.types.User"],
-        chats: Dict[int, "raw.types.Chat"]
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
     ) -> "ChatMemberUpdated":
         chat_id = getattr(update, "chat_id", None) or getattr(update, "channel_id")
 

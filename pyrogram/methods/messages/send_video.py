@@ -19,7 +19,7 @@
 import os
 import re
 from datetime import datetime
-from typing import BinaryIO, Callable, List, Optional, Union
+from typing import Any, Tuple, BinaryIO, Callable, List, Optional, Union
 
 import pyrogram
 from pyrogram import StopTransmission, enums, raw, types, utils
@@ -34,40 +34,41 @@ class SendVideo:
         video: Union[str, BinaryIO],
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
-        has_spoiler: bool = None,
-        ttl_seconds: int = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
+        has_spoiler: Optional[bool] = None,
+        ttl_seconds: Optional[int] = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
-        video_start_timestamp: int = None,
-        video_cover: Union[str, BinaryIO] = None,
-        thumb: Union[str, BinaryIO] = None,
-        file_name: str = None,
+        video_start_timestamp: Optional[int] = None,
+        video_cover: Union[str, BinaryIO, None] = None,
+        thumb: Union[str, BinaryIO, None] = None,
+        file_name: Optional[str] = None,
         supports_streaming: bool = True,
-        disable_notification: bool = None,
-        message_thread_id: int = None,
-        effect_id: int = None,
-        show_caption_above_media: bool = None,
-        reply_to_message_id: int = None,
-        reply_to_chat_id: Union[int, str] = None,
-        reply_to_story_id: int = None,
-        quote_text: str = None,
-        quote_entities: List["types.MessageEntity"] = None,
-        quote_offset: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
+        disable_notification: Optional[bool] = None,
+        message_thread_id: Optional[int] = None,
+        effect_id: Optional[int] = None,
+        show_caption_above_media: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        reply_to_chat_id: Union[int, str, None] = None,
+        reply_to_story_id: Optional[int] = None,
+        quote_text: Optional[str] = None,
+        quote_entities: Optional[List["types.MessageEntity"]] = None,
+        quote_offset: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
         no_sound: bool = True,
-        business_connection_id: str = None,
-        allow_paid_broadcast: bool = None,
+        business_connection_id: Optional[str] = None,
+        allow_paid_broadcast: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
-        progress: Callable = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Send video files.
 

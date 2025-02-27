@@ -20,15 +20,16 @@ import typing
 from datetime import datetime
 from enum import Enum
 from json import dumps
+from typing import Optional, Union, Dict, Any
 
 import pyrogram
 
 
 class Object:
-    def __init__(self, client: "pyrogram.Client" = None):
+    def __init__(self, client: Optional["pyrogram.Client"] = None) -> None:
         self._client = client
 
-    def bind(self, client: "pyrogram.Client"):
+    def bind(self, client: "pyrogram.Client") -> None:
         """Bind a Client instance to this and to all nested Pyrogram objects.
 
         Parameters:
@@ -45,7 +46,7 @@ class Object:
                 o.bind(client)
 
     @staticmethod
-    def default(obj: "Object"):
+    def default(obj: "Object") -> Union[str, Dict[str, Any]]:
         if isinstance(obj, bytes):
             return repr(obj)
 
@@ -104,7 +105,7 @@ class Object:
 
         return True
 
-    def __setstate__(self, state):
+    def __setstate__(self, state: dict[str, Any]) -> None:
         for attr in state:
             obj = state[attr]
 
@@ -114,7 +115,7 @@ class Object:
 
         self.__dict__ = state
 
-    def __getstate__(self):
+    def __getstate__(self) -> dict[str, Any]:
         state = self.__dict__.copy()
         state.pop("_client", None)
 

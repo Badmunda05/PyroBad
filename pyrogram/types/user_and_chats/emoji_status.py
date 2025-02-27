@@ -63,7 +63,7 @@ class EmojiStatus(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         custom_emoji_id: Optional[int] = None,
         gift_id: Optional[int] = None,
         until_date: Optional[datetime] = None,
@@ -74,7 +74,7 @@ class EmojiStatus(Object):
         edge_color: Optional[int] = None,
         pattern_color: Optional[int] = None,
         text_color: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.custom_emoji_id = custom_emoji_id
@@ -89,7 +89,9 @@ class EmojiStatus(Object):
         self.text_color = text_color
 
     @staticmethod
-    def _parse(client, emoji_status: "raw.base.EmojiStatus") -> Optional["EmojiStatus"]:
+    def _parse(
+        client: Optional["pyrogram.Client"], emoji_status: "raw.base.EmojiStatus"
+    ) -> Optional["EmojiStatus"]:
         if isinstance(emoji_status, raw.types.EmojiStatus):
             return EmojiStatus(
                 client=client,
@@ -114,7 +116,7 @@ class EmojiStatus(Object):
 
         return None
 
-    def write(self):
+    def write(self) -> "raw.base.EmojiStatus":
         if self.gift_id:
             return raw.types.InputEmojiStatusCollectible(
                 collectible_id=self.gift_id,

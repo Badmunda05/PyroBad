@@ -20,17 +20,19 @@ import asyncio
 import logging
 import signal
 from signal import signal as signal_fn, SIGINT, SIGTERM, SIGABRT
+from types import FrameType
+from typing import Dict, Optional
 
 log = logging.getLogger(__name__)
 
 # Signal number to name
-signals = {
+signals: Dict[int, str] = {
     k: v for v, k in signal.__dict__.items()
     if v.startswith("SIG") and not v.startswith("SIG_")
 }
 
 
-async def idle():
+async def idle() -> None:
     """Block the main script execution until a signal is received.
 
     This function will run indefinitely in order to block the main script execution and prevent it from
@@ -71,9 +73,10 @@ async def idle():
     """
     task = None
 
-    def signal_handler(signum, __):
+    def signal_handler(signum: int, __: Optional[FrameType]) -> None:
         logging.info(f"Stop signal received ({signals[signum]}). Exiting...")
-        task.cancel()
+        if task is not None:
+            task.cancel()
 
     for s in (SIGINT, SIGTERM, SIGABRT):
         signal_fn(s, signal_handler)

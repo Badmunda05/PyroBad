@@ -33,7 +33,7 @@ class BotCommand(Object):
             Description of the command; 1-256 characters.
     """
 
-    def __init__(self, command: str, description: str):
+    def __init__(self, command: str, description: str) -> None:
         super().__init__()
 
         self.command = command

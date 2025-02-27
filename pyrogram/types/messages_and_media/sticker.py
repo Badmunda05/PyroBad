@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Dict, Type
+from typing import List, Dict, Type, Optional
 
 import pyrogram
 from pyrogram import raw, utils
@@ -80,7 +80,7 @@ class Sticker(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         file_id: str,
         file_unique_id: str,
         width: int,
@@ -88,14 +88,14 @@ class Sticker(Object):
         is_animated: bool,
         is_video: bool,
         is_premium: bool,
-        file_name: str = None,
-        mime_type: str = None,
-        file_size: int = None,
-        date: datetime = None,
-        emoji: str = None,
-        set_name: str = None,
-        thumbs: List["types.Thumbnail"] = None
-    ):
+        file_name: Optional[str] = None,
+        mime_type: Optional[str] = None,
+        file_size: Optional[int] = None,
+        date: Optional[datetime] = None,
+        emoji: Optional[str] = None,
+        set_name: Optional[str] = None,
+        thumbs: Optional[List["types.Thumbnail"]] = None
+    ) -> None:
         super().__init__(client)
 
         self.file_id = file_id
@@ -149,7 +149,7 @@ class Sticker(Object):
 
     @staticmethod
     async def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         sticker: "raw.types.Document",
         document_attributes: Dict[Type["raw.base.DocumentAttribute"], "raw.base.DocumentAttribute"],
     ) -> "Sticker":

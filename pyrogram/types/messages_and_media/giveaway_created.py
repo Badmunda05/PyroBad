@@ -37,9 +37,9 @@ class GiveawayCreated(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         prize_star_count: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.prize_star_count = prize_star_count
@@ -47,7 +47,7 @@ class GiveawayCreated(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         giveaway_launch: "raw.types.MessageActionGiveawayLaunch"
     ) -> "GiveawayCreated":
         if isinstance(giveaway_launch, raw.types.MessageActionGiveawayLaunch):

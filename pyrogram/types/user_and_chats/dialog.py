@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional, Dict
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
@@ -61,7 +62,7 @@ class Dialog(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         chat: "types.Chat",
         top_message: "types.Message",
         unread_messages_count: int,
@@ -69,10 +70,10 @@ class Dialog(Object):
         unread_reactions_count: int,
         unread_mark: bool,
         is_pinned: bool,
-        folder_id: int = None,
-        ttl_period: int = None,
-        raw: "raw.types.Dialog" = None
-    ):
+        folder_id: Optional[int] = None,
+        ttl_period: Optional[int] = None,
+        raw: Optional["raw.types.Dialog"] = None
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat
@@ -87,7 +88,13 @@ class Dialog(Object):
         self.raw = raw
 
     @staticmethod
-    def _parse(client, dialog: "raw.types.Dialog", messages, users, chats) -> "Dialog":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        dialog: "raw.types.Dialog",
+        messages: Dict[int, "raw.base.Message"],
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
+    ) -> "Dialog":
         return Dialog(
             chat=types.Chat._parse_dialog(client, dialog.peer, users, chats),
             top_message=messages.get(utils.get_peer_id(dialog.peer)),

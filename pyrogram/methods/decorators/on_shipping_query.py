@@ -16,18 +16,22 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Optional, Union
 
 import pyrogram
 from pyrogram.filters import Filter
+from pyrogram.types import ShippingQuery
 
 
 class OnShippingQuery:
     def on_shipping_query(
-        self=None,
-        filters=None,
+        self: Union["OnShippingQuery", Filter, None] = None,
+        filters: Optional[Filter] = None,
         group: int = 0,
-    ) -> Callable:
+    ) -> Callable[
+        [Callable[["pyrogram.Client", ShippingQuery], Any]],
+        Callable[["pyrogram.Client", ShippingQuery], Any]
+    ]:
         """Decorator for handling shipping queries.
 
         This does the same thing as :meth:`~pyrogram.Client.add_handler` using the
@@ -45,7 +49,9 @@ class OnShippingQuery:
 
         """
 
-        def decorator(func: Callable) -> Callable:
+        def decorator(
+            func: Callable[["pyrogram.Client", ShippingQuery], Any]
+        ) -> Callable[["pyrogram.Client", ShippingQuery], Any]:
             if isinstance(self, pyrogram.Client):
                 self.add_handler(pyrogram.handlers.ShippingQueryHandler(func, filters), group)
             elif isinstance(self, Filter) or self is None:

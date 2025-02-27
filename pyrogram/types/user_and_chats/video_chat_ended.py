@@ -31,7 +31,7 @@ class VideoChatEnded(Object):
     def __init__(
         self, *,
         duration: int
-    ):
+    ) -> None:
         super().__init__()
 
         self.duration = duration

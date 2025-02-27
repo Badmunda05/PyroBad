@@ -37,7 +37,7 @@ class Storage(ABC):
 
     SESSION_STRING_FORMAT = ">BI?256sQ?"
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.name = name
 
     @abstractmethod

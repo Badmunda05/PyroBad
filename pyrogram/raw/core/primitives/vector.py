@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from io import BytesIO
-from typing import cast, Union, Any
+from typing import cast, Union, Any, Optional
 
 from .bool import BoolFalse, BoolTrue, Bool
 from .int import Int, Long
@@ -47,7 +47,7 @@ class Vector(bytes, TLObject):
         return TLObject.read(b)
 
     @classmethod
-    def read(cls, data: BytesIO, t: Any = None, *args: Any) -> List:
+    def read(cls, data: BytesIO, t: Optional[Any] = None, *args: Any) -> List:
         count = Int.read(data)
         left = len(data.read())
         size = (left / count) if count else 0
@@ -59,7 +59,7 @@ class Vector(bytes, TLObject):
             for _ in range(count)
         )
 
-    def __new__(cls, value: list, t: Any = None) -> bytes:  # type: ignore
+    def __new__(cls, value: list, t: Optional[Any] = None) -> bytes:  # type: ignore
         return b"".join(
             [Int(cls.ID, False), Int(len(value))]
             + [cast(bytes, t(i)) if t else i.write() for i in value]

@@ -55,7 +55,7 @@ class SendPoll:
         schedule_date: Optional[datetime] = None,
         business_connection_id: Optional[str] = None,
         options_parse_mode: Optional["enums.ParseMode"] = None,
-        allow_paid_broadcast: bool = None,
+        allow_paid_broadcast: Optional[bool] = None,
         reply_markup: Optional[
             Union[
                 "types.InlineKeyboardMarkup",

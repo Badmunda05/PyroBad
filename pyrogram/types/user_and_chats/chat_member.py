@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, Dict
+from typing import Union, Dict, Optional
 
 import pyrogram
 from pyrogram import raw, types, utils, enums
@@ -78,22 +78,22 @@ class ChatMember(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         status: "enums.ChatMemberStatus",
-        user: "types.User" = None,
-        chat: "types.Chat" = None,
-        custom_title: str = None,
-        until_date: datetime = None,
-        joined_date: datetime = None,
-        invited_by: "types.User" = None,
-        promoted_by: "types.User" = None,
-        restricted_by: "types.User" = None,
-        is_member: bool = None,
-        can_be_edited: bool = None,
-        permissions: "types.ChatPermissions" = None,
-        privileges: "types.ChatPrivileges" = None,
-        subscription_until_date: datetime = None
-    ):
+        user: Optional["types.User"] = None,
+        chat: Optional["types.Chat"] = None,
+        custom_title: Optional[str] = None,
+        until_date: Optional[datetime] = None,
+        joined_date: Optional[datetime] = None,
+        invited_by: Optional["types.User"] = None,
+        promoted_by: Optional["types.User"] = None,
+        restricted_by: Optional["types.User"] = None,
+        is_member: Optional[bool] = None,
+        can_be_edited: Optional[bool] = None,
+        permissions: Optional["types.ChatPermissions"] = None,
+        privileges: Optional["types.ChatPrivileges"] = None,
+        subscription_until_date: Optional[datetime] = None
+    ) -> None:
         super().__init__(client)
 
         self.status = status
@@ -113,7 +113,7 @@ class ChatMember(Object):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         member: Union["raw.base.ChatParticipant", "raw.base.ChannelParticipant"],
         users: Dict[int, "raw.base.User"],
         chats: Dict[int, "raw.base.Chat"]

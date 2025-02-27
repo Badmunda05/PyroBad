@@ -43,21 +43,21 @@ class SendMediaGroup:
             "types.InputMediaAudio",
             "types.InputMediaDocument"
         ]],
-        disable_notification: bool = None,
-        message_thread_id: int = None,
-        effect_id: int = None,
-        reply_to_message_id: int = None,
-        reply_to_chat_id: Union[int, str] = None,
-        reply_to_story_id: int = None,
-        quote_text: str = None,
+        disable_notification: Optional[bool] = None,
+        message_thread_id: Optional[int] = None,
+        effect_id: Optional[int] = None,
+        reply_to_message_id: Optional[int] = None,
+        reply_to_chat_id: Union[int, str, None] = None,
+        reply_to_story_id: Optional[int] = None,
+        quote_text: Optional[str] = None,
         parse_mode: Optional["enums.ParseMode"] = None,
-        quote_entities: List["types.MessageEntity"] = None,
-        quote_offset: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
-        show_caption_above_media: bool = None,
-        business_connection_id: str = None,
-        allow_paid_broadcast: bool = None
+        quote_entities: Optional[List["types.MessageEntity"]] = None,
+        quote_offset: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
+        show_caption_above_media: Optional[bool] = None,
+        business_connection_id: Optional[str] = None,
+        allow_paid_broadcast: Optional[bool] = None
     ) -> List["types.Message"]:
         """Send a group of photos or videos as an album.
 

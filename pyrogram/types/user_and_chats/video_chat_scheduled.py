@@ -33,7 +33,7 @@ class VideoChatScheduled(Object):
     def __init__(
         self, *,
         start_date: datetime
-    ):
+    ) -> None:
         super().__init__()
 
         self.start_date = start_date

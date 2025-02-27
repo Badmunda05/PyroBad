@@ -19,7 +19,7 @@
 import asyncio
 import os
 from datetime import datetime
-from typing import Union, Optional, Callable, BinaryIO, List
+from typing import Any, Tuple, Union, Optional, Callable, BinaryIO, List
 
 import pyrogram
 from pyrogram import types, utils
@@ -51,8 +51,8 @@ class DownloadMedia:
         file_name: str = DEFAULT_DOWNLOAD_DIR,
         in_memory: bool = False,
         block: bool = True,
-        progress: Callable = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional[Union[Union[str, BinaryIO], List[Union[str, BinaryIO]]]]:
         """Download the media from a message.
 

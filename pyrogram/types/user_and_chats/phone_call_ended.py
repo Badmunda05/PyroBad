@@ -45,7 +45,7 @@ class PhoneCallEnded(Object):
         is_video: bool,
         reason: "enums.PhoneCallDiscardReason",
         duration: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

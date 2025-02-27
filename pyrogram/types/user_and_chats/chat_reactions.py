@@ -39,11 +39,11 @@ class ChatReactions(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         all_are_enabled: Optional[bool] = None,
         allow_custom_emoji: Optional[bool] = None,
         reactions: Optional[List["types.Reaction"]] = None,
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.all_are_enabled = all_are_enabled
@@ -51,7 +51,9 @@ class ChatReactions(Object):
         self.reactions = reactions
 
     @staticmethod
-    def _parse(client, chat_reactions: "raw.base.ChatReactions") -> Optional["ChatReactions"]:
+    def _parse(
+        client: Optional["pyrogram.Client"], chat_reactions: "raw.base.ChatReactions"
+    ) -> Optional["ChatReactions"]:
         if isinstance(chat_reactions, raw.types.ChatReactionsAll):
             return ChatReactions(
                 client=client,

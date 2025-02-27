@@ -18,6 +18,7 @@
 
 from typing import Optional
 
+import pyrogram
 from pyrogram import raw, types
 from ..object import Object
 
@@ -58,7 +59,7 @@ class AvailableEffect(Object):
         is_premium: Optional[bool] = None,
         static_icon_id: Optional[int] = None,
         effect_animation_id: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id
@@ -70,7 +71,11 @@ class AvailableEffect(Object):
         self.effect_animation_id = effect_animation_id
 
     @staticmethod
-    async def _parse(client, effect: "raw.types.AvailableEffect", document: "raw.types.Document" = None) -> "AvailableEffect":
+    async def _parse(
+        client: Optional["pyrogram.Client"],
+        effect: "raw.types.AvailableEffect",
+        document: Optional["raw.types.Document"] = None
+    ) -> "AvailableEffect":
         sticker = None
 
         if document:

@@ -16,8 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, List
+from typing import Optional, List, Dict
 
+import pyrogram
 from pyrogram import raw, types, utils
 from ..object import Object
 
@@ -70,7 +71,7 @@ class GiftCode(Object):
         id: str,
         premium_subscription_month_count: int,
         caption: Optional[str] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         via_giveaway: Optional[bool] = None,
         is_unclaimed: Optional[bool] = None,
         boosted_chat: Optional["types.Chat"] = None,
@@ -78,7 +79,7 @@ class GiftCode(Object):
         amount: Optional[int] = None,
         cryptocurrency: Optional[str] = None,
         cryptocurrency_amount: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id
@@ -94,7 +95,12 @@ class GiftCode(Object):
         self.cryptocurrency_amount = cryptocurrency_amount
 
     @staticmethod
-    def _parse(client, giftcode: "raw.types.MessageActionGiftCode", users, chats):
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        giftcode: "raw.types.MessageActionGiftCode",
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
+    ) -> "GiftCode":
         peer = chats.get(utils.get_raw_peer_id(getattr(giftcode, "boost_peer")))
 
         message, entities = (utils.parse_text_with_entities(client, getattr(giftcode, "message", None), users)).values()

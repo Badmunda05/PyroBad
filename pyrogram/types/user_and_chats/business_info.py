@@ -16,8 +16,9 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Optional, Dict
 
+import pyrogram
 from pyrogram import types, raw
 from ..object import Object
 
@@ -45,13 +46,13 @@ class BusinessInfo(Object):
     def __init__(
         self,
         *,
-        address: str = None,
-        location: "types.Location" = None,
-        greeting_message: "types.BusinessMessage" = None,
-        away_message: "types.BusinessMessage" = None,
-        working_hours: "types.BusinessWorkingHours" = None,
+        address: Optional[str] = None,
+        location: Optional["types.Location"] = None,
+        greeting_message: Optional["types.BusinessMessage"] = None,
+        away_message: Optional["types.BusinessMessage"] = None,
+        working_hours: Optional["types.BusinessWorkingHours"] = None,
 
-    ):
+    ) -> None:
         self.address = address
         self.location = location
         self.greeting_message = greeting_message
@@ -60,9 +61,9 @@ class BusinessInfo(Object):
 
     @staticmethod
     def _parse(
-        client,
-        user: "raw.types.UserFull" = None,
-        users: dict = None
+        client: Optional["pyrogram.Client"],
+        user: Optional["raw.types.UserFull"] = None,
+        users: Optional[Dict[int, "raw.base.User"]] = None
     ) -> Optional["BusinessInfo"]:
         working_hours = getattr(user, "business_work_hours", None)
         location = getattr(user, "business_location", None)

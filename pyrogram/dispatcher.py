@@ -20,6 +20,7 @@ import asyncio
 import inspect
 import logging
 from collections import OrderedDict
+from typing import Any, Dict, List
 
 import pyrogram
 from pyrogram import utils
@@ -29,6 +30,7 @@ from pyrogram.handlers import (
     ChosenInlineResultHandler, ChatMemberUpdatedHandler, ChatJoinRequestHandler, StoryHandler,
     ShippingQueryHandler, MessageReactionHandler, MessageReactionCountHandler, ChatBoostHandler, PurchasedPaidMediaHandler
 )
+from pyrogram.handlers.handler import Handler
 from pyrogram.raw.types import (
     UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage,
     UpdateBotNewBusinessMessage, UpdateBotEditBusinessMessage, UpdateBotDeleteBusinessMessage,
@@ -64,7 +66,7 @@ class Dispatcher:
     CHAT_BOOST_UPDATES = (UpdateBotChatBoost,)
     PURCHASED_PAID_MEDIA_UPDATES = (UpdateBotPurchasedPaidMedia,)
 
-    def __init__(self, client: "pyrogram.Client"):
+    def __init__(self, client: "pyrogram.Client") -> None:
         self.client = client
         self.loop = asyncio.get_event_loop()
 
@@ -72,7 +74,7 @@ class Dispatcher:
         self.locks_list = []
 
         self.updates_queue = asyncio.Queue()
-        self.groups = OrderedDict()
+        self.groups: Dict[int, List[Handler[Any]]] = OrderedDict()
 
         async def message_parser(update, users, chats):
             connection_id = getattr(update, "connection_id", None)

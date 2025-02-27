@@ -16,20 +16,27 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 
 import pyrogram
 
 
 class OnDisconnect:
-    def on_disconnect(self: Optional["OnDisconnect"] = None) -> Callable:
+    def on_disconnect(
+        self: Optional["OnDisconnect"] = None
+    ) -> Callable[
+        [Callable[["pyrogram.Client"], Any]],
+        Callable[["pyrogram.Client"], Any]
+    ]:
         """Decorator for handling disconnections.
 
         This does the same thing as :meth:`~pyrogram.Client.add_handler` using the
         :obj:`~pyrogram.handlers.DisconnectHandler`.
         """
 
-        def decorator(func: Callable) -> Callable:
+        def decorator(
+            func: Callable[["pyrogram.Client"], Any]
+        ) -> Callable[["pyrogram.Client"], Any]:
             if isinstance(self, pyrogram.Client):
                 self.add_handler(pyrogram.handlers.DisconnectHandler(func))
             else:

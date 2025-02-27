@@ -16,12 +16,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable
 
+import pyrogram
 from .handler import Handler
 
 
-class DisconnectHandler(Handler):
+class DisconnectHandler(Handler[Callable[["pyrogram.Client"], Any]]):
     """The Disconnect handler class. Used to handle disconnections. It is intended to be used with
     :meth:`~pyrogram.Client.add_handler`
 
@@ -39,5 +40,5 @@ class DisconnectHandler(Handler):
             is established.
     """
 
-    def __init__(self, callback: Callable):
+    def __init__(self, callback: Callable[["pyrogram.Client"], Any]) -> None:
         super().__init__(callback)

@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import Union
+from typing import Union, Optional
 
 import pyrogram
 from pyrogram import raw, types
@@ -26,9 +26,9 @@ from pyrogram import raw, types
 class GetPaymentForm:
     async def get_payment_form(
         self: "pyrogram.Client", *,
-        chat_id: Union[int, str] = None,
-        message_id: int = None,
-        invoice_link: str = None
+        chat_id: Union[int, str, None] = None,
+        message_id: Optional[int] = None,
+        invoice_link: Optional[str] = None
     ) -> "types.PaymentForm":
         """Get information about a invoice or paid media.
 

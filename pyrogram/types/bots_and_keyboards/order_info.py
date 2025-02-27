@@ -48,7 +48,7 @@ class OrderInfo(Object):
         phone_number: Optional[str] = None,
         email: Optional[str] = None,
         shipping_address: Optional["types.ShippingAddress"] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.name = name

@@ -43,7 +43,7 @@ class ShippingOption(Object):
         id: str,
         title: str,
         prices: List["types.LabeledPrice"]
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id

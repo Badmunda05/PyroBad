@@ -16,6 +16,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 from pyrogram import types
 
 from ..object import Object
@@ -42,11 +44,11 @@ class PaidMediaPreview(Object):
     def __init__(
         self,
         *,
-        width: int = None,
-        height: int = None,
-        duration: int = None,
-        thumbnail: "types.StrippedThumbnail" = None
-    ):
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+        duration: Optional[int] = None,
+        thumbnail: Optional["types.StrippedThumbnail"] = None
+    ) -> None:
         super().__init__()
 
         self.width = width

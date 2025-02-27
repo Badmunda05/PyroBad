@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 import pyrogram
 from pyrogram import raw, utils
@@ -56,15 +56,15 @@ class Document(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         file_id: str,
         file_unique_id: str,
-        file_name: str = None,
-        mime_type: str = None,
-        file_size: int = None,
-        date: datetime = None,
-        thumbs: List["types.Thumbnail"] = None
-    ):
+        file_name: Optional[str] = None,
+        mime_type: Optional[str] = None,
+        file_size: Optional[int] = None,
+        date: Optional[datetime] = None,
+        thumbs: Optional[List["types.Thumbnail"]] = None
+    ) -> None:
         super().__init__(client)
 
         self.file_id = file_id
@@ -76,7 +76,9 @@ class Document(Object):
         self.thumbs = thumbs
 
     @staticmethod
-    def _parse(client, document: "raw.types.Document", file_name: str) -> "Document":
+    def _parse(
+        client: Optional["pyrogram.Client"], document: "raw.types.Document", file_name: str
+    ) -> "Document":
         return Document(
             file_id=FileId(
                 file_type=FileType.DOCUMENT,

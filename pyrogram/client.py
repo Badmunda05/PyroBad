@@ -32,7 +32,8 @@ from importlib import import_module
 from io import StringIO, BytesIO
 from mimetypes import MimeTypes
 from pathlib import Path
-from typing import Union, List, Optional, Callable, AsyncGenerator, Type, Tuple
+from typing import Any, Union, List, Optional, Callable, AsyncGenerator, Type, Tuple, Optional
+
 
 import pyrogram
 from pyrogram import __version__, __license__
@@ -271,7 +272,7 @@ class Client(Methods):
         init_connection_params: Optional["raw.base.JSONValue"] = None,
         connection_factory: Type[Connection] = Connection,
         protocol_factory: Type[TCP] = TCPAbridged
-    ):
+    ) -> None:
         super().__init__()
 
         self.name = name
@@ -345,7 +346,7 @@ class Client(Methods):
 
         self.takeout_id = None
 
-        self.disconnect_handler = None
+        self.disconnect_handler: Union[Callable[["Client"], Any], None] = None
 
         self.me: Optional[User] = None
 
@@ -1012,8 +1013,8 @@ class Client(Methods):
         file_size: int = 0,
         limit: int = 0,
         offset: int = 0,
-        progress: Callable = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> AsyncGenerator[bytes, None]:
         async with self.get_file_semaphore:
             file_type = file_id.file_type
@@ -1242,7 +1243,7 @@ class Client(Methods):
 
 
 class Cache:
-    def __init__(self, capacity: int):
+    def __init__(self, capacity: int) -> None:
         self.capacity = capacity
         self.store = {}
 

@@ -16,6 +16,8 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+import pyrogram
 from pyrogram import types, raw
 from ..object import Object
 
@@ -38,10 +40,10 @@ class BusinessIntro(Object):
     def __init__(
         self,
         *,
-        title: str = None,
-        text: str = None,
-        sticker: "types.Sticker" = None
-    ):
+        title: Optional[str] = None,
+        text: Optional[str] = None,
+        sticker: Optional["types.Sticker"] = None
+    ) -> None:
         super().__init__()
 
         self.title = title
@@ -51,7 +53,7 @@ class BusinessIntro(Object):
 
     @staticmethod
     async def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         business_intro: "raw.types.BusinessIntro"
     ) -> "BusinessIntro":
         if not business_intro:

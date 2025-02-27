@@ -27,7 +27,7 @@ class {name}(TLObject):  # type: ignore
         {read_types}
         return {name}({return_arguments})
 
-    def write(self, *args) -> bytes:
+    def write(self, *args: Any) -> bytes:
         b = BytesIO()
         b.write(Int(self.ID, False))
 

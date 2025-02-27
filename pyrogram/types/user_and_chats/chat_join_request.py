@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 import pyrogram
 from pyrogram import raw, utils
@@ -49,13 +49,13 @@ class ChatJoinRequest(Object, Update):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         chat: "types.Chat",
         from_user: "types.User",
         date: datetime,
-        bio: str = None,
-        invite_link: "types.ChatInviteLink" = None
-    ):
+        bio: Optional[str] = None,
+        invite_link: Optional["types.ChatInviteLink"] = None
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat
@@ -66,10 +66,10 @@ class ChatJoinRequest(Object, Update):
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         update: "raw.types.UpdateBotChatInviteRequester",
-        users: Dict[int, "raw.types.User"],
-        chats: Dict[int, "raw.types.Chat"]
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
     ) -> "ChatJoinRequest":
         chat_id = utils.get_raw_peer_id(update.peer)
 

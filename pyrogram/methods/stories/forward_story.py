@@ -30,9 +30,9 @@ class ForwardStory:
         chat_id: Union[int, str],
         from_chat_id: Union[int, str],
         story_id: int,
-        disable_notification: bool = None,
-        message_thread_id: int = None,
-        schedule_date: datetime = None,
+        disable_notification: Optional[bool] = None,
+        message_thread_id: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
     ) -> Optional["types.Message"]:
         """Forward story.
 

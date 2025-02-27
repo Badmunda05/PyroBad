@@ -30,7 +30,7 @@ class Run:
         self: "pyrogram.Client",
         use_qr: bool = False,
         except_ids: List[int] = [],
-    ):
+    ) -> None:
         """Start the client, idle the main script and finally stop the client.
 
         When calling this method without any argument it acts as a convenience method that calls

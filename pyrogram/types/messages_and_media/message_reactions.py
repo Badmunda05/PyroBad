@@ -34,16 +34,16 @@ class MessageReactions(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         reactions: Optional[List["types.Reaction"]] = None,
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.reactions = reactions
 
     @staticmethod
     def _parse(
-        client: "pyrogram.Client",
+        client: Optional["pyrogram.Client"],
         message_reactions: Optional["raw.base.MessageReactions"] = None
     ) -> Optional["MessageReactions"]:
         if not message_reactions:

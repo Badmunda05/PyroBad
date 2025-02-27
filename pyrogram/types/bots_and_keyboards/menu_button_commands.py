@@ -25,7 +25,7 @@ class MenuButtonCommands(MenuButton):
     """A menu button, which opens the bot's list of commands.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("commands")
 
     async def write(self, client: "pyrogram.Client") -> "raw.types.BotMenuButtonCommands":

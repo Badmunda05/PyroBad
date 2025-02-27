@@ -16,12 +16,15 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Any, Callable, Optional
 
+import pyrogram
+from pyrogram.filters import Filter
+from pyrogram.types import InlineQuery
 from .handler import Handler
 
 
-class InlineQueryHandler(Handler):
+class InlineQueryHandler(Handler[Callable[["pyrogram.Client", InlineQuery], Any]]):
     """The InlineQuery handler class. Used to handle inline queries.
     It is intended to be used with :meth:`~pyrogram.Client.add_handler`
 
@@ -45,5 +48,9 @@ class InlineQueryHandler(Handler):
             The received inline query.
     """
 
-    def __init__(self, callback: Callable, filters=None):
+    def __init__(
+        self,
+        callback: Callable[["pyrogram.Client", InlineQuery], Any],
+        filters: Optional[Filter] = None
+    ) -> None:
         super().__init__(callback, filters)

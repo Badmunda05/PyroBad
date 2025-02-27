@@ -32,7 +32,7 @@ class InlineKeyboardMarkup(Object):
             List of button rows, each represented by a List of InlineKeyboardButton objects.
     """
 
-    def __init__(self, inline_keyboard: List[List["types.InlineKeyboardButton"]]):
+    def __init__(self, inline_keyboard: List[List["types.InlineKeyboardButton"]]) -> None:
         super().__init__()
 
         self.inline_keyboard = inline_keyboard

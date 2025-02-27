@@ -25,7 +25,7 @@ class BotCommandScopeAllPrivateChats(BotCommandScope):
     """Represents the scope of bot commands, covering all private chats.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("all_private_chats")
 
     async def write(self, client: "pyrogram.Client") -> "raw.base.BotCommandScope":

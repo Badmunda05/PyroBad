@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict
 
 import pyrogram
 from pyrogram import raw, types, utils
@@ -76,7 +76,7 @@ class ChatBoost(Object):
         giveaway_message_id: Optional[int] = None,
         used_gift_slug: Optional[str] = None,
         stars: Optional[int] = None
-    ):
+    ) -> None:
         super().__init__()
 
         self.id = id
@@ -92,7 +92,11 @@ class ChatBoost(Object):
         self.stars = stars
 
     @staticmethod
-    def _parse(client: "pyrogram.Client", boost: "raw.types.Boost", users) -> "ChatBoost":
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        boost: "raw.types.Boost",
+        users: Dict[int, "raw.base.User"]
+    ) -> "ChatBoost":
         return ChatBoost(
             id=boost.id,
             date=utils.timestamp_to_datetime(boost.date),

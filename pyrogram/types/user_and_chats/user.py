@@ -18,7 +18,7 @@
 
 import html
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 import pyrogram
 from pyrogram import enums, utils
@@ -32,7 +32,7 @@ class Link(str):
     HTML = "<a href={url}>{text}</a>"
     MARKDOWN = "[{text}]({url})"
 
-    def __init__(self, url: str, text: str, style: enums.ParseMode):
+    def __init__(self, url: str, text: str, style: Optional[enums.ParseMode]) -> None:
         super().__init__()
 
         self.url = url
@@ -40,7 +40,7 @@ class Link(str):
         self.style = style
 
     @staticmethod
-    def format(url: str, text: str, style: enums.ParseMode):
+    def format(url: str, text: str, style: Optional[enums.ParseMode]) -> str:
         if style == enums.ParseMode.MARKDOWN:
             fmt = Link.MARKDOWN
         else:
@@ -49,13 +49,15 @@ class Link(str):
         return fmt.format(url=url, text=html.escape(text))
 
     # noinspection PyArgumentList
-    def __new__(cls, url, text, style):
+    def __new__(cls, url: str, text: str, style: Optional[enums.ParseMode]) -> "Link":
         return str.__new__(cls, Link.format(url, text, style))
 
-    def __call__(self, other: str = None, *, style: str = None):
+    def __call__(
+        self, other: Optional[str] = None, *, style: Optional[enums.ParseMode] = None
+    ) -> str:
         return Link.format(self.url, other or self.text, style or self.style)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return Link.format(self.url, self.text, self.style)
 
 
@@ -207,50 +209,50 @@ class User(Object, Update):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         id: int,
-        is_self: bool = None,
-        is_contact: bool = None,
-        is_mutual_contact: bool = None,
-        is_deleted: bool = None,
-        is_bot: bool = None,
-        is_verified: bool = None,
-        is_restricted: bool = None,
-        is_scam: bool = None,
-        is_fake: bool = None,
-        is_support: bool = None,
-        is_premium: bool = None,
-        is_contact_require_premium: bool = None,
-        is_close_friend: bool = None,
-        is_stories_hidden: bool = None,
-        is_stories_unavailable: bool = None,
-        is_business_bot: bool = None,
-        first_name: str = None,
-        last_name: str = None,
-        status: "enums.UserStatus" = None,
-        last_online_date: datetime = None,
-        next_offline_date: datetime = None,
-        username: str = None,
-        usernames: List["types.Username"] = None,
-        language_code: str = None,
+        is_self: Optional[bool] = None,
+        is_contact: Optional[bool] = None,
+        is_mutual_contact: Optional[bool] = None,
+        is_deleted: Optional[bool] = None,
+        is_bot: Optional[bool] = None,
+        is_verified: Optional[bool] = None,
+        is_restricted: Optional[bool] = None,
+        is_scam: Optional[bool] = None,
+        is_fake: Optional[bool] = None,
+        is_support: Optional[bool] = None,
+        is_premium: Optional[bool] = None,
+        is_contact_require_premium: Optional[bool] = None,
+        is_close_friend: Optional[bool] = None,
+        is_stories_hidden: Optional[bool] = None,
+        is_stories_unavailable: Optional[bool] = None,
+        is_business_bot: Optional[bool] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        status: Optional["enums.UserStatus"] = None,
+        last_online_date: Optional[datetime] = None,
+        next_offline_date: Optional[datetime] = None,
+        username: Optional[str] = None,
+        usernames: Optional[List["types.Username"]] = None,
+        language_code: Optional[str] = None,
         emoji_status: Optional["types.EmojiStatus"] = None,
-        dc_id: int = None,
-        phone_number: str = None,
-        photo: "types.ChatPhoto" = None,
-        restrictions: List["types.Restriction"] = None,
-        reply_color: "types.ChatColor" = None,
-        profile_color: "types.ChatColor" = None,
-        added_to_attachment_menu: bool = None,
-        active_users_count: int = None,
-        inline_need_location: bool = None,
-        inline_query_placeholder: str = None,
-        can_be_edited: bool = None,
-        can_be_added_to_attachment_menu: bool = None,
-        can_join_groups: bool = None,
-        can_read_all_group_messages: bool = None,
-        has_main_web_app: bool = None,
-        raw: Union["raw.base.User", "raw.base.UserStatus"] = None
-    ):
+        dc_id: Optional[int] = None,
+        phone_number: Optional[str] = None,
+        photo: Optional["types.ChatPhoto"] = None,
+        restrictions: Optional[List["types.Restriction"]] = None,
+        reply_color: Optional["types.ChatColor"] = None,
+        profile_color: Optional["types.ChatColor"] = None,
+        added_to_attachment_menu: Optional[bool] = None,
+        active_users_count: Optional[int] = None,
+        inline_need_location: Optional[bool] = None,
+        inline_query_placeholder: Optional[str] = None,
+        can_be_edited: Optional[bool] = None,
+        can_be_added_to_attachment_menu: Optional[bool] = None,
+        can_join_groups: Optional[bool] = None,
+        can_read_all_group_messages: Optional[bool] = None,
+        has_main_web_app: Optional[bool] = None,
+        raw: Union["raw.base.User", "raw.base.UserStatus", None] = None
+    ) -> None:
         super().__init__(client)
 
         self.id = id
@@ -297,11 +299,11 @@ class User(Object, Update):
         self.raw = raw
 
     @property
-    def full_name(self) -> str:
+    def full_name(self) -> Optional[str]:
         return " ".join(filter(None, [self.first_name, self.last_name])) or None
 
     @property
-    def mention(self):
+    def mention(self) -> Link:
         return Link(
             f"tg://user?id={self.id}",
             self.first_name or "Deleted Account",
@@ -309,7 +311,10 @@ class User(Object, Update):
         )
 
     @staticmethod
-    def _parse(client, user: "raw.base.User") -> Optional["User"]:
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        user: "raw.base.User"
+    ) -> Optional["User"]:
         if user is None or isinstance(user, raw.types.UserEmpty):
             return None
 
@@ -358,7 +363,9 @@ class User(Object, Update):
         )
 
     @staticmethod
-    def _parse_status(user_status: "raw.base.UserStatus", is_bot: bool = False):
+    def _parse_status(
+        user_status: "raw.base.UserStatus", is_bot: bool = False
+    ) -> Dict[str, Optional[datetime]]:
         if isinstance(user_status, raw.types.UserStatusOnline):
             status, date = enums.UserStatus.ONLINE, user_status.expires
         elif isinstance(user_status, raw.types.UserStatusOffline):
@@ -391,7 +398,9 @@ class User(Object, Update):
         }
 
     @staticmethod
-    def _parse_user_status(client, user_status: "raw.types.UpdateUserStatus"):
+    def _parse_user_status(
+        client: Optional["pyrogram.Client"], user_status: "raw.types.UpdateUserStatus"
+    ) -> "User":
         return User(
             id=user_status.user_id,
             **User._parse_status(user_status.status),
@@ -399,7 +408,7 @@ class User(Object, Update):
             client=client
         )
 
-    async def archive(self):
+    async def archive(self) -> bool:
         """Bound method *archive* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -422,7 +431,7 @@ class User(Object, Update):
 
         return await self._client.archive_chats(self.id)
 
-    async def unarchive(self):
+    async def unarchive(self) -> bool:
         """Bound method *unarchive* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -445,7 +454,7 @@ class User(Object, Update):
 
         return await self._client.unarchive_chats(self.id)
 
-    def block(self):
+    async def block(self) -> bool:
         """Bound method *block* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -466,9 +475,9 @@ class User(Object, Update):
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.block_user(self.id)
+        return await self._client.block_user(self.id)
 
-    def unblock(self):
+    async def unblock(self) -> bool:
         """Bound method *unblock* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -489,9 +498,9 @@ class User(Object, Update):
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.unblock_user(self.id)
+        return await self._client.unblock_user(self.id)
 
-    def get_common_chats(self):
+    async def get_common_chats(self) -> List["types.Chat"]:
         """Bound method *get_common_chats* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -512,4 +521,4 @@ class User(Object, Update):
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.get_common_chats(self.id)
+        return await self._client.get_common_chats(self.id)

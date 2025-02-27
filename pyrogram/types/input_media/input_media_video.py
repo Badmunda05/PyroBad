@@ -90,20 +90,20 @@ class InputMediaVideo(InputMedia):
     def __init__(
         self,
         media: Union[str, BinaryIO],
-        thumb: str = None,
+        thumb: Optional[str] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List[MessageEntity] = None,
+        caption_entities: Optional[List[MessageEntity]] = None,
         width: int = 0,
         height: int = 0,
         duration: int = 0,
-        file_name: str = None,
+        file_name: Optional[str] = None,
         supports_streaming: bool = True,
-        has_spoiler: bool = None,
-        no_sound: bool = None,
-        video_start_timestamp: int = None,
-        video_cover: Union[str, BinaryIO] = None,
-    ):
+        has_spoiler: Optional[bool] = None,
+        no_sound: Optional[bool] = None,
+        video_start_timestamp: Optional[int] = None,
+        video_cover: Union[str, BinaryIO, None] = None,
+    ) -> None:
         super().__init__(media, caption, parse_mode, caption_entities)
 
         self.thumb = thumb

@@ -41,16 +41,16 @@ class Birthday(Object):
         *,
         day: int,
         month: int,
-        year: int = None
+        year: Optional[int] = None
 
-    ):
+    ) -> None:
         self.day = day
         self.month = month
         self.year = year
 
     @staticmethod
     def _parse(
-        birthday: "raw.types.Birthday" = None
+        birthday: Optional["raw.types.Birthday"] = None
     ) -> Optional["Birthday"]:
         if not birthday:
             return

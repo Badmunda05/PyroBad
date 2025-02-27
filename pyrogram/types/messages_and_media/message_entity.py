@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Optional, Dict
 
 import pyrogram
 from pyrogram import raw, enums
@@ -59,16 +59,16 @@ class MessageEntity(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         type: "enums.MessageEntityType",
         offset: int,
         length: int,
-        url: str = None,
-        user: "types.User" = None,
-        language: str = None,
-        custom_emoji_id: int = None,
-        expandable: bool = None
-    ):
+        url: Optional[str] = None,
+        user: Optional["types.User"] = None,
+        language: Optional[str] = None,
+        custom_emoji_id: Optional[int] = None,
+        expandable: Optional[bool] = None
+    ) -> None:
         super().__init__(client)
 
         self.type = type
@@ -81,7 +81,11 @@ class MessageEntity(Object):
         self.expandable = expandable
 
     @staticmethod
-    def _parse(client, entity: "raw.base.MessageEntity", users: dict) -> Optional["MessageEntity"]:
+    def _parse(
+        client: Optional["pyrogram.Client"],
+        entity: "raw.base.MessageEntity",
+        users: Dict[int, "raw.base.User"]
+    ) -> Optional["MessageEntity"]:
         # Special case for InputMessageEntityMentionName -> MessageEntityType.TEXT_MENTION
         # This happens in case of UpdateShortSentMessage inside send_message() where entities are parsed from the input
         if isinstance(entity, raw.types.InputMessageEntityMentionName):
@@ -103,7 +107,7 @@ class MessageEntity(Object):
             client=client
         )
 
-    async def write(self):
+    async def write(self) -> raw.base.MessageEntity:
         args = self.__dict__.copy()
 
         for arg in ("_client", "type", "user"):

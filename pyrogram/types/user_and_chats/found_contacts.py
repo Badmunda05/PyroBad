@@ -39,17 +39,19 @@ class FoundContacts(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         my_results: Optional["types.Chat"] = None,
         global_results: Optional["types.Chat"] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.my_results = my_results
         self.global_results = global_results
 
     @staticmethod
-    def _parse(client, found: "raw.types.contacts.Found") -> "FoundContacts":
+    def _parse(
+        client: Optional["pyrogram.Client"], found: "raw.types.contacts.Found"
+    ) -> "FoundContacts":
         users = {u.id: u for u in found.users}
         chats = {c.id: c for c in found.chats}
 

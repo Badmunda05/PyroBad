@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Union, Optional
 
 import pyrogram
 from pyrogram import raw
@@ -29,18 +29,19 @@ class SendGame:
         self: "pyrogram.Client",
         chat_id: Union[int, str],
         game_short_name: str,
-        disable_notification: bool = None,
-        message_thread_id: int = None,
-        effect_id: int = None,
-        reply_to_message_id: int = None,
-        reply_to_chat_id: Union[int, str] = None,
-        protect_content: bool = None,
-        allow_paid_broadcast: bool = None,
+        disable_notification: Optional[bool] = None,
+        message_thread_id: Optional[int] = None,
+        effect_id: Optional[int] = None,
+        reply_to_message_id: Optional[int] = None,
+        reply_to_chat_id: Union[int, str, None] = None,
+        protect_content: Optional[bool] = None,
+        allow_paid_broadcast: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None
     ) -> "types.Message":
         """Send a game.

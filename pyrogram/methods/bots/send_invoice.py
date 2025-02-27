@@ -55,7 +55,7 @@ class SendInvoice:
         protect_content: Optional[bool] = None,
         message_effect_id: Optional[int] = None,
         reply_to_message_id: Optional[int] = None,
-        allow_paid_broadcast: bool = None,
+        allow_paid_broadcast: Optional[bool] = None,
         reply_markup: Optional[Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",

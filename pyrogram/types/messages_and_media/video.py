@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 import pyrogram
 from pyrogram import raw, utils
@@ -80,23 +80,23 @@ class Video(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         file_id: str,
         file_unique_id: str,
         width: int,
         height: int,
         codec: str,
         duration: int,
-        file_name: str = None,
-        mime_type: str = None,
-        file_size: int = None,
-        supports_streaming: bool = None,
-        ttl_seconds: int = None,
-        date: datetime = None,
-        thumbs: List["types.Thumbnail"] = None,
-        video_cover: "types.Photo" = None,
-        video_start_timestamp: int = None,
-    ):
+        file_name: Optional[str] = None,
+        mime_type: Optional[str] = None,
+        file_size: Optional[int] = None,
+        supports_streaming: Optional[bool] = None,
+        ttl_seconds: Optional[int] = None,
+        date: Optional[datetime] = None,
+        thumbs: Optional[List["types.Thumbnail"]] = None,
+        video_cover: Optional["types.Photo"] = None,
+        video_start_timestamp: Optional[int] = None,
+    ) -> None:
         super().__init__(client)
 
         self.file_id = file_id
@@ -117,13 +117,13 @@ class Video(Object):
 
     @staticmethod
     def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         video: "raw.types.Document",
         video_attributes: "raw.types.DocumentAttributeVideo",
-        file_name: str = None,
-        ttl_seconds: int = None,
-        video_cover = None,
-        video_start_timestamp: int = None
+        file_name: Optional[str] = None,
+        ttl_seconds: Optional[int] = None,
+        video_cover: Optional["raw.base.Photo"] = None,
+        video_start_timestamp: Optional[int] = None
     ) -> "Video":
         return Video(
             file_id=FileId(

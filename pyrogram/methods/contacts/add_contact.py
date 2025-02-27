@@ -31,7 +31,7 @@ class AddContact:
         last_name: str = "",
         phone_number: str = "",
         share_phone_number: bool = False
-    ):
+    ) -> "types.User":
         """Add an existing Telegram user as contact, even without a phone number.
 
         .. include:: /_includes/usable-by/users.rst

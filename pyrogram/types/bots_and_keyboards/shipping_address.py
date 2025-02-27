@@ -54,7 +54,7 @@ class ShippingAddress(Object):
         street_line1: str,
         street_line2: str,
         post_code: str
-    ):
+    ) -> None:
         super().__init__()
 
         self.country_code = country_code

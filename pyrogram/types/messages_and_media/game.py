@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
 import pyrogram
 from pyrogram import raw
 from pyrogram import types
@@ -50,14 +51,14 @@ class Game(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         id: int,
         title: str,
         short_name: str,
         description: str,
         photo: "types.Photo",
-        animation: "types.Animation" = None
-    ):
+        animation: Optional["types.Animation"] = None
+    ) -> None:
         super().__init__(client)
 
         self.id = id
@@ -68,7 +69,7 @@ class Game(Object):
         self.animation = animation
 
     @staticmethod
-    def _parse(client, message: "raw.types.Message") -> "Game":
+    def _parse(client: Optional["pyrogram.Client"], message: "raw.types.Message") -> "Game":
         game: "raw.types.Game" = message.media.game
         animation = None
 

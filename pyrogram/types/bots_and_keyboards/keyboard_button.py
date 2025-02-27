@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Union, Optional
 
 from pyrogram import raw, types
 from ..object import Object
@@ -56,12 +56,12 @@ class KeyboardButton(Object):
     def __init__(
         self,
         text: str,
-        request_contact: bool = None,
-        request_location: bool = None,
-        request_poll: "types.RequestPollInfo" = None,
-        request_peer: Union["types.RequestChannelInfo", "types.RequestChatInfo", "types.RequestUserInfo"] = None,
-        web_app: "types.WebAppInfo" = None,
-    ):
+        request_contact: Optional[bool] = None,
+        request_location: Optional[bool] = None,
+        request_poll: Optional["types.RequestPollInfo"] = None,
+        request_peer: Union["types.RequestChannelInfo", "types.RequestChatInfo", "types.RequestUserInfo", None] = None,
+        web_app: Optional["types.WebAppInfo"] = None,
+    ) -> None:
         super().__init__()
 
         self.text = str(text)

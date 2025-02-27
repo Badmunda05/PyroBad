@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 import pyrogram
 
@@ -77,7 +77,7 @@ class GiveawayWinners(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
+        client: Optional["pyrogram.Client"] = None,
         chat: "types.Chat",
         giveaway_message_id: int,
         winners_selection_date: datetime,
@@ -92,7 +92,7 @@ class GiveawayWinners(Object):
         only_new_members: Optional[bool] = None,
         was_refunded: Optional[bool] = None,
         prize_description: Optional[str] = None
-    ):
+    ) -> None:
         super().__init__(client)
 
         self.chat = chat
@@ -112,10 +112,10 @@ class GiveawayWinners(Object):
 
     @staticmethod
     async def _parse(
-        client,
+        client: Optional["pyrogram.Client"],
         giveaway_media: "raw.types.MessageMediaGiveawayResults",
-        users: dict,
-        chats: dict
+        users: Dict[int, "raw.base.User"],
+        chats: Dict[int, "raw.base.Chat"]
     ) -> "GiveawayWinners":
         if not isinstance(giveaway_media, raw.types.MessageMediaGiveawayResults):
             return

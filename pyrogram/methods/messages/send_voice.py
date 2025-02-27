@@ -19,7 +19,7 @@
 import os
 import re
 from datetime import datetime
-from typing import Union, BinaryIO, List, Optional, Callable
+from typing import Any, Tuple, Union, BinaryIO, List, Optional, Callable
 
 import pyrogram
 from pyrogram import StopTransmission, enums
@@ -37,30 +37,31 @@ class SendVoice:
         voice: Union[str, BinaryIO],
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
-        caption_entities: List["types.MessageEntity"] = None,
+        caption_entities: Optional[List["types.MessageEntity"]] = None,
         duration: int = 0,
-        disable_notification: bool = None,
-        message_thread_id: int = None,
-        effect_id: int = None,
-        reply_to_message_id: int = None,
-        reply_to_chat_id: Union[int, str] = None,
-        reply_to_story_id: int = None,
-        quote_text: str = None,
-        quote_entities: List["types.MessageEntity"] = None,
-        quote_offset: int = None,
-        schedule_date: datetime = None,
-        protect_content: bool = None,
-        view_once: bool = None,
-        business_connection_id: str = None,
-        allow_paid_broadcast: bool = None,
+        disable_notification: Optional[bool] = None,
+        message_thread_id: Optional[int] = None,
+        effect_id: Optional[int] = None,
+        reply_to_message_id: Optional[int] = None,
+        reply_to_chat_id: Union[int, str, None] = None,
+        reply_to_story_id: Optional[int] = None,
+        quote_text: Optional[str] = None,
+        quote_entities: Optional[List["types.MessageEntity"]] = None,
+        quote_offset: Optional[int] = None,
+        schedule_date: Optional[datetime] = None,
+        protect_content: Optional[bool] = None,
+        view_once: Optional[bool] = None,
+        business_connection_id: Optional[str] = None,
+        allow_paid_broadcast: Optional[bool] = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
             "types.ReplyKeyboardRemove",
-            "types.ForceReply"
+            "types.ForceReply",
+            None
         ] = None,
-        progress: Callable = None,
-        progress_args: tuple = ()
+        progress: Optional[Callable[[int, int], Any]] = None,
+        progress_args: Tuple[Any, ...] = ()
     ) -> Optional["types.Message"]:
         """Send audio files.
 
