@@ -327,7 +327,7 @@ def get_peer_id(peer: Union[raw.base.Peer, raw.base.InputPeer, raw.base.Requeste
     raise ValueError(f"Peer type invalid: {peer}")
 
 
-def get_peer_type_new(peer_id: int) -> str:
+def get_peer_type(peer_id: int) -> str:
     peer_id_str = str(peer_id)
     if not peer_id_str.startswith('-'):
         return 'user'
