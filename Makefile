@@ -1,18 +1,8 @@
-VENV := venv
-PYTHON := $(VENV)/bin/python
-HOST = $(shell ifconfig | grep "inet " | tail -1 | cut -d\  -f2)
-TAG = v$(shell grep -E '__version__ = ".*"' pyrogram/__init__.py | cut -d\" -f2)
-
 RM := rm -rf
+HOST = $(shell ifconfig | grep "inet " | tail -1 | cut -d\  -f2)
+TAG = v$(shell awk -F'"' '/^__version__ = /{print $$2}' pyrogram/__init__.py)
 
-.PHONY: venv clean-build clean-api clean-docs clean api docs build
-
-venv:
-	$(RM) $(VENV)
-	python3 -m venv $(VENV)
-	$(PYTHON) -m pip install -U pip wheel setuptools
-	$(PYTHON) -m pip install -U -r requirements.txt -r dev-requirements.txt
-	@echo "Created venv with $$($(PYTHON) --version)"
+.PHONY: clean-build clean-api clean-docs clean api docs build
 
 clean-build:
 	$(RM) *.egg-info build dist
@@ -29,17 +19,21 @@ clean:
 	make clean-docs
 
 api:
-	cd compiler/api && ../../$(PYTHON) compiler.py
-	cd compiler/errors && ../../$(PYTHON) compiler.py
+	cd compiler/api && python compiler.py
+	cd compiler/errors && python compiler.py
 
+# How to build docs locally:
+# pip install Sphinx,sphinx_copybutton,furo
+# pip uninstall kurigram pyrogram -y && pip install --force-reinstall file:.
+# make clean api docs
 docs:
-	cd compiler/docs && ../../$(PYTHON) compiler.py
-	$(VENV)/bin/sphinx-build -b dirhtml "docs/source" "docs/build/html" -j auto
+	cd compiler/docs && python compiler.py
+	sphinx-build -b dirhtml "docs/source" "docs/build/html" -j auto
 
 build:
 	make clean
-	$(PYTHON) setup.py sdist
-	$(PYTHON) setup.py bdist_wheel
+	python setup.py sdist
+	python setup.py bdist_wheel
 
 tag:
 	git tag $(TAG)
