@@ -41,7 +41,7 @@ def snek(s: str):
     return re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s).lower()
 
 
-def _extrat_union_name(node: ast.AST) -> str | None:
+def _extract_union_name(node: ast.AST) -> str | None:
     """Extract the name of a variable that is assigned a Union type.
 
     :param node: The AST node to extract the variable name from.
@@ -49,7 +49,7 @@ def _extrat_union_name(node: ast.AST) -> str | None:
 
     >>> import ast
     >>> parsed_ast = ast.parse("User = Union[raw.types.UserEmpty]")
-    >>> _extrat_union_name(parsed_ast.body[0])
+    >>> _extract_union_name(parsed_ast.body[0])
     'User'
     """
 
@@ -61,7 +61,7 @@ def _extrat_union_name(node: ast.AST) -> str | None:
                 return node.targets[0].id  # Variable name
 
 
-def _extrac_class_name(node: ast.AST) -> str | None:
+def _extract_class_name(node: ast.AST) -> str | None:
     """Extract the name of a class.
 
     :param node: The AST node to extract the class name from.
@@ -69,7 +69,7 @@ def _extrac_class_name(node: ast.AST) -> str | None:
 
     >>> import ast
     >>> parsed_ast = ast.parse("class User: pass")
-    >>> _extrac_class_name(parsed_ast.body[0])
+    >>> _extract_class_name(parsed_ast.body[0])
     'User'
     """
 
@@ -88,11 +88,11 @@ class NodeInfo:
 
 def parse_node_info(node: ast.AST) -> NodeInfo | None:
     """Parse an AST node and extract the class or variable name."""
-    class_name = _extrac_class_name(node)
+    class_name = _extract_class_name(node)
     if class_name:
         return NodeInfo(name=class_name, type="class")
 
-    union_name = _extrat_union_name(node)
+    union_name = _extract_union_name(node)
     if union_name:
         return NodeInfo(name=union_name, type="union")
 
