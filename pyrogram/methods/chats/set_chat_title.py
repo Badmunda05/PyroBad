@@ -47,7 +47,7 @@ class SetChatTitle:
                 New chat title, 1-255 characters.
 
         Returns:
-            ``bool``: True on success.
+            :obj:`~pyrogram.types.Message`: On success, the sent service message is returned.
 
         Raises:
             ValueError: In case a chat id belongs to user.
