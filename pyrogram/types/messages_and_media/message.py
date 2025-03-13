@@ -324,6 +324,9 @@ class Message(Object, Update):
             Note that the Message object in this field will not contain further reply_to_message fields even if it
             is itself a reply.
 
+        pinned (``bool``, *optional*):
+            True, if message is painned.
+        
         game_high_score (:obj:`~pyrogram.types.GameHighScore`, *optional*):
             The game score for a user.
             The reply_to_message field will contain the game Message.
@@ -547,6 +550,7 @@ class Message(Object, Update):
         migrate_to_chat_id: int = None,
         migrate_from_chat_id: int = None,
         pinned_message: "Message" = None,
+        pinned: bool = None,
         game_high_score: int = None,
         views: int = None,
         forwards: int = None,
@@ -672,6 +676,7 @@ class Message(Object, Update):
         self.migrate_to_chat_id = migrate_to_chat_id
         self.migrate_from_chat_id = migrate_from_chat_id
         self.pinned_message = pinned_message
+        self.pinned = pinned
         self.game_high_score = game_high_score
         self.views = views
         self.forwards = forwards
@@ -1256,6 +1261,7 @@ class Message(Object, Update):
                 mentioned=message.mentioned,
                 scheduled=is_scheduled,
                 from_scheduled=message.from_scheduled,
+                pinned=message.pinned,
                 media=media_type,
                 paid_media=paid_media,
                 show_caption_above_media=getattr(message, "invert_media", None),
