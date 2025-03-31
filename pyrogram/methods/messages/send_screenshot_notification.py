@@ -28,7 +28,7 @@ class SendScreenshotNotification:
     ) -> "types.Message":
         """Notify the other user in a private chat that a screenshot of the chat was taken.
 
-        .. include:: /_includes/usable-by/users-bots.rst
+        .. include:: /_includes/usable-by/users.rst
 
         Parameters:
             chat_id (``int`` | ``str``):
