@@ -459,7 +459,7 @@ class Story(Object, Update):
             await client.send_message(
                 chat_id=story.chat.id,
                 text="hello",
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -551,7 +551,7 @@ class Story(Object, Update):
             await client.send_animation(
                 chat_id=story.chat.id,
                 animation=animation,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -690,7 +690,7 @@ class Story(Object, Update):
             await client.send_audio(
                 chat_id=story.chat.id,
                 audio=audio,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -818,7 +818,7 @@ class Story(Object, Update):
             await client.send_cached_media(
                 chat_id=story.chat.id,
                 file_id=file_id,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -890,7 +890,7 @@ class Story(Object, Update):
             await client.send_media_group(
                 chat_id=story.chat.id,
                 media=list_of_media,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -955,7 +955,7 @@ class Story(Object, Update):
             await client.send_photo(
                 chat_id=story.chat.id,
                 photo=photo,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -1073,7 +1073,7 @@ class Story(Object, Update):
             await client.send_sticker(
                 chat_id=story.chat.id,
                 sticker=sticker,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -1177,7 +1177,7 @@ class Story(Object, Update):
             await client.send_video(
                 chat_id=story.chat.id,
                 video=video,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -1339,7 +1339,7 @@ class Story(Object, Update):
             await client.send_video_note(
                 chat_id=story.chat.id,
                 video_note=video_note,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
@@ -1454,7 +1454,7 @@ class Story(Object, Update):
             await client.send_voice(
                 chat_id=story.chat.id,
                 voice=voice,
-                reply_parameters=types.ReplyParameters(story_id=self.id)
+                reply_parameters=types.ReplyParameters(story_id=story.id)
             )
 
         Example:
