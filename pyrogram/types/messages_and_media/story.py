@@ -21,7 +21,7 @@ from typing import BinaryIO, Callable, Dict, List, Optional, Union
 
 import pyrogram
 from pyrogram import enums, raw, types, utils
-from pyrogram.errors import ChannelInvalid, ChannelPrivate, PeerIdInvalid
+from pyrogram.errors import ChannelInvalid, ChannelPrivate
 
 from ..object import Object
 from ..update import Update
@@ -34,7 +34,7 @@ class Story(Object, Update):
         id (``int``):
             Unique story identifier.
 
-        from_user (:obj:`~pyrogram.types.User`, *optional*):
+        chat (:obj:`~pyrogram.types.User`, *optional*):
             Sender of the story.
 
         sender_chat (:obj:`~pyrogram.types.Chat`, *optional*):
@@ -457,15 +457,15 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_message(
-                chat_id=self.chat.id,
+                chat_id=story.chat.id,
                 text="hello",
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
             .. code-block:: python
 
-                await story.reply_text("hello", quote=True)
+                await story.reply_text("hello")
 
         Parameters:
             text (``str``):
@@ -503,7 +503,7 @@ class Story(Object, Update):
         """
         return await self._client.send_message(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             text=text,
             parse_mode=parse_mode,
             entities=entities,
@@ -549,9 +549,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_animation(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 animation=animation,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -563,7 +563,7 @@ class Story(Object, Update):
             animation (``str``):
                 Animation to send.
                 Pass a file_id as string to send an animation that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get an animation from the Internet, or
+                pass a HTTP URL as a string for Telegram to get an animation from the Internet, or
                 pass a file path as string to upload a new animation that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -641,7 +641,7 @@ class Story(Object, Update):
         """
         return await self._client.send_animation(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             animation=animation,
             caption=caption,
             parse_mode=parse_mode,
@@ -688,9 +688,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_audio(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 audio=audio,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -702,7 +702,7 @@ class Story(Object, Update):
             audio (``str``):
                 Audio file to send.
                 Pass a file_id as string to send an audio file that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get an audio file from the Internet, or
+                pass a HTTP URL as a string for Telegram to get an audio file from the Internet, or
                 pass a file path as string to upload a new audio file that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -777,7 +777,7 @@ class Story(Object, Update):
         """
         return await self._client.send_audio(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             audio=audio,
             caption=caption,
             parse_mode=parse_mode,
@@ -816,9 +816,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_cached_media(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 file_id=file_id,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -860,7 +860,7 @@ class Story(Object, Update):
         """
         return await self._client.send_cached_media(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             file_id=file_id,
             caption=caption,
             parse_mode=parse_mode,
@@ -888,9 +888,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_media_group(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 media=list_of_media,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -920,7 +920,7 @@ class Story(Object, Update):
         """
         return await self._client.send_media_group(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             media=media,
             disable_notification=disable_notification,
             paid_message_star_count=paid_message_star_count,
@@ -953,9 +953,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_photo(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 photo=photo,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -967,7 +967,7 @@ class Story(Object, Update):
             photo (``str``):
                 Photo to send.
                 Pass a file_id as string to send a photo that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get a photo from the Internet, or
+                pass a HTTP URL as a string for Telegram to get a photo from the Internet, or
                 pass a file path as string to upload a new photo that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -1035,7 +1035,7 @@ class Story(Object, Update):
         """
         return await self._client.send_photo(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             photo=photo,
             caption=caption,
             parse_mode=parse_mode,
@@ -1071,9 +1071,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_sticker(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 sticker=sticker,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -1085,7 +1085,7 @@ class Story(Object, Update):
             sticker (``str``):
                 Sticker to send.
                 Pass a file_id as string to send a sticker that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get a .webp sticker file from the Internet, or
+                pass a HTTP URL as a string for Telegram to get a .webp sticker file from the Internet, or
                 pass a file path as string to upload a new sticker that exists on your local machine.
 
             disable_notification (``bool``, *optional*):
@@ -1131,7 +1131,7 @@ class Story(Object, Update):
         """
         return await self._client.send_sticker(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             sticker=sticker,
             disable_notification=disable_notification,
             paid_message_star_count=paid_message_star_count,
@@ -1175,9 +1175,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_video(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 video=video,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -1189,7 +1189,7 @@ class Story(Object, Update):
             video (``str``):
                 Video to send.
                 Pass a file_id as string to send a video that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get a video from the Internet, or
+                pass a HTTP URL as a string for Telegram to get a video from the Internet, or
                 pass a file path as string to upload a new video that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -1289,7 +1289,7 @@ class Story(Object, Update):
         """
         return await self._client.send_video(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             video=video,
             caption=caption,
             parse_mode=parse_mode,
@@ -1337,9 +1337,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_video_note(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 video_note=video_note,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -1413,7 +1413,7 @@ class Story(Object, Update):
         """
         return await self._client.send_video_note(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             video_note=video_note,
             duration=duration,
             length=length,
@@ -1452,9 +1452,9 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_voice(
-                chat_id=story.from_user.id,
+                chat_id=story.chat.id,
                 voice=voice,
-                reply_to_story_id=story.id
+                reply_parameters=types.ReplyParameters(story_id=self.id)
             )
 
         Example:
@@ -1466,7 +1466,7 @@ class Story(Object, Update):
             voice (``str``):
                 Audio file to send.
                 Pass a file_id as string to send an audio that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get an audio from the Internet, or
+                pass a HTTP URL as a string for Telegram to get an audio from the Internet, or
                 pass a file path as string to upload a new audio that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -1529,7 +1529,7 @@ class Story(Object, Update):
         """
         return await self._client.send_voice(
             chat_id=self.chat.id,
-            reply_to_story_id=self.id,
+            reply_parameters=types.ReplyParameters(story_id=self.id),
             voice=voice,
             caption=caption,
             parse_mode=parse_mode,
@@ -1562,7 +1562,7 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.copy_story(
-                chat_id=self.chat.id,
+                chat_id=story.chat.id,
                 from_chat_id=from_chat_id,
                 story_id=story.id
             )
@@ -1662,15 +1662,16 @@ class Story(Object, Update):
         self,
         media: Union[str, BinaryIO] = None,
     ) -> "types.Story":
-        """Bound method *edit* of :obj:`~pyrogram.types.Story`.
+        """Bound method *edit_story_media* of :obj:`~pyrogram.types.Story`.
 
         Use as a shortcut for:
 
         .. code-block:: python
 
-            await client.edit_story(
+            await client.edit_story_media(
+                chat_id=story.chat.id,
                 story_id=story.id,
-                caption="hello"
+                media=media
             )
 
         Example:
@@ -1682,7 +1683,7 @@ class Story(Object, Update):
             media (``str`` | ``BinaryIO``, *optional*):
                 New story media.
                 Pass a file_id as string to send a photo that exists on the Telegram servers,
-                pass an HTTP URL as a string for Telegram to get a photo from the Internet,
+                pass a HTTP URL as a string for Telegram to get a photo from the Internet,
                 pass a file path as string to upload a new photo that exists on your local machine, or
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
 
@@ -1804,7 +1805,7 @@ class Story(Object, Update):
         .. code-block:: python
 
             await client.send_reaction(
-                chat_id=self.chat.id,
+                chat_id=story.chat.id,
                 story_id=story.id,
                 emoji="🔥"
             )
@@ -1847,7 +1848,7 @@ class Story(Object, Update):
 
             await client.forward_story(
                 chat_id=chat_id,
-                from_chat_id=message.chat.id,
+                from_chat_id=story.chat.id,
                 story_id=story.id
             )
 
