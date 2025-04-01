@@ -34,7 +34,7 @@ class Story(Object, Update):
         id (``int``):
             Unique story identifier.
 
-        chat (:obj:`~pyrogram.types.User`, *optional*):
+        from_user (:obj:`~pyrogram.types.User`, *optional*):
             Sender of the story.
 
         sender_chat (:obj:`~pyrogram.types.Chat`, *optional*):
@@ -43,7 +43,7 @@ class Story(Object, Update):
         date (:py:obj:`~datetime.datetime`, *optional*):
             Date the story was sent.
 
-        from_user (:obj:`~pyrogram.types.Chat`, *optional*):
+        chat (:obj:`~pyrogram.types.Chat`, *optional*):
             Conversation the story belongs to.
 
         forward_from (:obj:`~pyrogram.types.User`, *optional*):
