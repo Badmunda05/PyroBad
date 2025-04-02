@@ -563,7 +563,7 @@ class Story(Object, Update):
             animation (``str``):
                 Animation to send.
                 Pass a file_id as string to send an animation that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get an animation from the Internet, or
+                pass an HTTP URL as a string for Telegram to get an animation from the Internet, or
                 pass a file path as string to upload a new animation that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -702,7 +702,7 @@ class Story(Object, Update):
             audio (``str``):
                 Audio file to send.
                 Pass a file_id as string to send an audio file that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get an audio file from the Internet, or
+                pass an HTTP URL as a string for Telegram to get an audio file from the Internet, or
                 pass a file path as string to upload a new audio file that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -967,7 +967,7 @@ class Story(Object, Update):
             photo (``str``):
                 Photo to send.
                 Pass a file_id as string to send a photo that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get a photo from the Internet, or
+                pass an HTTP URL as a string for Telegram to get a photo from the Internet, or
                 pass a file path as string to upload a new photo that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -1085,7 +1085,7 @@ class Story(Object, Update):
             sticker (``str``):
                 Sticker to send.
                 Pass a file_id as string to send a sticker that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get a .webp sticker file from the Internet, or
+                pass an HTTP URL as a string for Telegram to get a .webp sticker file from the Internet, or
                 pass a file path as string to upload a new sticker that exists on your local machine.
 
             disable_notification (``bool``, *optional*):
@@ -1189,7 +1189,7 @@ class Story(Object, Update):
             video (``str``):
                 Video to send.
                 Pass a file_id as string to send a video that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get a video from the Internet, or
+                pass an HTTP URL as a string for Telegram to get a video from the Internet, or
                 pass a file path as string to upload a new video that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -1225,7 +1225,7 @@ class Story(Object, Update):
             video_cover (``str`` | ``BinaryIO``, *optional*):
                 Video cover.
                 Pass a file_id as string to attach a photo that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get a video from the Internet,
+                pass an HTTP URL as a string for Telegram to get a video from the Internet,
                 pass a file path as string to upload a new photo civer that exists on your local machine, or
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
 
@@ -1466,7 +1466,7 @@ class Story(Object, Update):
             voice (``str``):
                 Audio file to send.
                 Pass a file_id as string to send an audio that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get an audio from the Internet, or
+                pass an HTTP URL as a string for Telegram to get an audio from the Internet, or
                 pass a file path as string to upload a new audio that exists on your local machine.
 
             caption (``str``, *optional*):
@@ -1683,7 +1683,7 @@ class Story(Object, Update):
             media (``str`` | ``BinaryIO``, *optional*):
                 New story media.
                 Pass a file_id as string to send a photo that exists on the Telegram servers,
-                pass a HTTP URL as a string for Telegram to get a photo from the Internet,
+                pass an HTTP URL as a string for Telegram to get a photo from the Internet,
                 pass a file path as string to upload a new photo that exists on your local machine, or
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
 
