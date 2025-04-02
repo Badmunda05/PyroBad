@@ -1662,7 +1662,7 @@ class Story(Object, Update):
         self,
         media: Union[str, BinaryIO] = None,
     ) -> "types.Story":
-        """Bound method *edit_story_media* of :obj:`~pyrogram.types.Story`.
+        """Bound method *edit_media* of :obj:`~pyrogram.types.Story`.
 
         Use as a shortcut for:
 
