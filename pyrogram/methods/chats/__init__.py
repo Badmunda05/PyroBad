@@ -38,6 +38,7 @@ from .get_chat_member import GetChatMember
 from .get_chat_members import GetChatMembers
 from .get_chat_members_count import GetChatMembersCount
 from .get_chat_online_count import GetChatOnlineCount
+from .get_chat_settings import GetChatSettings
 from .get_similar_channels import GetSimilarChannels
 from .get_dialogs import GetDialogs
 from .get_dialogs_count import GetDialogsCount
@@ -68,6 +69,7 @@ from .set_slow_mode import SetSlowMode
 from .toggle_folder_tags import ToggleFolderTags
 from .toggle_forum_topics import ToggleForumTopics
 from .toggle_join_to_send import ToggleJoinToSend
+from .transfer_chat_ownership import TransferChatOwnership
 from .unarchive_chats import UnarchiveChats
 from .unban_chat_member import UnbanChatMember
 from .unpin_all_chat_messages import UnpinAllChatMessages
@@ -130,11 +132,13 @@ class Chats(
     ToggleFolderTags,
     ToggleForumTopics,
     ToggleJoinToSend,
+    TransferChatOwnership,
     DeleteUserHistory,
     UnpinAllChatMessages,
     MarkChatUnread,
     GetChatEventLog,
     GetChatOnlineCount,
+    GetChatSettings,
     GetSimilarChannels,
     GetSendAsChats,
     SetSendAsChat,

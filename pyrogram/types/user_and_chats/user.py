@@ -191,6 +191,9 @@ class User(Object, Update):
         has_main_web_app (``bool``, *optional*):
             True, if the bot has a main Web App. Returned only in get_me.
 
+        paid_message_star_count (``int``, *optional*):
+            Number of Telegram Stars that must be paid by user for each sent message to the user.
+
         raw (:obj:`~pyrogram.raw.base.User` | :obj:`~pyrogram.raw.base.UserStatus`, *optional*):
             The raw user or user status object, as received from the Telegram API.
 
@@ -249,6 +252,7 @@ class User(Object, Update):
         can_join_groups: bool = None,
         can_read_all_group_messages: bool = None,
         has_main_web_app: bool = None,
+        paid_message_star_count: int = None,
         raw: Union["raw.base.User", "raw.base.UserStatus"] = None
     ):
         super().__init__(client)
@@ -294,6 +298,7 @@ class User(Object, Update):
         self.can_join_groups = can_join_groups
         self.can_read_all_group_messages = can_read_all_group_messages
         self.has_main_web_app = has_main_web_app
+        self.paid_message_star_count = paid_message_star_count
         self.raw = raw
 
     @property
@@ -353,6 +358,7 @@ class User(Object, Update):
             can_join_groups=getattr(user, "bot_nochats", None),
             can_read_all_group_messages=getattr(user, "bot_chat_history", None),
             has_main_web_app=getattr(user, "bot_has_main_app", None),
+            paid_message_star_count=getattr(user, "send_paid_messages_stars", None),
             raw=user,
             client=client
         )
@@ -445,7 +451,7 @@ class User(Object, Update):
 
         return await self._client.unarchive_chats(self.id)
 
-    def block(self):
+    async def block(self):
         """Bound method *block* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
@@ -466,21 +472,21 @@ class User(Object, Update):
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.block_user(self.id)
+        return await self._client.block_user(self.id)
 
-    def unblock(self):
+    async def unblock(self):
         """Bound method *unblock* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
 
         .. code-block:: python
 
-            client.unblock_user(123456789)
+            await client.unblock_user(123456789)
 
         Example:
             .. code-block:: python
 
-                user.unblock()
+                await user.unblock()
 
         Returns:
             True on success.
@@ -489,27 +495,27 @@ class User(Object, Update):
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.unblock_user(self.id)
+        return await self._client.unblock_user(self.id)
 
-    def get_common_chats(self):
+    async def get_common_chats(self):
         """Bound method *get_common_chats* of :obj:`~pyrogram.types.User`.
 
         Use as a shortcut for:
 
         .. code-block:: python
 
-            client.get_common_chats(123456789)
+            await client.get_common_chats(123456789)
 
         Example:
             .. code-block:: python
 
-                user.get_common_chats()
+                await user.get_common_chats()
 
         Returns:
-            True on success.
+            List of :obj:`~pyrogram.types.Chat`: On success, a list of the common chats is returned.
 
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
 
-        return self._client.get_common_chats(self.id)
+        return await self._client.get_common_chats(self.id)
