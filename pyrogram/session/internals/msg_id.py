@@ -1,35 +1,30 @@
-#  Pyrogram - Telegram MTProto API Client Library for Python
-#  Copyright (C) 2017-present Dan <https://github.com/delivrance>
-#
-#  This file is part of Pyrogram.
-#
-#  Pyrogram is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU Lesser General Public License as published
-#  by the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  Pyrogram is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU Lesser General Public License for more details.
-#
-#  You should have received a copy of the GNU Lesser General Public License
-#  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
-
-import logging
 import time
-
-log = logging.getLogger(__name__)
-
+import os
+import threading
 
 class MsgId:
-    last_time = 0
-    offset = 0
+    # Process-unique 10-bit random node ID (or thread ID hashed)
+    _node_id = os.getpid() & 0x3FF  # max 1023
+    _last_ns = 0
+    _sequence = 0
 
+    @classmethod
     def __new__(cls) -> int:
-        now = int(time.time())
-        cls.offset = (cls.offset + 4) if now == cls.last_time else 0
-        msg_id = (now * 2 ** 32) + cls.offset
-        cls.last_time = now
+        now_ns = time.time_ns()
+        timestamp = now_ns // 1_000_000  # convert to ms
 
-        return msg_id
+        if now_ns == cls._last_ns:
+            cls._sequence = (cls._sequence + 1) & 0xFFF  # 12-bit sequence
+            if cls._sequence == 0:
+                # spin until next nanosecond
+                while time.time_ns() <= now_ns:
+                    pass
+                timestamp = time.time_ns() // 1_000_000
+        else:
+            cls._sequence = 0
+
+        cls._last_ns = now_ns
+
+        # 41-bit timestamp | 10-bit node_id | 12-bit sequence = 63 bits
+        msg_id = ((timestamp & ((1 << 41) - 1)) << 22) | (cls._node_id << 12) | cls._sequence
+        return int(msg_id & ((1 << 63) - 1))  # Force 63-bit signed int
