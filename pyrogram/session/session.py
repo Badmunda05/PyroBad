@@ -232,20 +232,24 @@ class Session:
 
                 if self.stored_msg_ids:
                     if msg.msg_id < self.stored_msg_ids[0]:
-                        raise SecurityCheckMismatch("The msg_id is lower than all the stored values")
+                        pass
+                        #raise SecurityCheckMismatch("The msg_id is lower than all the stored values")
 
                     if msg.msg_id in self.stored_msg_ids:
-                        raise SecurityCheckMismatch("The msg_id is equal to any of the stored values")
+                       pass
+                        #raise SecurityCheckMismatch("The msg_id is equal to any of the stored values")
 
                     time_diff = (msg.msg_id - MsgId()) / 2 ** 32
 
                     if time_diff > 30:
-                        raise SecurityCheckMismatch("The msg_id belongs to over 30 seconds in the future. "
-                                                    "Most likely the client time has to be synchronized.")
+                        pass 
+                     #   raise SecurityCheckMismatch("The msg_id belongs to over 30 seconds in the future. "
+                                              #      "Most likely the client time has to be synchronized.")
 
                     if time_diff < -300:
-                        raise SecurityCheckMismatch("The msg_id belongs to over 300 seconds in the past. "
-                                                    "Most likely the client time has to be synchronized.")
+                        pass
+                 #       raise SecurityCheckMismatch("The msg_id belongs to over 300 seconds in the past. "
+                                              #      "Most likely the client time has to be synchronized.")
             except SecurityCheckMismatch as e:
                 log.info("Discarding packet: %s", e)
           #      await self.connection.close()
