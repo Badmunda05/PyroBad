@@ -17,9 +17,10 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Tuple
-
+from random import choice
 
 class DataCenter:
+    DC_5 = ["91.108.56.137", "91.108.56.200", "91.108.56.150",] # "91.108.56.162"]
     TEST = {
         1: "149.154.175.10",
         2: "149.154.167.40",
@@ -31,13 +32,14 @@ class DataCenter:
         2: "149.154.167.51",
         3: "149.154.175.100",
         4: "149.154.167.91",
-        5: "91.108.56.130",
+        5: "91.108.56.130", #162",
         203: "91.105.192.100"
     }
 
     PROD_MEDIA = {
         2: "149.154.167.151",
-        4: "149.154.164.250"
+        4: "149.154.164.250",
+        5: choice(DC_5),
     }
 
     TEST_IPV6 = {
@@ -76,7 +78,7 @@ class DataCenter:
                     ip = cls.PROD_IPV6[dc_id]
             else:
                 if media:
-                    ip = cls.PROD_MEDIA.get(dc_id, cls.PROD[dc_id])
+                         ip = cls.PROD_MEDIA.get(dc_id, cls.PROD[dc_id])
                 else:
                     ip = cls.PROD[dc_id]
 
