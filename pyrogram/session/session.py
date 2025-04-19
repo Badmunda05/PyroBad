@@ -190,7 +190,7 @@ class Session:
             except Exception as e:
                 log.exception(e)
 
-        log.info("Session stopped")
+        log.info("Session stopped is media: %s", self.is_media)
 
     async def restart(self):
         await self.stop()
@@ -248,7 +248,7 @@ class Session:
                                                     "Most likely the client time has to be synchronized.")
             except SecurityCheckMismatch as e:
                 log.info("Discarding packet: %s", e)
-                await self.connection.close()
+          #      await self.connection.close()
                 return
             else:
                 bisect.insort(self.stored_msg_ids, msg.msg_id)
@@ -348,7 +348,7 @@ class Session:
         if wait_response:
             self.results[msg_id] = Result()
 
-        log.debug("Sent: %s", message)
+  #      log.debug("Sent: %s", message)
 
         payload = await self.client.loop.run_in_executor(
             pyrogram.crypto_executor,
@@ -420,10 +420,12 @@ class Session:
                 if amount > sleep_threshold >= 0:
                     raise
 
-                log.warning('[%s] Waiting for %s seconds before continuing (required by "%s")',
+                log.debug('[%s] Waiting for %s seconds before continuing (required by "%s")',
                             self.client.name, amount, query_name)
 
                 await asyncio.sleep(amount)
+            except (TimeoutError, OSError):
+                pass
             except (OSError, InternalServerError, ServiceUnavailable) as e:
                 if retries == 0:
                     raise e from None
