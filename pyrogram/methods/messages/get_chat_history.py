@@ -95,6 +95,12 @@ class GetChatHistory:
             offset_date (:py:obj:`~datetime.datetime`, *optional*):
                 Pass a date as offset to retrieve only older messages starting from that date.
 
+            min_id (``int``, *optional*):
+                If a positive value was provided, the method will return only messages with IDs more than min_id.
+
+            max_id (``int``, *optional*):
+                If a positive value was provided, the method will return only messages with IDs less than max_id.
+
             reverse (``bool``, *optional*):
                 Pass True to retrieve the messages from oldest to newest.
 
