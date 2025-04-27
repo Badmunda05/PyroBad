@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from typing import Union, Optional, AsyncGenerator
+from typing import Union, AsyncGenerator
 
 import pyrogram
 from pyrogram import types, raw, utils
@@ -68,7 +68,7 @@ class GetChatHistory:
         min_id: int = 0,
         max_id: int = 0,
         reverse: bool = False
-    ) -> Optional[AsyncGenerator["types.Message", None]]:
+    ) -> AsyncGenerator["types.Message", None]:
         """Get messages from a chat history.
 
         The messages are returned in reverse chronological order.
