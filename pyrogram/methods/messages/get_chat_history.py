@@ -33,16 +33,16 @@ async def get_chunk(
     from_date: datetime = utils.zero_datetime(),
     min_id: int = 0,
     max_id: int = 0,
-    reverse: bool = False
+    unstable_reverse: bool = False
 ):
-    from_message_id = from_message_id or (1 if reverse else 0)
+    from_message_id = from_message_id or (1 if unstable_reverse else 0)
 
     messages = await client.invoke(
         raw.functions.messages.GetHistory(
             peer=await client.resolve_peer(chat_id),
             offset_id=from_message_id,
             offset_date=utils.datetime_to_timestamp(from_date),
-            add_offset=offset * (-1 if reverse else 1) - (limit if reverse else 0),
+            add_offset=offset * (-1 if unstable_reverse else 1) - (limit if unstable_reverse else 0),
             limit=limit,
             max_id=max_id,
             min_id=min_id,
@@ -52,7 +52,7 @@ async def get_chunk(
     )
 
     messages = await utils.parse_messages(client, messages, replies=0)
-    if reverse:
+    if unstable_reverse:
         messages.reverse()
 
     return messages
@@ -67,7 +67,8 @@ class GetChatHistory:
         offset_date: datetime = utils.zero_datetime(),
         min_id: int = 0,
         max_id: int = 0,
-        reverse: bool = False
+        *,
+        unstable_reverse: bool = False
     ) -> AsyncGenerator["types.Message", None]:
         """Get messages from a chat history.
 
@@ -101,7 +102,7 @@ class GetChatHistory:
             max_id (``int``, *optional*):
                 If a positive value was provided, the method will return only messages with IDs less than max_id.
 
-            reverse (``bool``, *optional*):
+            unstable_reverse (``bool``, *optional*):
                 Pass True to retrieve the messages from oldest to newest.
 
         Returns:
@@ -127,14 +128,14 @@ class GetChatHistory:
                 from_date=offset_date,
                 max_id=max_id,
                 min_id=min_id,
-                reverse=reverse
+                unstable_reverse=unstable_reverse
             )
 
             if not messages:
                 return
 
             offset_id = messages[-1].id
-            if reverse:
+            if unstable_reverse:
                 offset_id += 1
 
             for message in messages:
