@@ -134,6 +134,8 @@ class GetChatHistory:
                 return
 
             offset_id = messages[-1].id
+            if reversed:
+                offset += 1
 
             for message in messages:
                 yield message
