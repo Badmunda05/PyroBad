@@ -133,7 +133,7 @@ class GetChatHistory:
             if not messages:
                 return
 
-            offset_id = messages[-1].id + (1 if reverse else 0)
+            offset_id = messages[-1].id
 
             for message in messages:
                 yield message
