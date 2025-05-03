@@ -213,9 +213,9 @@ class Dispatcher:
         self.update_parsers = {key: value for key_tuple, value in self.update_parsers.items() for key in key_tuple}
 
     async def start(self):
-        if callable(self.client.connect_handler):
+        if callable(self.client.start_handler):
             try:
-                await self.client.connect_handler(self.client)
+                await self.client.start_handler(self.client)
             except Exception as e:
                 log.exception(e)
 
