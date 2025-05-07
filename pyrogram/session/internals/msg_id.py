@@ -8,7 +8,7 @@ class MsgId(int):
 
     def __new__(cls):
         with cls._lock:
-            now = int(time.time())
+            now = int(time.time()) + 8
 
             if now == cls._last_time:
                 cls._offset = (cls._offset + 4) & 0xFFFFFFFF  # wrap if needed
