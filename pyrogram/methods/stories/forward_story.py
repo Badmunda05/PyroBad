@@ -33,6 +33,17 @@ class ForwardStory:
         message_thread_id: int = None,
         schedule_date: datetime = None,
         paid_message_star_count: int = None,
+        protect_content: bool = None,
+        allow_paid_broadcast: bool = None,
+        reply_parameters: "types.ReplyParameters" = None,
+        reply_markup: Union[
+            "types.InlineKeyboardMarkup",
+            "types.ReplyKeyboardMarkup",
+            "types.ReplyKeyboardRemove",
+            "types.ForceReply"
+        ] = None,
+        message_effect_id: int = None,
+        send_as: Union[int, str] = None,
     ) -> Optional["types.Message"]:
         """Forward story.
 
@@ -65,6 +76,29 @@ class ForwardStory:
 
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
+            
+            protect_content (``bool``, *optional*):
+                Pass True if the content of the message must be protected from forwarding and saving; for bots only.
+
+            allow_paid_broadcast (``bool``, *optional*):
+                Pass True to allow the message to ignore regular broadcast limits for a small fee; for bots only
+            
+            reply_parameters (:obj:`~pyrogram.types.ReplyParameters`, *optional*):
+                Description of the message to reply to.
+            
+            reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
+                Additional interface options. An object for an inline keyboard, custom reply keyboard,
+                instructions to remove reply keyboard or to force a reply from the user.
+            
+            message_effect_id (``int`` ``64-bit``, *optional*):
+                Unique identifier of the message effect to be added to the message; for private chats only.
+
+            send_as (``int`` | ``str``):
+                Unique identifier (int) or username (str) of the chat or channel to send the message as.
+                You can use this to send the message on behalf of a chat or channel where you have appropriate permissions.
+                Use the :meth:`~pyrogram.Client.get_send_as_chats` to return the list of message sender identifiers, which can be used to send messages in the chat, 
+                This setting applies to the current message and will remain effective for future messages unless explicitly changed.
+                To set this behavior permanently for all messages, use :meth:`~pyrogram.Client.set_send_as_chat`.
 
         Returns:
             :obj:`~pyrogram.types.Message`: On success, the sent story message is returned.
@@ -88,10 +122,15 @@ class ForwardStory:
                 message="",
                 reply_to=await utils.get_reply_to(
                     self,
+                    reply_parameters,
                     message_thread_id
                 ),
                 allow_paid_stars=paid_message_star_count,
-
+                allow_paid_floodskip=allow_paid_broadcast,
+                reply_markup=await reply_markup.write(self) if reply_markup else None,
+                noforwards=protect_content,
+                send_as=send_as,
+                effect=message_effect_id,
             )
         )
 
