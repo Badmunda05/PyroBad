@@ -1,6 +1,5 @@
 import time
 import threading
-import random
 
 class MsgId(int):
     _lock = threading.Lock()
@@ -11,13 +10,10 @@ class MsgId(int):
         with cls._lock:
             now = int(time.time())
 
-            # Add a small random number to reduce collisions
-            rand_shift = random.randint(1, 999)
-
             if now == cls._last_time:
-                cls._offset = (cls._offset + rand_shift) & 0xFFFFFFFF
+                cls._offset = (cls._offset + 4) & 0xFFFFFFFF  # wrap if needed
             else:
-                cls._offset = rand_shift  # not 0 to avoid repeat on new second
+                cls._offset = 0
 
             cls._last_time = now
             msg_id = (now << 32) | cls._offset
