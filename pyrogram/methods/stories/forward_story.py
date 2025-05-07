@@ -36,7 +36,7 @@ class ForwardStory:
     ) -> Optional["types.Message"]:
         """Forward story.
 
-        .. include:: /_includes/usable-by/users.rst
+        .. include:: /_includes/usable-by/users-bots.rst
 
         Parameters:
             chat_id (``int`` | ``str``):
