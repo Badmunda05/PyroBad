@@ -42,8 +42,7 @@ class ForwardStory:
             "types.ReplyKeyboardRemove",
             "types.ForceReply"
         ] = None,
-        message_effect_id: int = None,
-        send_as: Union[int, str] = None,
+        message_effect_id: int = None
     ) -> Optional["types.Message"]:
         """Forward story.
 
@@ -93,13 +92,6 @@ class ForwardStory:
             message_effect_id (``int`` ``64-bit``, *optional*):
                 Unique identifier of the message effect to be added to the message; for private chats only.
 
-            send_as (``int`` | ``str``):
-                Unique identifier (int) or username (str) of the chat or channel to send the message as.
-                You can use this to send the message on behalf of a chat or channel where you have appropriate permissions.
-                Use the :meth:`~pyrogram.Client.get_send_as_chats` to return the list of message sender identifiers, which can be used to send messages in the chat, 
-                This setting applies to the current message and will remain effective for future messages unless explicitly changed.
-                To set this behavior permanently for all messages, use :meth:`~pyrogram.Client.set_send_as_chat`.
-
         Returns:
             :obj:`~pyrogram.types.Message`: On success, the sent story message is returned.
 
@@ -129,7 +121,6 @@ class ForwardStory:
                 allow_paid_floodskip=allow_paid_broadcast,
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
                 noforwards=protect_content,
-                send_as=send_as,
                 effect=message_effect_id,
             )
         )
