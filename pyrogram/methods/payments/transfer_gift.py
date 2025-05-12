@@ -43,6 +43,9 @@ class TransferGift:
         Parameters:
             owned_gift_id (``str``):
                 Unique identifier of the regular gift that should be transferred.
+                For a user gift, you can use the message ID (int) of the gift message.
+                For a channel gift, you can use the packed format `chatID_savedID` (str).
+                For a upgraded gift, you can use the gift link.
 
             new_owner_chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat you want to transfer the star gift to.
@@ -62,12 +65,19 @@ class TransferGift:
                 # Transfer gift to another user
                 await app.transfer_gift(owned_gift_id="123", new_owner_chat_id=123)
         """
-        match = re.search(r"(\d+)_(\d+)", str(owned_gift_id))
+        owned_gift_id = str(owned_gift_id)
 
-        if match:
+        saved_gift_match = re.match(r"^(\d+)_(\d+)$", owned_gift_id)
+        slug_match = self.UPGRADED_GIFT_RE.match(owned_gift_id)
+
+        if saved_gift_match:
             stargift = raw.types.InputSavedStarGiftChat(
-                peer=await self.resolve_peer(match.group(1)),
-                saved_id=int(match.group(2))
+                peer=await self.resolve_peer(saved_gift_match.group(1)),
+                saved_id=int(saved_gift_match.group(2))
+            )
+        elif slug_match:
+            stargift = raw.types.InputSavedStarGiftSlug(
+                slug=slug_match.group(1)
             )
         else:
             stargift = raw.types.InputSavedStarGiftUser(

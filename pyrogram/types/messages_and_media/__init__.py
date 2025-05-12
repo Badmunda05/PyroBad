@@ -84,6 +84,10 @@ from .stripped_thumbnail import StrippedThumbnail
 from .successful_payment import SuccessfulPayment
 from .text_quote import TextQuote
 from .thumbnail import Thumbnail
+from .upgraded_gift_attribute_id_backdrop import UpgradedGiftAttributeIdBackdrop
+from .upgraded_gift_attribute_id_model import UpgradedGiftAttributeIdModel
+from .upgraded_gift_attribute_id_symbol import UpgradedGiftAttributeIdSymbol
+from .upgraded_gift_attribute_id import UpgradedGiftAttributeId
 from .venue import Venue
 from .video import Video
 from .video_note import VideoNote
@@ -161,6 +165,10 @@ __all__ = [
     "SuccessfulPayment",
     "TextQuote",
     "Thumbnail",
+    "UpgradedGiftAttributeIdBackdrop",
+    "UpgradedGiftAttributeIdModel",
+    "UpgradedGiftAttributeIdSymbol",
+    "UpgradedGiftAttributeId",
     "Venue",
     "Video",
     "VideoNote",

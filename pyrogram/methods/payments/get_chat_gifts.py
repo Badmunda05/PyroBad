@@ -33,8 +33,7 @@ class GetChatGifts:
         exclude_upgraded: Optional[bool] = None,
         sort_by_price: Optional[bool] = None,
         limit: int = 0,
-        offset: str = "",
-        business_connection_id: Optional[str] = None
+        offset: str = ""
     ):
         """Get all gifts owned by specified chat.
 
@@ -70,10 +69,6 @@ class GetChatGifts:
             limit (``int``, *optional*):
                 The maximum number of gifts to be returned.
 
-            business_connection_id (``str``, *optional*):
-                Unique identifier of business connection on behalf of which to send the request.
-                For bots only.
-
         Returns:
             ``Generator``: A generator yielding :obj:`~pyrogram.types.Gift` objects.
 
@@ -102,8 +97,7 @@ class GetChatGifts:
                     exclude_unique=exclude_upgraded,
                     sort_by_value=sort_by_price
                 ),
-                sleep_threshold=60,
-                business_connection_id=business_connection_id
+                sleep_threshold=60
             )
 
             users = {i.id: i for i in r.users}

@@ -282,7 +282,6 @@ def pyrogram_api():
             get_custom_emoji_stickers
             send_web_page
             start_bot
-            update_color
             delete_chat_history
             send_paid_media
             send_paid_reaction
@@ -420,6 +419,9 @@ def pyrogram_api():
             upgrade_gift
             get_stars_balance
             set_pinned_gifts
+            search_gifts_for_resale
+            send_resold_gift
+            set_gift_resale_price
         """,
         phone="""
         Phone
@@ -464,6 +466,9 @@ def pyrogram_api():
         """,
         business="""
         Business
+            delete_business_messages
+            get_business_account_gifts
+            get_business_account_star_balance
             get_business_connection
         """,
         authorization="""
@@ -603,7 +608,7 @@ def pyrogram_api():
             PrivacyRule
             StoriesStealthMode
             BotVerification
-            BusinessBotPermissions
+            BusinessBotRights
             ChatSettings
             GlobalPrivacySettings
             HistoryCleared
@@ -692,6 +697,7 @@ def pyrogram_api():
             ChatBackground
             ChatTheme
             GiftedStars
+            UpgradedGiftAttributeId
         """,
         bot_keyboards="""
         Bot keyboards
@@ -774,7 +780,11 @@ def pyrogram_api():
         input_message_content="""
         InputMessageContent
             InputMessageContent
+            InputContactMessageContent
+            InputInvoiceMessageContent
+            InputLocationMessageContent
             InputTextMessageContent
+            InputVenueMessageContent
         """,
         authorization="""
         Authorization
@@ -975,6 +985,7 @@ def pyrogram_api():
             Gift.upgrade
             Gift.transfer
             Gift.wear
+            Gift.buy
         """,
         animation="""
         Animation
@@ -1044,6 +1055,7 @@ def pyrogram_api():
             GiftAttributeType
             MediaAreaType
             PrivacyRuleType
+            GiftForResaleOrder
         """,
     )
 

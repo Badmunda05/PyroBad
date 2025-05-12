@@ -27,7 +27,9 @@ from pyrogram.handlers import (
     CallbackQueryHandler, MessageHandler, EditedMessageHandler, DeletedMessagesHandler,
     UserStatusHandler, RawUpdateHandler, InlineQueryHandler, PollHandler, PreCheckoutQueryHandler,
     ChosenInlineResultHandler, ChatMemberUpdatedHandler, ChatJoinRequestHandler, StoryHandler,
-    ShippingQueryHandler, MessageReactionHandler, MessageReactionCountHandler, ChatBoostHandler, PurchasedPaidMediaHandler
+    ShippingQueryHandler, MessageReactionHandler, MessageReactionCountHandler, ChatBoostHandler,
+    PurchasedPaidMediaHandler, BusinessConnectionHandler, BusinessMessageHandler,
+    EditedBusinessMessageHandler, DeletedBusinessMessagesHandler
 )
 from pyrogram.raw.types import (
     UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage,
@@ -39,16 +41,16 @@ from pyrogram.raw.types import (
     UpdateBotInlineSend, UpdateChatParticipant, UpdateChannelParticipant,
     UpdateBotChatInviteRequester, UpdateStory, UpdateBotShippingQuery, UpdateBotMessageReaction,
     UpdateBotMessageReactions, UpdateBotChatBoost, UpdateBusinessBotCallbackQuery,
-    UpdateBotPurchasedPaidMedia, UpdateMessagePollVote
+    UpdateBotPurchasedPaidMedia, UpdateMessagePollVote, UpdateBotBusinessConnect
 )
 
 log = logging.getLogger(__name__)
 
 
 class Dispatcher:
-    NEW_MESSAGE_UPDATES = (UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage, UpdateBotNewBusinessMessage)
-    EDIT_MESSAGE_UPDATES = (UpdateEditMessage, UpdateEditChannelMessage, UpdateBotEditBusinessMessage)
-    DELETE_MESSAGES_UPDATES = (UpdateDeleteMessages, UpdateDeleteChannelMessages, UpdateBotDeleteBusinessMessage)
+    NEW_MESSAGE_UPDATES = (UpdateNewMessage, UpdateNewChannelMessage, UpdateNewScheduledMessage)
+    EDIT_MESSAGE_UPDATES = (UpdateEditMessage, UpdateEditChannelMessage)
+    DELETE_MESSAGES_UPDATES = (UpdateDeleteMessages, UpdateDeleteChannelMessages)
     CALLBACK_QUERY_UPDATES = (UpdateBotCallbackQuery, UpdateInlineBotCallbackQuery, UpdateBusinessBotCallbackQuery)
     CHAT_MEMBER_UPDATES = (UpdateChatParticipant, UpdateChannelParticipant)
     USER_STATUS_UPDATES = (UpdateUserStatus,)
@@ -63,6 +65,10 @@ class Dispatcher:
     MESSAGE_REACTION_COUNT_UPDATES = (UpdateBotMessageReactions,)
     CHAT_BOOST_UPDATES = (UpdateBotChatBoost,)
     PURCHASED_PAID_MEDIA_UPDATES = (UpdateBotPurchasedPaidMedia,)
+    BUSINESS_CONNECTION_UPDATES = (UpdateBotBusinessConnect,)
+    NEW_BUSINESS_MESSAGE_UPDATES = (UpdateBotNewBusinessMessage,)
+    EDITED_BUSINESS_MESSAGE_UPDATES = (UpdateBotEditBusinessMessage,)
+    DELETED_BUSINESS_MESSAGES_UPDATES = (UpdateBotDeleteBusinessMessage,)
 
     def __init__(self, client: "pyrogram.Client"):
         self.client = client
@@ -189,6 +195,39 @@ class Dispatcher:
                 PurchasedPaidMediaHandler
             )
 
+        async def business_connection_parser(update, users, chats):
+            return (
+                pyrogram.types.BusinessConnection._parse(self.client, update, users),
+                BusinessConnectionHandler
+            )
+
+        async def business_message_parser(update, users, chats):
+            # Business messages are parsed the same way as regular messages, but the handler is different
+            parsed, _ = await message_parser(update, users, chats)
+
+            return (
+                parsed,
+                BusinessMessageHandler
+            )
+
+        async def edited_business_message_parser(update, users, chats):
+            # Edited messages are parsed the same way as regular messages, but the handler is different
+            parsed, _ = await message_parser(update, users, chats)
+
+            return (
+                parsed,
+                EditedBusinessMessageHandler
+            )
+
+        async def deleted_business_messages_parser(update, users, chats):
+            # Deleted messages are parsed the same way as regular messages, but the handler is different
+            parsed, _ = await deleted_messages_parser(update, users, chats)
+
+            return (
+                parsed,
+                DeletedBusinessMessagesHandler,
+            )
+
         self.update_parsers = {
             Dispatcher.NEW_MESSAGE_UPDATES: message_parser,
             Dispatcher.EDIT_MESSAGE_UPDATES: edited_message_parser,
@@ -207,11 +246,21 @@ class Dispatcher:
             Dispatcher.MESSAGE_REACTION_COUNT_UPDATES: message_reaction_count_parser,
             Dispatcher.CHAT_BOOST_UPDATES: chat_boost_parser,
             Dispatcher.PURCHASED_PAID_MEDIA_UPDATES: purchased_paid_media_parser,
+            Dispatcher.BUSINESS_CONNECTION_UPDATES: business_connection_parser,
+            Dispatcher.NEW_BUSINESS_MESSAGE_UPDATES: business_message_parser,
+            Dispatcher.EDITED_BUSINESS_MESSAGE_UPDATES: edited_business_message_parser,
+            Dispatcher.DELETED_BUSINESS_MESSAGES_UPDATES: deleted_business_messages_parser
         }
 
         self.update_parsers = {key: value for key_tuple, value in self.update_parsers.items() for key in key_tuple}
 
     async def start(self):
+        if callable(self.client.start_handler):
+            try:
+                await self.client.start_handler(self.client)
+            except Exception as e:
+                log.exception(e)
+
         if not self.client.no_updates:
             for i in range(self.client.workers):
                 self.locks_list.append(asyncio.Lock())
@@ -226,6 +275,12 @@ class Dispatcher:
                 await self.client.recover_gaps()
 
     async def stop(self, clear: bool = True):
+        if callable(self.client.stop_handler):
+            try:
+                await self.client.stop_handler(self.client)
+            except Exception as e:
+                log.exception(e)
+
         if not self.client.no_updates:
             for i in range(self.client.workers):
                 self.updates_queue.put_nowait(None)

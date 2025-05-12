@@ -43,6 +43,9 @@ class UpgradeGift:
         Parameters:
             owned_gift_id (``str``):
                 Unique identifier of the regular gift that should be upgraded to a unique one.
+                For a user gift, you can use the message ID (int) of the gift message.
+                For a channel gift, you can use the packed format `chatID_savedID` (str).
+                For a upgraded gift, you can use the gift link.
 
             keep_original_details (``bool``, *optional*):
                 Pass True to keep the original gift text, sender and receiver in the upgraded gift.
@@ -63,12 +66,19 @@ class UpgradeGift:
                 # Upgrade gift in channel (owned_gift_id packed in format chatID_savedID)
                 await app.upgrade_gift(owned_gift_id="123_456")
         """
-        match = re.search(r"(\d+)_(\d+)", str(owned_gift_id))
+        owned_gift_id = str(owned_gift_id)
 
-        if match:
+        saved_gift_match = re.match(r"^(\d+)_(\d+)$", owned_gift_id)
+        slug_match = self.UPGRADED_GIFT_RE.match(owned_gift_id)
+
+        if saved_gift_match:
             stargift = raw.types.InputSavedStarGiftChat(
-                peer=await self.resolve_peer(match.group(1)),
-                saved_id=int(match.group(2))
+                peer=await self.resolve_peer(saved_gift_match.group(1)),
+                saved_id=int(saved_gift_match.group(2))
+            )
+        elif slug_match:
+            stargift = raw.types.InputSavedStarGiftSlug(
+                slug=slug_match.group(1)
             )
         else:
             stargift = raw.types.InputSavedStarGiftUser(

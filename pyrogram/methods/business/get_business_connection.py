@@ -23,11 +23,11 @@ from pyrogram import raw, types
 class GetBusinessConnection:
     async def get_business_connection(
         self: "pyrogram.Client",
-        connection_id: str
+        business_connection_id: str
     ):
-        """Get a business connection information.
+        """Use this method to get information about the connection of the bot with a business account.
 
-        .. include:: /_includes/usable-by/users-bots.rst
+        .. include:: /_includes/usable-by/bots.rst
 
         Parameters:
             connection_id (``str``):
@@ -44,11 +44,10 @@ class GetBusinessConnection:
         """
         r = await self.invoke(
             raw.functions.account.GetBotBusinessConnection(
-                connection_id=connection_id
+                connection_id=business_connection_id
             )
         )
 
         users = {i.id: i for i in r.users}
-        chats = {i.id: i for i in r.chats}
 
         return types.BusinessConnection._parse(self, r.updates[0].connection, users)
