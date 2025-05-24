@@ -46,6 +46,7 @@ BOT_GAMES_DISABLED	Bot games cannot be used in this type of chat
 BOT_GROUPS_BLOCKED	This bot can't be added to groups
 BOT_INLINE_DISABLED	The inline feature of the bot is disabled
 BOT_INVALID	This is not a valid bot
+BOT_INVOICE_INVALID	The provided invoice is invalid
 BOT_METHOD_INVALID	The method can't be used by bots
 BOT_MISSING	This method can only be run by a bot
 BOT_NOT_CONNECTED_YET	No [business bot](https://core.telegram.org/api/business#connected-bots) is connected to the currently logged in user.
@@ -59,6 +60,7 @@ BROADCAST_CALLS_DISABLED	Broadcast calls disabled
 BROADCAST_ID_INVALID	The channel is invalid
 BROADCAST_PUBLIC_VOTERS_FORBIDDEN	Polls with public voters cannot be sent in channels
 BROADCAST_REQUIRED	The request can only be used with a channel
+BUSINESS_BOT_MISSING	Business bot missing
 BUSINESS_CONNECTION_INVALID	The business connection is invalid
 BUSINESS_CONNECTION_NOT_ALLOWED	This business connection is not allowed
 BUSINESS_PEER_INVALID	Messages can't be set to the specified peer through the current [business connection](https://core.telegram.org/api/business#connected-bots).
@@ -455,8 +457,12 @@ SRP_ID_INVALID	Invalid SRP ID provided
 SRP_PASSWORD_CHANGED	The password has changed
 STARGIFT_ALREADY_CONVERTED	The provided star gift already converted to stars
 STARGIFT_ALREADY_UPGRADED	This star gift was already upgraded before
+STARGIFT_CONVERT_TOO_OLD	This gift can no longer be converted into stars
 STARGIFT_INVALID	The specified gift is invalid
 STARGIFT_NOT_FOUND	The specified star gift was not found
+STARGIFT_NOT_OWNER	You can't control this gift because it doesn't belong to you
+STARGIFT_RESELL_NOT_ALLOWED	You can't buy this gift. Someone else may have already bought it
+STARGIFT_RESELL_TOO_EARLY_X	A wait of {value} seconds is required to resell this gift
 STARGIFT_SLUG_INVALID	The provided star gift slug is invalid (must match the format CollectionName-123)
 STARGIFT_UPGRADE_UNAVAILABLE	Gift is not available for upgrade yet.
 STARGIFT_USAGE_LIMITED	The star gift usage is limited

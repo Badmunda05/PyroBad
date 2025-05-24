@@ -19,8 +19,7 @@
 from typing import Union
 
 import pyrogram
-from pyrogram import raw
-from pyrogram import types
+from pyrogram import raw, types, utils
 
 
 class SetChatTTL:
@@ -63,12 +62,6 @@ class SetChatTTL:
             )
         )
 
-        for i in r.updates:
-            if isinstance(i, (raw.types.UpdateNewMessage,
-                              raw.types.UpdateNewChannelMessage)):
-                return await types.Message._parse(
-                    self,
-                    i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats},
-                )
+        messages = await utils.parse_messages(client=self, messages=r)
+
+        return messages[0] if messages else None

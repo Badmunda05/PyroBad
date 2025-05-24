@@ -102,8 +102,7 @@ def get_input_media_from_file_id(
 async def parse_messages(
     client: "pyrogram.Client",
     messages: Union["raw.base.messages.Messages", "raw.base.Updates"],
-    replies: int = 1,
-    business_connection_id: str = None
+    replies: int = 1
 ) -> List["types.Message"]:
     users = {i.id: i for i in getattr(messages, "users", [])}
     chats = {i.id: i for i in getattr(messages, "chats", [])}
@@ -131,8 +130,7 @@ async def parse_messages(
                     users=users,
                     chats=chats,
                     topics=topics,
-                    replies=0,
-                    business_connection_id=business_connection_id
+                    replies=0
                 )
             )
 
@@ -202,7 +200,7 @@ async def parse_messages(
                         users,
                         chats,
                         is_scheduled=isinstance(u, raw.types.UpdateNewScheduledMessage),
-                        business_connection_id=getattr(u, "connection_id", business_connection_id),
+                        business_connection_id=getattr(u, "connection_id", None),
                         raw_reply_to_message=getattr(u, "reply_to_message", None),
                         replies=replies
                     )

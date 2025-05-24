@@ -73,9 +73,11 @@ class EditInlineText:
                 await app.edit_inline_text(inline_message_id, "new text")
 
                 # Take the same text message, remove the web page preview only
+                from pyrogram import types
+
                 await app.edit_inline_text(
                     inline_message_id, message.text,
-                    disable_web_page_preview=True)
+                    link_preview_options=types.LinkPreviewOptions(is_disabled=True))
         """
         if disable_web_page_preview is not None:
             log.warning(

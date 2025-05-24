@@ -544,7 +544,7 @@ class Gift(Object):
             :obj:`~pyrogram.types.Message`: On success, the sent message is returned.
         """
         return await self._client.transfer_gift(
-            owned_gift_id=str(self.message_id),
+            owned_gift_id=self.link,
             new_owner_chat_id=to_chat_id
         )
 

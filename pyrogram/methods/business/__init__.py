@@ -20,12 +20,14 @@ from .delete_business_messages import DeleteBusinessMessages
 from .get_business_account_gifts import GetBusinessAccountGifts
 from .get_business_account_star_balance import GetBusinessAccountStarBalance
 from .get_business_connection import GetBusinessConnection
+from .transfer_business_account_stars import TransferBusinessAccountStars
 
 
 class Business(
     DeleteBusinessMessages,
     GetBusinessAccountGifts,
     GetBusinessAccountStarBalance,
-    GetBusinessConnection
+    GetBusinessConnection,
+    TransferBusinessAccountStars,
 ):
     pass

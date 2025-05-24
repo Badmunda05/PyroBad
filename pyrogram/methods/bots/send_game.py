@@ -41,7 +41,7 @@ class SendGame:
             "types.ReplyKeyboardRemove",
             "types.ForceReply",
         ] = None,
-        
+
         reply_to_message_id: int = None,
         reply_to_chat_id: Union[int, str] = None,
     ) -> "types.Message":
@@ -134,10 +134,6 @@ class SendGame:
             )
         )
 
-        for i in r.updates:
-            if isinstance(i, (raw.types.UpdateNewMessage, raw.types.UpdateNewChannelMessage)):
-                return await types.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats}
-                )
+        messages = await utils.parse_messages(client=self, messages=r)
+
+        return messages[0] if messages else None

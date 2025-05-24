@@ -20,6 +20,7 @@ from .add_chat_members import AddChatMembers
 from .archive_chats import ArchiveChats
 from .ban_chat_member import BanChatMember
 from .create_channel import CreateChannel
+from .create_folder import CreateFolder
 from .create_forum_topic import CreateForumTopic
 from .create_group import CreateGroup
 from .create_supergroup import CreateSupergroup
@@ -77,7 +78,8 @@ from .unpin_chat_message import UnpinChatMessage
 from .unpin_forum_topic import UnpinForumTopic
 from .update_chat_notifications import UpdateChatNotifications
 from .update_color import UpdateColor
-from .update_folder import UpdateFolder
+from .edit_folder import EditFolder
+from .reorder_folders import ReorderFolders
 
 
 class Chats(
@@ -104,7 +106,7 @@ class Chats(
     UnpinForumTopic,
     UpdateChatNotifications,
     UpdateColor,
-    UpdateFolder,
+    EditFolder,
     GetDialogs,
     GetChatMembersCount,
     SetChatUsername,
@@ -118,6 +120,8 @@ class Chats(
     CreateGroup,
     CreateSupergroup,
     CreateChannel,
+    CreateFolder,
+    ReorderFolders,
     CreateForumTopic,
     CloseForumTopic,
     AddChatMembers,

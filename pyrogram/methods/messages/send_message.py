@@ -132,8 +132,10 @@ class SendMessage:
                 await app.send_message("me", "Message sent with **Pyrogram**!")
 
                 # Disable web page previews
+                from pyrogram import types
+
                 await app.send_message("me", "https://docs.pyrogram.org",
-                    disable_web_page_preview=True)
+                    link_preview_options=types.LinkPreviewOptions(is_disabled=True))
 
                 # Reply to a message using its id
                 await app.send_message("me", "this is a reply", reply_to_message_id=123)
@@ -269,15 +271,6 @@ class SendMessage:
                 client=self
             )
 
-        for i in r.updates:
-            if isinstance(i, (raw.types.UpdateNewMessage,
-                              raw.types.UpdateNewChannelMessage,
-                              raw.types.UpdateNewScheduledMessage,
-                              raw.types.UpdateBotNewBusinessMessage)):
-                return await types.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats},
-                    is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
-                    business_connection_id=getattr(i, "connection_id", None)
-                )
+        messages = await utils.parse_messages(client=self, messages=r)
+
+        return messages[0] if messages else None

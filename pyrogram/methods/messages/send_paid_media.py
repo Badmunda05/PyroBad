@@ -390,6 +390,5 @@ class SendPaidMedia:
                 )],
                 users=r.users,
                 chats=r.chats
-            ),
-            business_connection_id=conn_id
+            )
         )

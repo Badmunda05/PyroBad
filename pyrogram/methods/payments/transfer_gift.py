@@ -115,8 +115,7 @@ class TransferGift:
 
         messages = await utils.parse_messages(
             client=self,
-            messages=r.updates if isinstance(r, raw.types.payments.PaymentResult) else r,
-            business_connection_id=business_connection_id
+            messages=r.updates if isinstance(r, raw.types.payments.PaymentResult) else r
         )
 
         return messages[0] if messages else None

@@ -280,18 +280,8 @@ class SendSticker:
                 except FilePartMissing as e:
                     await self.save_file(sticker, file_id=file.id, file_part=e.value)
                 else:
-                    for i in r.updates:
-                        if isinstance(i, (raw.types.UpdateNewMessage,
-                                          raw.types.UpdateNewChannelMessage,
-                                          raw.types.UpdateNewScheduledMessage,
-                                          raw.types.UpdateBotNewBusinessMessage)):
-                            return await types.Message._parse(
-                                self, i.message,
-                                {i.id: i for i in r.users},
-                                {i.id: i for i in r.chats},
-                                is_scheduled=isinstance(i, raw.types.UpdateNewScheduledMessage),
-                                business_connection_id=getattr(i, "connection_id", None),
-                                raw_reply_to_message=getattr(i, "reply_to_message", None),
-                            )
+                    messages = await utils.parse_messages(client=self, messages=r)
+
+                    return messages[0] if messages else None
         except StopTransmission:
             return None
