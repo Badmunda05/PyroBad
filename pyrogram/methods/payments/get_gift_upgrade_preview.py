@@ -16,36 +16,38 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
 import pyrogram
-from pyrogram import raw
+from pyrogram import raw, types
 
 
-class ToggleFolderTags:
-    async def toggle_folder_tags(
+class GetGiftUpgradePreview:
+    async def get_gift_upgrade_preview(
         self: "pyrogram.Client",
-        are_tags_enabled: bool
-    ) -> bool:
-        """Toggles whether chat folder tags are enabled.
+        gift_id: int
+    ):
+        """Return examples of possible upgraded gifts for a regular gift.
 
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
-            are_tags_enabled (``bool``):
-                Pass True to enable folder tags.
-                Pass False to disable them.
+            gift_id (``int``):
+                Identifier of the gift.
 
         Returns:
-            ``bool``: On success, True is returned.
+            :obj:`~pyrogram.types.GiftUpgradePreview`: Information about the gift preview is returned.
 
         Example:
             .. code-block:: python
 
-                await app.toggle_folder_tags(True)
+                # Get information about upgraded gift preview
+                await client.get_gift_upgrade_preview("https://t.me/nft/SignetRing-903")
         """
         r = await self.invoke(
-            raw.functions.messages.ToggleDialogFilterTags(
-                enabled=are_tags_enabled
+            raw.functions.payments.GetStarGiftUpgradePreview(
+                gift_id=gift_id
             )
         )
 
-        return r
+        return await types.GiftUpgradePreview._parse(self, r)

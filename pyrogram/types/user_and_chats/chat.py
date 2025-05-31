@@ -838,21 +838,20 @@ class Chat(Object):
         chat_id = (peer_id or from_id) if is_chat else (from_id or peer_id)
 
         if isinstance(message.peer_id, raw.types.PeerUser):
-            return Chat._parse_user_chat(client, users[chat_id])
-
-        if isinstance(message.peer_id, raw.types.PeerChat):
-            return Chat._parse_chat_chat(client, chats[chat_id])
-
-        return Chat._parse_channel_chat(client, chats[chat_id])
+            return Chat._parse_user_chat(client, users.get(chat_id))
+        elif isinstance(message.peer_id, raw.types.PeerChat):
+            return Chat._parse_chat_chat(client, chats.get(chat_id))
+        else:
+            return Chat._parse_channel_chat(client, chats.get(chat_id))
 
     @staticmethod
     def _parse_dialog(client, peer, users: dict, chats: dict):
         if isinstance(peer, (raw.types.PeerUser, raw.types.InputPeerUser)):
-            return Chat._parse_user_chat(client, users[peer.user_id])
+            return Chat._parse_user_chat(client, users.get(peer.user_id))
         elif isinstance(peer, (raw.types.PeerChat, raw.types.InputPeerChat)):
-            return Chat._parse_chat_chat(client, chats[peer.chat_id])
+            return Chat._parse_chat_chat(client, chats.get(peer.chat_id))
         else:
-            return Chat._parse_channel_chat(client, chats[peer.channel_id])
+            return Chat._parse_channel_chat(client, chats.get(peer.channel_id))
 
     @staticmethod
     async def _parse_full_user(client: "pyrogram.Client", user: "raw.types.UserFull", users: dict, chats: dict) -> "Chat":

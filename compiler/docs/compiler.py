@@ -338,10 +338,12 @@ def pyrogram_api():
             update_color
             update_chat_notifications
             toggle_forum_topics
-            delete_folder
             export_folder_link
             get_folders
-            update_folder
+            create_folder
+            delete_folder
+            reorder_folders
+            edit_folder
             get_similar_channels
             join_folder
             leave_folder
@@ -406,22 +408,23 @@ def pyrogram_api():
             apply_gift_code
             check_gift_code
             convert_gift_to_stars
-            get_payment_form
             get_available_gifts
-            get_upgraded_gift
-            get_chat_gifts_count
             get_chat_gifts
+            get_chat_gifts_count
+            get_gift_upgrade_preview
+            get_payment_form
+            get_stars_balance
+            get_upgraded_gift
             hide_gift
-            send_payment_form
+            search_gifts_for_resale
             send_gift
+            send_payment_form
+            send_resold_gift
+            set_gift_resale_price
+            set_pinned_gifts
             show_gift
             transfer_gift
             upgrade_gift
-            get_stars_balance
-            set_pinned_gifts
-            search_gifts_for_resale
-            send_resold_gift
-            set_gift_resale_price
         """,
         phone="""
         Phone
@@ -678,6 +681,7 @@ def pyrogram_api():
             Invoice
             LinkPreviewOptions
             GiftCode
+            GiftUpgradePreview
             CheckedGiftCode
             RefundedPayment
             ReplyParameters
@@ -966,7 +970,7 @@ def pyrogram_api():
         folder="""
         Folder
             Folder.delete
-            Folder.update
+            Folder.edit
             Folder.include_chat
             Folder.exclude_chat
             Folder.update_color

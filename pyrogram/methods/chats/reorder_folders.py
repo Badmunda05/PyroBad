@@ -16,35 +16,45 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List
+
 import pyrogram
 from pyrogram import raw
 
 
-class ToggleFolderTags:
-    async def toggle_folder_tags(
+class ReorderFolders:
+    async def reorder_folders(
         self: "pyrogram.Client",
-        are_tags_enabled: bool
+        folder_ids: List[int],
+        main_chat_list_position: int = 0
     ) -> bool:
-        """Toggles whether chat folder tags are enabled.
+        """Change the order of chat folders.
 
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
-            are_tags_enabled (``bool``):
-                Pass True to enable folder tags.
-                Pass False to disable them.
+            folder_ids (List of ``int``):
+                Identifiers of chat folders in the new correct order.
+
+            main_chat_list_position (``int``, *optional*):
+                Position of the main chat list among chat folders, 0-based.
+                Can be non-zero only for Premium users.
 
         Returns:
-            ``bool``: On success, True is returned.
+            ``bool``: True, on success.
 
         Example:
             .. code-block:: python
 
-                await app.toggle_folder_tags(True)
+                # Reorder folders
+                await app.reorder_folders([2, 5, 4])
         """
+        if main_chat_list_position:
+            folder_ids.insert(main_chat_list_position, 0)
+
         r = await self.invoke(
-            raw.functions.messages.ToggleDialogFilterTags(
-                enabled=are_tags_enabled
+            raw.functions.messages.UpdateDialogFiltersOrder(
+                order=folder_ids
             )
         )
 

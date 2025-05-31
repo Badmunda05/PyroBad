@@ -517,26 +517,4 @@ class SendMediaGroup:
             business_connection_id=business_connection_id
         )
 
-        conn_id = None
-
-        for u in r.updates:
-            if getattr(u, "connection_id", None):
-                conn_id = u.connection_id
-                break
-
-
-        return await utils.parse_messages(
-            self,
-            raw.types.messages.Messages(
-                messages=[m.message for m in filter(
-                    lambda u: isinstance(u, (raw.types.UpdateNewMessage,
-                                             raw.types.UpdateNewChannelMessage,
-                                             raw.types.UpdateNewScheduledMessage,
-                                             raw.types.UpdateBotNewBusinessMessage)),
-                    r.updates
-                )],
-                users=r.users,
-                chats=r.chats
-            ),
-            business_connection_id=conn_id
-        )
+        return await utils.parse_messages(client=self, messages=r)
