@@ -5436,16 +5436,16 @@ class Message(Object, Update):
                 Defaults to True.
 
         Returns:
-            True on success, False otherwise.
+            `int` – Amount of affected messages.
 
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
-        return bool(await self._client.delete_messages(
+        return await self._client.delete_messages(
             chat_id=self.chat.id,
             message_ids=self.id,
             revoke=revoke
-        ))
+        )
 
     async def click(
         self,
