@@ -5436,7 +5436,7 @@ class Message(Object, Update):
                 Defaults to True.
 
         Returns:
-            `int` – Amount of affected messages.
+            ``int`` – Amount of affected messages.
 
         Raises:
             RPCError: In case of a Telegram RPC error.
