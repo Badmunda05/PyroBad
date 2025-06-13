@@ -5441,11 +5441,11 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
-        return await self._client.delete_messages(
+        return bool(await self._client.delete_messages(
             chat_id=self.chat.id,
             message_ids=self.id,
             revoke=revoke
-        )
+        ))
 
     async def click(
         self,
