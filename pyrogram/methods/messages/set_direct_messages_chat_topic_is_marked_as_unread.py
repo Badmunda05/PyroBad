@@ -16,21 +16,21 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
 from typing import Union
 
 import pyrogram
 from pyrogram import raw
-from pyrogram import errors
 
 
-class ToggleForumTopics:
-    async def toggle_forum_topics(
+class SetDirectMessagesChatTopicIsMarkedAsUnread:
+    async def set_direct_messages_chat_topic_is_marked_as_unread(
         self: "pyrogram.Client",
         chat_id: Union[int, str],
-        is_forum: bool = False,
-        has_forum_tabs: bool = False
-    ) -> bool:
-        """Enable or disable forum functionality in a supergroup.
+        topic_id: int = None,
+        is_marked_as_unread: bool = True
+    ) -> int:
+        """Change the marked as unread state of the topic in a channel direct messages chat administered by the current user.
 
         .. include:: /_includes/usable-by/users.rst
 
@@ -38,33 +38,29 @@ class ToggleForumTopics:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
 
-            enabled (``bool``):
-                The new status. Pass True to enable forum topics.
+            topic_id (``int``):
+                Identifier of the topic which messages will be fetched.
 
-            has_forum_tabs (``bool``):
-                Whether to enable or disable tabs in the forum. Defaults to False.
+            is_marked_as_unread (``bool``, *optional*):
+                Pass True to mark the topic as unread.
+                Pass False to mark the topic as read.
+                Defaults to True.
 
         Returns:
-            ``bool``: True on success. False otherwise.
+            ``bool``: True on success
 
         Example:
             .. code-block:: python
 
-                # Change status of topics to disabled
-                await app.toggle_forum_topics()
-
-                # Change status of topics to enabled
-                await app.toggle_forum_topics(is_forum=True)
+                # Mark the topic as unread
+                await app.set_direct_messages_chat_topic_is_marked_as_unread(chat_id, topic_id)
         """
-        try:
-            r = await self.invoke(
-                raw.functions.channels.ToggleForum(
-                    channel=await self.resolve_peer(chat_id),
-                    enabled=is_forum,
-                    tabs=has_forum_tabs
-                )
+        r = await self.invoke(
+            raw.functions.messages.MarkDialogUnread(
+                parent_peer=await self.resolve_peer(chat_id),
+                peer=await self.resolve_peer(topic_id),
+                unread=is_marked_as_unread
             )
+        )
 
-            return bool(r)
-        except errors.RPCError:
-            return False
+        return r

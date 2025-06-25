@@ -53,13 +53,19 @@ class SetPinnedGifts:
             .. code-block:: python
 
                 # Set pinned gifts in user profile
-                await app.set_pinned_gifts(received_gift_ids=["123", "456"])
+                await app.set_pinned_gifts(owner_id="me", received_gift_ids=["123", "456"])
+
+                # Set pinned gifts in channel
+                await app.set_pinned_gifts(owner_id="pyrogram", received_gift_ids=["-1001292933413_123", "-1001292933413_456"])
         """
         stargifts = []
 
         for gift in owned_gift_ids:
-            saved_gift_match = re.match(r"^(-\d+)_(\d+)$", str(gift))
-            slug_match = self.UPGRADED_GIFT_RE.match(str(gift))
+            if not isinstance(gift, str):
+                raise ValueError(f"gift id has to be str, but {type(gift)} was provided")
+
+            saved_gift_match = re.match(r"^(-\d+)_(\d+)$", gift)
+            slug_match = self.UPGRADED_GIFT_RE.match(gift)
 
             if saved_gift_match:
                 stargifts.append(

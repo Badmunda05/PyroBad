@@ -20,6 +20,7 @@ from .add_to_gifs import AddToGifs
 from .copy_media_group import CopyMediaGroup
 from .copy_message import CopyMessage
 from .delete_chat_history import DeleteChatHistory
+from .delete_direct_messages_chat_topic_history import DeleteDirectMessagesChatTopicHistory
 from .delete_messages import DeleteMessages
 from .download_media import DownloadMedia
 from .edit_inline_caption import EditInlineCaption
@@ -36,6 +37,7 @@ from .get_available_effects import GetAvailableEffects
 from .get_chat_history import GetChatHistory
 from .get_chat_history_count import GetChatHistoryCount
 from .get_custom_emoji_stickers import GetCustomEmojiStickers
+from .get_direct_messages_chat_topic_history import GetDirectMessagesChatTopicHistory
 from .get_discussion_message import GetDiscussionMessage
 from .get_discussion_replies import GetDiscussionReplies
 from .get_discussion_replies_count import GetDiscussionRepliesCount
@@ -75,9 +77,12 @@ from .send_video import SendVideo
 from .send_video_note import SendVideoNote
 from .send_voice import SendVoice
 from .send_web_page import SendWebPage
+from .set_direct_messages_chat_topic_is_marked_as_unread import SetDirectMessagesChatTopicIsMarkedAsUnread
 from .start_bot import StartBot
 from .stop_poll import StopPoll
 from .stream_media import StreamMedia
+from .translate_message_text import TranslateMessageText
+from .translate_text import TranslateText
 from .view_messages import ViewMessages
 from .vote_poll import VotePoll
 
@@ -115,6 +120,7 @@ class Messages(
     SendVoice,
     SendPoll,
     SendWebPage,
+    SetDirectMessagesChatTopicIsMarkedAsUnread,
     ViewMessages,
     VotePoll,
     StartBot,
@@ -136,6 +142,7 @@ class Messages(
     SearchGlobal,
     CopyMessage,
     DeleteChatHistory,
+    DeleteDirectMessagesChatTopicHistory,
     CopyMediaGroup,
     SearchMessagesCount,
     SearchPosts,
@@ -146,6 +153,9 @@ class Messages(
     GetDiscussionReplies,
     GetDiscussionRepliesCount,
     StreamMedia,
-    GetCustomEmojiStickers
+    TranslateMessageText,
+    TranslateText,
+    GetCustomEmojiStickers,
+    GetDirectMessagesChatTopicHistory
 ):
     pass

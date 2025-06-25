@@ -276,10 +276,15 @@ def pyrogram_api():
             search_global_count
             download_media
             stream_media
+            translate_message_text
+            translate_text
             get_discussion_message
             get_discussion_replies
             get_discussion_replies_count
             get_custom_emoji_stickers
+            get_direct_messages_chat_topic_history
+            delete_direct_messages_chat_topic_history
+            set_direct_messages_chat_topic_is_marked_as_unread
             send_web_page
             start_bot
             delete_chat_history
@@ -300,6 +305,7 @@ def pyrogram_api():
             delete_chat_photo
             set_chat_title
             set_chat_description
+            set_chat_direct_messages_group
             set_chat_permissions
             pin_chat_message
             unpin_chat_message
@@ -312,6 +318,8 @@ def pyrogram_api():
             get_chat_members_count
             get_dialogs
             get_dialogs_count
+            get_direct_messages_topics_by_id
+            get_direct_messages_topics
             set_chat_username
             archive_chats
             unarchive_chats
@@ -592,6 +600,7 @@ def pyrogram_api():
             BusinessWorkingHours
             User
             Username
+            VerificationStatus
             Chat
             ChatPhoto
             ChatMember
@@ -638,6 +647,7 @@ def pyrogram_api():
             Document
             ExternalReplyInfo
             FactCheck
+            FormattedText
             ForumTopic
             ForumTopicClosed
             ForumTopicCreated
@@ -693,6 +703,8 @@ def pyrogram_api():
             PaidMediaPreview
             PaidMessagesRefunded
             PaidMessagesPriceChanged
+            DirectMessagePriceChanged
+            DirectMessagesTopic
             PaymentForm
             ChatBoost
             ContactRegistered
@@ -1063,6 +1075,7 @@ def pyrogram_api():
             MediaAreaType
             PrivacyRuleType
             GiftForResaleOrder
+            PaymentFormType
         """,
     )
 
