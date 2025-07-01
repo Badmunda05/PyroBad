@@ -465,8 +465,8 @@ class Message(Object, Update):
             Additional interface options. An object for an inline keyboard, custom reply keyboard,
             instructions to remove reply keyboard or to force a reply from the user.
 
-        reactions (List of :obj:`~pyrogram.types.Reaction`):
-            List of the reactions to this message.
+        reactions (:obj:`~pyrogram.types.MessageReactions`):
+            Reactions of this message.
 
         send_paid_messages_stars (``int``, *optional*):
             The number of Telegram Stars the sender paid to send the message.
@@ -634,7 +634,7 @@ class Message(Object, Update):
                 "types.ForceReply"
             ]
         ] = None,
-        reactions: Optional[List["types.Reaction"]] = None,
+        reactions: Optional["types.MessageReactions"] = None,
         send_paid_messages_stars: Optional[int] = None,
         unread_media: Optional[bool] = None,
         silent: Optional[bool] = None,
