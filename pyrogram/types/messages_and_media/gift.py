@@ -35,6 +35,9 @@ class Gift(Object):
         sticker (:obj:`~pyrogram.types.Sticker`, *optional*):
             Information about the star gift sticker.
 
+        custom_emoji_id (``int``, *optional*):
+            Unique identifier of the custom emoji of the star gift.
+
         caption (``str``, *optional*):
             Text message.
 
@@ -175,7 +178,8 @@ class Gift(Object):
         *,
         client: "pyrogram.Client" = None,
         id: int,
-        sticker: "types.Sticker" = None,
+        sticker: Optional["types.Sticker"] = None,
+        custom_emoji_id: Optional[int] = None,
         caption: Optional[str] = None,
         caption_entities: List["types.MessageEntity"] = None,
         message_id: Optional[int] = None,
@@ -222,6 +226,7 @@ class Gift(Object):
 
         self.id = id
         self.sticker = sticker
+        self.custom_emoji_id = custom_emoji_id
         self.caption = caption
         self.caption_entities = caption_entities
         self.message_id = message_id
@@ -289,6 +294,7 @@ class Gift(Object):
             id=star_gift.id,
             title=star_gift.title,
             sticker=await types.Sticker._parse(client, doc, attributes),
+            custom_emoji_id=getattr(doc, "id", None),
             price=star_gift.stars,
             convert_price=star_gift.convert_stars,
             upgrade_price=star_gift.upgrade_stars,
