@@ -665,6 +665,7 @@ def pyrogram_api():
             VideoNote
             Contact
             Location
+            MaskPosition
             MediaArea
             Venue
             Sticker
@@ -1094,6 +1095,8 @@ def pyrogram_api():
             PrivacyRuleType
             GiftForResaleOrder
             PaymentFormType
+            StickerType
+            MaskPointType
         """,
     )
 
