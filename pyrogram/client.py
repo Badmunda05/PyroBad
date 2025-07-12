@@ -500,7 +500,7 @@ class Client(Methods):
 
                     try:
                         if not self.password:
-                            confirm = await ainput("Confirm password recovery (y/n): ", loop=self.loop)
+                            confirm = await ainput("Confirm password recovery (y/N): ", loop=self.loop)
 
                             if confirm.lower() == "y":
                                 email_pattern = await self.send_recovery_code()
