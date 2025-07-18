@@ -110,9 +110,6 @@ class GetMessages:
             else:
                 raise ValueError("Invalid message link.")
         else:
-            if not chat_id:
-                raise ValueError("Invalid chat_id.")
-
             if pinned:
                 ids = [raw.types.InputMessagePinned()]
             else:
@@ -121,12 +118,13 @@ class GetMessages:
 
                 ids = [_type(id=i) for i in ids]
 
-        peer = await self.resolve_peer(chat_id)
+        if chat_id:
+            peer = await self.resolve_peer(chat_id)
 
         if replies < 0:
             replies = (1 << 31) - 1
 
-        if isinstance(peer, raw.types.InputPeerChannel):
+        if chat_id and isinstance(peer, raw.types.InputPeerChannel):
             rpc = raw.functions.channels.GetMessages(channel=peer, id=ids)
         else:
             rpc = raw.functions.messages.GetMessages(id=ids)
