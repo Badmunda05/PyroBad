@@ -251,7 +251,7 @@ class SendVideoNote:
                     if file_size > _MAX_VIDEO_NOTE_SIZE_BYTES:
                         log.warning(
                            "Video note file size (%.1f MB) exceeds 10 MB limit. "
-                           "Telegram will treat this as a regular video instead of a video note.",
+                           "Telegram will treat it as a regular video instead of a video note.",
                            file_size / (1024 * 1024),
                         )
 
