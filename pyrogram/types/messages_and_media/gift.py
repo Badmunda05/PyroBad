@@ -161,6 +161,18 @@ class Gift(Object):
 
         is_pinned (``bool``, *optional*):
             True, if the gift is pinned.
+            
+        require_premium (``bool``, *optional*):
+            True, if the gift requires Premium to purchase.
+        
+        limited_per_user (``bool``, *optional*):
+            True, if the gift is limited per one user.
+            
+        per_user_total (``int``, *optional*):
+            Total count of gifts available per one user to purchase.
+            
+        per_user_remains (``int``, *optional*):
+            Remained count of gifts available per one user to purchase.
 
         raw (:obj:`~pyrogram.raw.base.StarGift`, *optional*):
             The raw object as received from the server.
@@ -216,6 +228,10 @@ class Gift(Object):
         is_transferred: Optional[bool] = None,
         is_birthday: Optional[bool] = None,
         is_pinned: Optional[bool] = None,
+        require_premium: Optional[bool] = None,
+        limited_per_user: Optional[bool] = None,
+        per_user_total: Optional[int] = None,
+        per_user_remains: Optional[int] = None,
         raw: Optional["raw.base.StarGift"] = None
     ):
         super().__init__(client)
@@ -262,6 +278,10 @@ class Gift(Object):
         self.is_transferred = is_transferred
         self.is_birthday = is_birthday
         self.is_pinned = is_pinned
+        self.require_premium = require_premium
+        self.limited_per_user = limited_per_user
+        self.per_user_total = per_user_total
+        self.per_user_remains = per_user_remains
         self.raw = raw
 
     @staticmethod
@@ -284,7 +304,6 @@ class Gift(Object):
         doc = star_gift.sticker
         attributes = {type(i): i for i in doc.attributes}
 
-        # TODO: resell_min_stars
         return Gift(
             id=star_gift.id,
             title=star_gift.title,
@@ -300,6 +319,10 @@ class Gift(Object):
             is_birthday=star_gift.birthday,
             first_sale_date=utils.timestamp_to_datetime(star_gift.first_sale_date),
             last_sale_date=utils.timestamp_to_datetime(star_gift.last_sale_date),
+            require_premium=star_gift.require_premium,
+            limited_per_user=star_gift.limited_per_user,
+            per_user_total=star_gift.per_user_total,
+            per_user_remains=star_gift.per_user_remains,
             raw=star_gift,
             client=client
         )
