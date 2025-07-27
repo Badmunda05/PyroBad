@@ -20,6 +20,7 @@ import asyncio
 import ipaddress
 import logging
 import socket
+import traceback 
 from concurrent.futures import ThreadPoolExecutor
 from typing import Tuple, Dict, TypedDict, Optional
 
@@ -150,6 +151,7 @@ class TCP:
                 await self.writer.drain()
             except Exception as e:
                 log.info("Send exception: %s %s", type(e).__name__, e)
+                log.info(traceback.format_exc())
                 raise OSError(e)
 
     async def recv(self, length: int = 0) -> Optional[bytes]:
