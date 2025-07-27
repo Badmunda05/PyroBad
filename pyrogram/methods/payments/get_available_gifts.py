@@ -40,5 +40,6 @@ class GetAvailableGifts:
         r = await self.invoke(
             raw.functions.payments.GetStarGifts(hash=0)
         )
+        chats = {i.id: i for i in r.chats}
 
-        return types.List([await types.Gift._parse_regular(self, gift) for gift in r.gifts])
+        return types.List([await types.Gift._parse_regular(self, gift, chats) for gift in r.gifts])

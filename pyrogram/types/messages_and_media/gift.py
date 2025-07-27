@@ -173,6 +173,9 @@ class Gift(Object):
             
         per_user_remains (``int``, *optional*):
             Remained count of gifts available per one user to purchase.
+            
+        released_by (:obj:`~pyrogram.types.Chat`, *optional*):
+            Name of the channel on behalf of which the gift was released.
 
         raw (:obj:`~pyrogram.raw.base.StarGift`, *optional*):
             The raw object as received from the server.
@@ -232,6 +235,7 @@ class Gift(Object):
         limited_per_user: Optional[bool] = None,
         per_user_total: Optional[int] = None,
         per_user_remains: Optional[int] = None,
+        released_by: Optional["types.Chat"] = None,
         raw: Optional["raw.base.StarGift"] = None
     ):
         super().__init__(client)
@@ -282,6 +286,7 @@ class Gift(Object):
         self.limited_per_user = limited_per_user
         self.per_user_total = per_user_total
         self.per_user_remains = per_user_remains
+        self.released_by = released_by
         self.raw = raw
 
     @staticmethod
@@ -297,12 +302,14 @@ class Gift(Object):
     async def _parse_regular(
         client,
         star_gift: "raw.types.StarGift",
+        chats: Dict[int, "raw.base.Chat"] = {}
     ) -> "Gift":
         if not isinstance(star_gift, raw.types.StarGift):
             return
 
         doc = star_gift.sticker
         attributes = {type(i): i for i in doc.attributes}
+        released_by_id = utils.get_raw_peer_id(star_gift.released_by)
 
         return Gift(
             id=star_gift.id,
@@ -323,6 +330,7 @@ class Gift(Object):
             limited_per_user=star_gift.limited_per_user,
             per_user_total=star_gift.per_user_total,
             per_user_remains=star_gift.per_user_remains,
+            released_by=types.Chat._parse_chat(client, chats.get(released_by_id)),
             raw=star_gift,
             client=client
         )
