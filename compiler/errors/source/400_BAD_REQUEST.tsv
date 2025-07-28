@@ -483,6 +483,7 @@ STARGIFT_MESSAGE_INVALID	The provided message for this gift is invalid.
 STARGIFT_NOT_FOUND	The specified star gift was not found.
 STARGIFT_NOT_OWNER	You can't control this gift because it doesn't belong to you.
 STARGIFT_OWNER_INVALID	The specified gift owner is invalid.
+STARGIFT_RESELL_CURRENCY_NOT_ALLOWED	The currency provided for gift resell is not allowed.
 STARGIFT_RESELL_NOT_ALLOWED	You can't buy this gift. Someone else may have already bought it or this gift is not for sale.
 STARGIFT_RESELL_TOO_EARLY_X	A wait of {value} seconds is required to resell this gift.
 STARGIFT_SLUG_INVALID	The provided star gift slug is invalid (must match the format CollectionName-123).
