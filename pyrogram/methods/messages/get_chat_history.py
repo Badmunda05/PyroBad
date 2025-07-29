@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-from typing import AsyncIterator, Union
+from typing import AsyncIterator, Union, List
 
 import pyrogram
 from pyrogram import raw, types, utils
@@ -34,7 +34,7 @@ async def get_chunk(
     min_id: int = 0,
     max_id: int = 0,
     reverse: bool = False,
-) -> list[types.Message]:
+) -> List[types.Message]:
     """
     Get chunk of messages from chat history.
 
