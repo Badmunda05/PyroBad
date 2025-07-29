@@ -175,7 +175,7 @@ class GetChatHistory:
             remaining: int = total - current
             current_chunk_limit: int = min(chunk_limit, remaining)
 
-            messages: list[types.Message] = await get_chunk(
+            messages = await get_chunk(
                 client=self,
                 chat_id=chat_id,
                 limit=current_chunk_limit,
