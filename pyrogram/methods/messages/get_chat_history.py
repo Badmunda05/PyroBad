@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime
+from datetime import datetime
 from typing import AsyncIterator, Union, List
 
 import pyrogram
@@ -30,7 +30,7 @@ async def get_chunk(
     limit: int = 0,
     offset: int = 0,
     from_message_id: int = 0,
-    from_date: datetime.datetime = utils.zero_datetime(),
+    from_date: datetime = utils.zero_datetime(),
     min_id: int = 0,
     max_id: int = 0,
     reverse: bool = False,
@@ -99,7 +99,7 @@ class GetChatHistory:
         limit: int = 0,
         offset: int = 0,
         offset_id: int = 0,
-        offset_date: datetime.datetime = utils.zero_datetime(),
+        offset_date: datetime = utils.zero_datetime(),
         min_id: int = 0,
         max_id: int = 0,
         reverse: bool = False,
