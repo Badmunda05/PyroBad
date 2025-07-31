@@ -22,7 +22,7 @@ from typing import Dict, List, Type
 import pyrogram
 from pyrogram import enums, raw, types, utils
 from pyrogram.errors import StickersetInvalid
-from pyrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType, ThumbnailSource
+from pyrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
 
 from ..object import Object
 
@@ -94,7 +94,6 @@ class Sticker(Object):
     def __init__(
         self,
         *,
-        client: "pyrogram.Client" = None,
         file_id: str,
         file_unique_id: str,
         type: "enums.StickerType",
@@ -113,10 +112,9 @@ class Sticker(Object):
         custom_emoji_id: int = None,
         needs_repainting: bool = None,
         thumbs: List["types.Thumbnail"] = None,
-        _input_sticker_set_id: tuple = None,
         raw: "raw.types.Document" = None
     ):
-        super().__init__(client)
+        super().__init__()
 
         self.file_id = file_id
         self.file_unique_id = file_unique_id
@@ -136,7 +134,6 @@ class Sticker(Object):
         self.custom_emoji_id = custom_emoji_id
         self.needs_repainting = needs_repainting
         self.thumbs = thumbs
-        self._input_sticker_set_id = _input_sticker_set_id
         self.raw = raw
 
     cache = {}
@@ -171,24 +168,6 @@ class Sticker(Object):
             return name
         except StickersetInvalid:
             return None
-        
-    async def get_set_name(self):
-        """Bound method *get_set_name* of :obj:`~pyrogram.types.Sticker`.
-
-        This method should be used when :meth:`~pyrogram.Client.fetch_stickers` is set to False
-
-        Example:
-            .. code-block:: python
-
-                await sticker.get_set_name()
-
-        Returns:
-            ``str``: On success, returns the sticker set name.
-
-        """
-        set_name = await Sticker._get_sticker_set_name(self._client.invoke, self._input_sticker_set_id)
-        self.set_name = set_name
-        return set_name
 
     @staticmethod
     async def _parse(
@@ -203,7 +182,6 @@ class Sticker(Object):
         needs_repainting = None
         premium_animation = None
         mask_position = None
-        _input_sticker_set_id = None
 
         sticker_type = enums.StickerType.REGULAR
 
@@ -224,15 +202,12 @@ class Sticker(Object):
         file_name = getattr(document_attributes.get(raw.types.DocumentAttributeFilename, None), "file_name", None)
         video_attributes = document_attributes.get(raw.types.DocumentAttributeVideo, None)
 
-        if sticker_attribute:
+        if client.fetch_stickers and sticker_attribute:
             sticker_set = sticker_attribute.stickerset
 
             if isinstance(sticker_set, raw.types.InputStickerSetID):
                 input_sticker_set_id = (sticker_set.id, sticker_set.access_hash)
-                if client.fetch_stickers:
-                    set_name = await Sticker._get_sticker_set_name(client.invoke, input_sticker_set_id)
-                else:
-                    _input_sticker_set_id = input_sticker_set_id
+                set_name = await Sticker._get_sticker_set_name(client.invoke, input_sticker_set_id)
 
         if sticker.video_thumbs:
             videos: List["raw.types.VideoSize"] = []
@@ -308,7 +283,5 @@ class Sticker(Object):
             file_name=file_name,
             date=utils.timestamp_to_datetime(sticker.date),
             thumbs=types.Thumbnail._parse(client, sticker),
-            _input_sticker_set_id=_input_sticker_set_id,
-            raw=sticker,
-            client=client
+            raw=sticker
         )
