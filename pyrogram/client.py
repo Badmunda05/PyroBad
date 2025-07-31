@@ -225,6 +225,10 @@ class Client(Methods):
         fetch_stories (``bool``, *optional*):
             Pass True to automatically fetch stories if they are missing.
             Defaults to True.
+            
+        fetch_stickers (``bool``, *optional*):
+            Pass True to automatically fetch names of sticker sets.
+            Defaults to True.
 
         loop (:py:class:`asyncio.AbstractEventLoop`, *optional*):
             Event loop.
@@ -297,6 +301,7 @@ class Client(Methods):
         fetch_replies: Optional[bool] = True,
         fetch_topics: Optional[bool] = True,
         fetch_stories: Optional[bool] = True,
+        fetch_stickers: Optional[bool] = True,
         init_connection_params: Optional["raw.base.JSONValue"] = None,
         connection_factory: Type[Connection] = Connection,
         protocol_factory: Type[TCP] = TCPAbridged,
@@ -339,6 +344,7 @@ class Client(Methods):
         self.fetch_replies = fetch_replies
         self.fetch_topics = fetch_topics
         self.fetch_stories = fetch_stories
+        self.fetch_stickers = fetch_stickers
         self.init_connection_params = init_connection_params
         self.connection_factory = connection_factory
         self.protocol_factory = protocol_factory
