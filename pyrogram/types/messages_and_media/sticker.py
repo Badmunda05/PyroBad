@@ -22,7 +22,7 @@ from typing import Dict, List, Type
 import pyrogram
 from pyrogram import enums, raw, types, utils
 from pyrogram.errors import StickersetInvalid
-from pyrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType, ThumbnailSource
+from pyrogram.file_id import FileId, FileType, FileUniqueId, FileUniqueType
 
 from ..object import Object
 
@@ -202,7 +202,7 @@ class Sticker(Object):
         file_name = getattr(document_attributes.get(raw.types.DocumentAttributeFilename, None), "file_name", None)
         video_attributes = document_attributes.get(raw.types.DocumentAttributeVideo, None)
 
-        if sticker_attribute:
+        if client.fetch_stickers and sticker_attribute:
             sticker_set = sticker_attribute.stickerset
 
             if isinstance(sticker_set, raw.types.InputStickerSetID):
