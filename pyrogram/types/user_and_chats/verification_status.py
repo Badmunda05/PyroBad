@@ -63,7 +63,7 @@ class VerificationStatus(Object):
         bot_verification_icon = None
 
         if isinstance(chat, raw.types.ChatInvite):
-            bot_verification_icon = chat.bot_verification.icon
+            bot_verification_icon = chat.bot_verification.icon if chat.bot_verification else None
         else:
             bot_verification_icon = chat.bot_verification_icon
 
