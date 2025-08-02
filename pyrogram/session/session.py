@@ -150,15 +150,15 @@ class Session:
                 log.info("Device: %s - %s", self.client.device_model, self.client.app_version)
                 log.info("System: %s (%s)", self.client.system_version, self.client.lang_code)
             except (AuthKeyDuplicated, Unauthorized) as e:
-                await self.stop()
+                await self.stop(e)
                 raise e
             except ConnectionError as e:
-                await self.stop()
+                await self.stop(e)
                 # raise e
             except (OSError, RPCError):
-                await self.stop()
+                await self.stop(e)
             except Exception as e:
-                await self.stop()
+                await self.stop(e)
                 raise e
             else:
                 break
@@ -167,7 +167,7 @@ class Session:
 
         log.info("Session started")
 
-    async def stop(self):
+    async def stop(self, reason=None):
         self.is_started.clear()
 
         self.stored_msg_ids.clear()
@@ -179,7 +179,7 @@ class Session:
 
         self.ping_task_event.clear()
 
-        await self.connection.close()
+        await self.connection.close(reason)
 
         if self.recv_task:
             await self.recv_task
