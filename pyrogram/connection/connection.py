@@ -63,7 +63,7 @@ class Connection:
                 await self.protocol.connect(self.address)
             except OSError as e:
                 log.warning("Unable to connect due to network issues: %s", e)
-                await self.protocol.close()
+                await self.protocol.close(e)
                 await asyncio.sleep(1)
             else:
                 log.info("Connected! %s DC%s%s - IPv%s",
@@ -76,9 +76,9 @@ class Connection:
             log.warning("Connection failed! Trying again...")
             raise ConnectionError
 
-    async def close(self) -> None:
+    async def close(self, reason) -> None:
         await self.protocol.close()
-        log.info("Disconnected")
+        log.info("Disconnected due to %s", reason)
 
     async def send(self, data: bytes) -> None:
         await self.protocol.send(data)
