@@ -157,7 +157,7 @@ class Session:
             except ConnectionError as e:
                 await self.stop(e)
                 # raise e
-            except (OSError, RPCError):
+            except (OSError, RPCError) as e:
                 await self.stop(e)
             except Exception as e:
                 await self.stop(e)
