@@ -445,7 +445,7 @@ class Session:
                 )
                 # restart was never being called after Exception block
                 if not self.restart_event.is_set():
-                    self.loop.create_task(self.restart())
+                    self.client.loop.create_task(self.restart())
                 else:
                     # multiple Exceptions can be raised in a row, so we need to wait for the restart to finish
                     try:
