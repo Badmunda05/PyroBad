@@ -76,7 +76,7 @@ class Connection:
             log.warning("Connection failed! Trying again...")
             raise ConnectionError
 
-    async def close(self, reason) -> None:
+    async def close(self, reason=None) -> None:
         await self.protocol.close()
         log.info("Disconnected due to %s", reason)
 
