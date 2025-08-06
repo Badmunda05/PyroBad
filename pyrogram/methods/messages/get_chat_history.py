@@ -20,6 +20,7 @@ import logging
 from datetime import datetime
 from typing import AsyncIterator, Union, List
 
+import pyrogram
 from pyrogram import raw, types, utils
 
 log = logging.getLogger(__name__)
