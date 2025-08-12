@@ -1044,6 +1044,7 @@ def pyrogram_api():
             Gift.transfer
             Gift.wear
             Gift.buy
+            Gift.send
         """,
         animation="""
         Animation
