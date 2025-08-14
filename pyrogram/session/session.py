@@ -105,7 +105,7 @@ class Session:
         self.recv_task = None
 
         self.is_started = asyncio.Event()
-        self.restart_event = asyncio.Event()
+        self._restart_lock = asyncio.Lock()
 
     async def start(self):
         while True:
@@ -192,7 +192,8 @@ class Session:
 
         self.ping_task_event.clear()
 
-        await self.connection.close()
+        if self.connection:
+            await self.connection.close()
 
         if self.recv_task:
             try:
@@ -205,10 +206,20 @@ class Session:
         log.info("Session stopped")
 
     async def restart(self):
-        self.restart_event.set()
-        await self.stop()
-        await self.start()
-        self.restart_event.clear()
+        async with self._restart_lock:
+            if self.is_started.is_set():
+                log.info("A restart was requested, stopping session...")
+                try:
+                    await self.stop()
+                except Exception as e:
+                    log.error("An error occurred during session stop: %s", e)
+
+            log.info("Restarting session...")
+            try:
+                await self.start()
+                log.info("Session restarted successfully.")
+            except Exception as e:
+                log.error("An error occurred during session start: %s", e)
 
     async def handle_packet(self, packet):
         try:
@@ -333,6 +344,10 @@ class Session:
                 packet = await asyncio.wait_for(self.connection.recv(), timeout=1)
             except asyncio.TimeoutError:
                 continue
+            except ConnectionError:
+                if self.is_started.is_set():
+                    self.client.loop.create_task(self.restart())
+                break
 
             if packet is None or len(packet) == 4:
                 if packet:
@@ -446,21 +461,10 @@ class Session:
                     raise e from None
 
                 (log.warning if retries < 2 else log.info)(
-                    '[%s] Retrying "%s" due to: %s',
+                    '[%s] Retrying "%s" due to: %s. Performing a restart.',
                     Session.MAX_RETRIES - retries + 1,
                     query_name, str(e) or repr(e)
                 )
 
-                # restart was never being called after Exception block
-                if not self.restart_event.is_set():
-                    self.client.loop.create_task(self.restart())
-                else:
-                    # multiple Exceptions can be raised in a row, so we need to wait for the restart to finish
-                    try:
-                        await asyncio.wait_for(self.restart_event.wait(), self.WAIT_TIMEOUT)
-                    except asyncio.TimeoutError:
-                        pass
-
-                await asyncio.sleep(0.5)
-
-                return await self.invoke(query, retries - 1, timeout)
+                await self.restart()
+                retries -= 1
