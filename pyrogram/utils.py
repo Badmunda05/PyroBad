@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from concurrent.futures.thread import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime, timedelta ,timezone
 from getpass import getpass
 from io import BytesIO
 from typing import Union, List, Dict, Optional
@@ -533,6 +533,8 @@ def timestamp_to_datetime(ts: Optional[int]) -> Optional[datetime]:
 def datetime_to_timestamp(dt: Optional[datetime]) -> Optional[int]:
     return int(dt.timestamp()) if dt else None
 
+def timedelta_to_total_seconds(dt: Optional[timedelta]) -> Optional[int]:
+    return int(dt.total_seconds()) if dt else None
 
 def get_first_url(text):
     text = re.sub(r"^\s*(<[\w<>=\s\"]*>)\s*", r"\1", text)
