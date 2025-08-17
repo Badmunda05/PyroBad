@@ -18,12 +18,12 @@
 
 from typing import Union
 import pyrogram
-from pyrogram import raw, types
+from pyrogram import raw
 
 class CancelStarSubscription:
-    async def cancel_stars_subscription(
+    async def cancel_star_subscription(
         self: "pyrogram.Client",
-        user_id: Union[int, types.InputUser],
+        user_id: Union[int, str],
         charge_id: str,
         restore: bool = False
     ) -> bool:
@@ -45,7 +45,7 @@ class CancelStarSubscription:
         """
         return await self.invoke(
             raw.functions.payments.BotCancelStarsSubscription(
-                user_id=raw.types.InputUser(user_id) if isinstance(user_id, int) else user_id,
+                user_id=await self.resolve_peer(user_id),
                 charge_id=charge_id,
                 restore=restore
             )
