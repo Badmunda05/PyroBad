@@ -31,7 +31,7 @@ class CancelStarSubscription:
         Cancel a Telegram Stars subscription for a user.
 
         Parameters:
-            user_id (``int`` | ``pyrogram.types.InputUser``):
+            user_id (``int`` | ``str``):
                 The user whose subscription will be cancelled. Can be a user ID or an InputUser object.
 
             charge_id (``str``):
