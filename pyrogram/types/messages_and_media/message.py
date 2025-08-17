@@ -1664,7 +1664,7 @@ class Message(Object, Update):
 
             if parsed_topic:
                 parsed_message.topic = parsed_topic
-            elif client.fetch_topics:
+            elif client.fetch_topics and client.me and not client.me.is_bot:
                 try:
                     parsed_message.topic = await client.get_direct_messages_topics_by_id(
                         chat_id=parsed_message.chat.id,
