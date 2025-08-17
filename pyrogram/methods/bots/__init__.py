@@ -22,6 +22,7 @@ from .answer_pre_checkout_query import AnswerPreCheckoutQuery
 from .answer_shipping_query import AnswerShippingQuery
 from .answer_web_app_query import AnswerWebAppQuery
 from .create_invoice_link import CreateInvoiceLink
+from .cancel_stars_subscription import CancelStarSubscription
 from .delete_bot_commands import DeleteBotCommands
 from .get_bot_commands import GetBotCommands
 from .get_bot_default_privileges import GetBotDefaultPrivileges
@@ -51,6 +52,7 @@ class Bots(
     AnswerInlineQuery,
     AnswerPreCheckoutQuery,
     AnswerShippingQuery,
+    CancelStarSubscription,
     CreateInvoiceLink,
     GetInlineBotResults,
     GetOwnedBots,
