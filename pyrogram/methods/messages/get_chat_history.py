@@ -37,7 +37,7 @@ async def get_chunk(
     min_id: int = 0,  # Inclusive
     max_id: int = 0,  # Inclusive
     reverse: bool = False,
-) -> List[types.Message]:
+) -> List["types.Message"]:
     # Telegram API requires `offset_id` as starting point, boundaries alone don't work
     if (min_id or max_id) and not offset_id:
         if max_id:
@@ -75,12 +75,12 @@ class GetChatHistory:
         chat_id: Union[int, str],
         limit: int = 0,
         offset: int = 0,
-        offset_id: int = 0,
+        offset_id: int = None,
         offset_date: datetime = utils.zero_datetime(),
         min_id: int = 0,
         max_id: int = 0,
         reverse: bool = False,
-    ) -> AsyncIterator[types.Message]:
+    ) -> AsyncIterator["types.Message"]:
         """Get messages from a chat history.
 
         The messages are returned in reverse chronological order.
@@ -110,8 +110,8 @@ class GetChatHistory:
                 Pass a date as offset to retrieve only older messages starting from that date.
 
             min_id (``int``, *optional*):
-                 If a positive value was provided, the method will return only messages
-                 with IDs more than or equal to min_id (inclusive).
+                If a positive value was provided, the method will return only messages
+                with IDs more than or equal to min_id (inclusive).
 
             max_id (``int``, *optional*):
                 If a positive value was provided, the method will return only messages
@@ -129,10 +129,11 @@ class GetChatHistory:
                 async for message in app.get_chat_history(chat_id):
                     print(message.text)
         """
-        log.warning(
-            "`offset_id` is deprecated and will be removed in future updates. " \
-            "Use `min_id` or `max_id` instead."
-        )
+        if offset_id is not None:
+            log.warning(
+                "`offset_id` is deprecated and will be removed in future updates. " \
+                "Use `min_id` or `max_id` instead."
+            )
 
         current: int = 0
         total: int = limit or (1 << 31) - 1
