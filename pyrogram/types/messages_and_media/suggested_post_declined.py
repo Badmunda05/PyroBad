@@ -22,7 +22,7 @@ from ..object import Object
 
 
 class SuggestedPostDeclined(Object):
-    """A suggested post was declined.
+    """Describes a service message about the rejection of a suggested post.
 
     Parameters:
         suggested_post_message_id (``int``, *optional*):

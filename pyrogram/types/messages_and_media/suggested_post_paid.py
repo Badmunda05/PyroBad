@@ -22,29 +22,31 @@ from ..object import Object
 
 
 class SuggestedPostPaid(Object):
-    """A suggested post was published and payment for the post was received.
+    """Describes a service message about a successful payment for a suggested post.
 
     Parameters:
         suggested_post_message_id (``int``, *optional*):
             Identifier of the message with the suggested post.
 
-        star_amount (:obj:`~pyrogram.types.StarAmount`, *optional*):
-            The amount of received Telegram Stars.
+        amount (``int``, *optional*):
+            The amount of the currency that was received by the channel in nanotoncoins.
+            For payments in toncoins only.
 
-        ton_amount (``int``, *optional*):
-            The amount of received Toncoins in the smallest units of the cryptocurrency.
+        star_amount (:obj:`~pyrogram.types.StarAmount`, *optional*):
+            The amount of Telegram Stars that was received by the channel.
+            For payments in Telegram Stars only.
     """
     def __init__(
         self, *,
         suggested_post_message_id: int = None,
+        amount: int = None,
         star_amount: "types.StarAmount" = None,
-        ton_amount: int = None
     ):
         super().__init__()
 
         self.suggested_post_message_id = suggested_post_message_id
+        self.amount = amount
         self.star_amount = star_amount
-        self.ton_amount = ton_amount
 
     @staticmethod
     def _parse(action: "raw.types.MessageActionSuggestedPostSuccess", reply_to: "raw.base.MessageReplyHeader") -> "SuggestedPostPaid":
@@ -52,20 +54,19 @@ class SuggestedPostPaid(Object):
             return None
 
         suggested_post_message_id = None
+        amount = None
         star_amount = None
-        ton_amount = None
 
         if isinstance(reply_to, raw.types.MessageReplyHeader):
             suggested_post_message_id = reply_to.reply_to_msg_id
 
-        if isinstance(action.price, raw.types.StarsAmount):
+        if isinstance(action.price, raw.types.StarsTonAmount):
+            amount = action.price.ton_amount
+        elif isinstance(action.price, raw.types.StarsAmount):
             star_amount = types.StarAmount._parse(action.price)
-        elif isinstance(action.price, raw.types.StarsTonAmount):
-            ton_amount = action.price.ton_amount
-
 
         return SuggestedPostPaid(
             suggested_post_message_id=suggested_post_message_id,
-            star_amount=star_amount,
-            ton_amount=ton_amount,
+            amount=amount,
+            star_amount=star_amount
         )

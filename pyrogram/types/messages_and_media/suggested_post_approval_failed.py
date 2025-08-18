@@ -22,14 +22,16 @@ from ..object import Object
 
 
 class SuggestedPostApprovalFailed(Object):
-    """Approval of suggested post has failed, because the user which proposed the post had no enough funds.
+    """Describes a service message about the failed approval of a suggested post.
+
+    Currently, only caused by insufficient user funds at the time of approval.
 
     Parameters:
         suggested_post_message_id (``int``, *optional*):
             Identifier of the message with the suggested post.
 
         price (:obj:`~pyrogram.types.SuggestedPostPrice`, *optional*):
-            Price of the suggested post.
+            Expected price of the post.
     """
     def __init__(
         self, *,

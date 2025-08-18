@@ -22,14 +22,14 @@ from ..object import Object
 
 
 class SuggestedPostRefunded(Object):
-    """A suggested post was published and payment for the post was received.
+    """Describes a service message about a payment refund for a suggested post.
 
     Parameters:
         suggested_post_message_id (``int``, *optional*):
             Identifier of the message with the suggested post.
 
         reason (:obj:`~pyrogram.enums.SuggestedPostRefundReason`, *optional*):
-            Reason of the refund.
+            Reason for the refund.
     """
     def __init__(
         self, *,

@@ -23,17 +23,17 @@ from ..object import Object
 
 
 class SuggestedPostApproved(Object):
-    """A suggested post was approved.
+    """Describes a service message about the approval of a suggested post.
 
     Parameters:
         suggested_post_message_id (``int``, *optional*):
             Identifier of the message with the suggested post.
 
         price (:obj:`~pyrogram.types.SuggestedPostPrice`, *optional*):
-            Price of the suggested post.
+            Amount paid for the post.
 
         send_date (:py:obj:`~datetime.datetime`, *optional*):
-            Point in time when the post is expected to be published.
+            Date when the post will be published.
     """
     def __init__(
         self, *,

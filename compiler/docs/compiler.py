@@ -718,6 +718,7 @@ def pyrogram_api():
             RefundedPayment
             ReplyParameters
             SuccessfulPayment
+            SuggestedPostParameters
             SuggestedPostInfo
             SuggestedPostPaid
             SuggestedPostPrice
@@ -837,7 +838,6 @@ def pyrogram_api():
             InputPrivacyRuleDisallowChats
             InputPrivacyRuleDisallowContacts
             InputPrivacyRuleDisallowUsers
-            InputSuggestedPostInfo
             InputTextMessageContent
             InputVenueMessageContent
         """,
