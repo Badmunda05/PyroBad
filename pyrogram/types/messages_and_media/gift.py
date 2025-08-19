@@ -463,9 +463,6 @@ class Gift(Object):
 
     @property
     def owned_gift_id(self) -> Optional[str]:
-        if not self.is_upgraded:
-            return None
-
         if self.owner and self.owner.type != enums.ChatType.PRIVATE:
             return f"{self.owner.id}_{self.message_id}"
         elif self.message_id:
