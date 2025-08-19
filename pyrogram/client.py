@@ -747,7 +747,7 @@ class Client(Methods):
             elif isinstance(peer, raw.types.Channel):
                 peer_id = utils.get_channel_id(peer.id)
                 access_hash = peer.access_hash
-                peer_type = "channel" if peer.broadcast else "supergroup"
+                peer_type = "direct" if peer.monoforum else "channel" if peer.broadcast else "forum" if peer.forum else "supergroup"
 
                 if peer.username:
                     usernames.append(peer.username.lower())
@@ -761,10 +761,14 @@ class Client(Methods):
                 continue
 
             parsed_peers.append((peer_id, access_hash, peer_type, phone_number))
-            parsed_usernames.append((peer_id, usernames))
+
+            if usernames:
+                parsed_usernames.append((peer_id, usernames))
 
         await self.storage.update_peers(parsed_peers)
-        await self.storage.update_usernames(parsed_usernames)
+
+        if parsed_usernames:
+            await self.storage.update_usernames(parsed_usernames)
 
         return is_min
 

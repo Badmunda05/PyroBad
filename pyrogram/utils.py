@@ -292,59 +292,60 @@ def unpack_inline_message_id(inline_message_id: str) -> "raw.base.InputBotInline
             access_hash=unpacked[3]
         )
 
+ZERO_SECRET_CHAT_ID = -2000000000000
+ZERO_CHANNEL_ID = -1000000000000
 
-MIN_CHANNEL_ID = -100999999999999
-MAX_CHANNEL_ID = -1000000000000
-MIN_MONOFORUM_CHANNEL_ID = 1070000000000
-MAX_MONOFORUM_CHANNEL_ID = 107999999999999
-MIN_CHAT_ID = -999999999999
-MAX_USER_ID = 999999999999
+MAX_CHANNEL_ID = 1000000000000 - (1 << 31)
+MIN_MONOFORUM_CHANNEL_ID = 1000000000000 + (1 << 31) + 1
+MAX_MONOFORUM_CHANNEL_ID = 3000000000000
+MAX_USER_ID = (1 << 40) - 1
+MAX_CHAT_ID = 999999999999
 
 
 def get_raw_peer_id(peer: Union[raw.base.Peer, raw.base.InputPeer, raw.base.RequestedPeer]) -> Optional[int]:
     """Get the raw peer id from a Peer object"""
-    if isinstance(peer, (raw.types.PeerUser, raw.types.InputPeerUser, raw.types.RequestedPeerUser)):
+    if hasattr(peer, "user_id"):
         return peer.user_id
 
-    if isinstance(peer, (raw.types.PeerChat, raw.types.InputPeerChat, raw.types.RequestedPeerChat)):
+    if hasattr(peer, "chat_id"):
         return peer.chat_id
 
-    if isinstance(peer, (raw.types.PeerChannel, raw.types.InputPeerChannel, raw.types.RequestedPeerChannel)):
+    if hasattr(peer, "channel_id"):
         return peer.channel_id
 
-    return None
+    raise ValueError(f"Peer type invalid: {peer}")
 
 
 def get_peer_id(peer: Union[raw.base.Peer, raw.base.InputPeer, raw.base.RequestedPeer]) -> int:
     """Get the non-raw peer id from a Peer object"""
-    if isinstance(peer, (raw.types.PeerUser, raw.types.InputPeerUser, raw.types.RequestedPeerUser)):
+    if hasattr(peer, "user_id"):
         return peer.user_id
 
-    if isinstance(peer, (raw.types.PeerChat, raw.types.InputPeerChat, raw.types.RequestedPeerChat)):
+    if hasattr(peer, "chat_id"):
         return -peer.chat_id
 
-    if isinstance(peer, (raw.types.PeerChannel, raw.types.InputPeerChannel, raw.types.RequestedPeerChannel)):
-        if MIN_MONOFORUM_CHANNEL_ID <= peer.channel_id < MAX_MONOFORUM_CHANNEL_ID:
-            return peer.channel_id
-
-        return MAX_CHANNEL_ID - peer.channel_id
+    if hasattr(peer, "channel_id"):
+        return ZERO_CHANNEL_ID - peer.channel_id
 
     raise ValueError(f"Peer type invalid: {peer}")
 
 
 def get_peer_type(peer_id: int) -> str:
     if peer_id < 0:
-        if MIN_CHAT_ID <= peer_id:
+        if -MAX_CHAT_ID <= peer_id:
             return "chat"
 
-        if MIN_CHANNEL_ID <= peer_id < MAX_CHANNEL_ID:
+        if ZERO_CHANNEL_ID - MAX_CHANNEL_ID <= peer_id and peer_id != ZERO_CHANNEL_ID:
             return "channel"
+
+        if ZERO_SECRET_CHAT_ID + (-1 << 31) <= peer_id and peer_id != ZERO_SECRET_CHAT_ID:
+            return "secret_chat"
+
+        if ZERO_CHANNEL_ID - MAX_MONOFORUM_CHANNEL_ID <= peer_id:
+            return "monoforum"
 
     elif 0 < peer_id <= MAX_USER_ID:
         return "user"
-
-    elif MIN_MONOFORUM_CHANNEL_ID <= peer_id < MAX_MONOFORUM_CHANNEL_ID:
-        return "monoforum"
 
     raise ValueError(f"Peer id invalid: {peer_id}")
 
@@ -388,7 +389,6 @@ async def get_reply_to(
                 todo_item_id=reply_parameters.checklist_task_id
             )
 
-
     if message_thread_id:
         return raw.types.InputReplyToMessage(
             reply_to_msg_id=message_thread_id
@@ -403,10 +403,7 @@ async def get_reply_to(
 
 
 def get_channel_id(peer_id: int) -> int:
-    if MIN_MONOFORUM_CHANNEL_ID <= peer_id < MAX_MONOFORUM_CHANNEL_ID:
-        return peer_id
-
-    return MAX_CHANNEL_ID - peer_id
+    return ZERO_CHANNEL_ID - peer_id
 
 
 def btoi(b: bytes) -> int:
