@@ -485,7 +485,7 @@ class Client(Methods):
                 try:
                     email = await ainput("Enter email: ", loop=self.loop)
 
-                    await self.app.invoke(
+                    await self.invoke(
                         raw.functions.account.SendVerifyEmailCode(
                             purpose=raw.types.EmailVerifyPurposeLoginSetup(
                                 phone_number=self.phone_number,
@@ -498,7 +498,7 @@ class Client(Methods):
                     email_code = await ainput("Enter confirmation code: ", loop=self.loop)
 
                     try:
-                        await self.app.invoke(
+                        await self.invoke(
                             raw.functions.account.VerifyEmail(
                                 purpose=raw.types.EmailVerifyPurposeLoginSetup(
                                     phone_number=self.phone_number,
