@@ -28,7 +28,8 @@ class SendResoldGift:
         self: "pyrogram.Client",
         gift_link: str,
         new_owner_chat_id: Union[int, str],
-        star_count: int = None
+        star_count: int = None,
+        ton: bool = False
     ) -> Optional["types.Message"]:
         """Send an upgraded gift that is available for resale to another user or channel chat.
 
@@ -50,14 +51,17 @@ class SendResoldGift:
             star_count (``int``, *optional*):
                 The amount of Telegram Stars required to pay for the gift.
 
+            ton (``bool``, *optional*):
+                Whether to accept only TON payments. Defaults to False.
+
         Returns:
             :obj:`~pyrogram.types.Message`: On success, the sent message is returned.
 
         Example:
             .. code-block:: python
 
-                # Transfer gift to another user
-                await app.send_resold_gift(gift_link="https://t.me/nft/NekoHelmet-9215", new_owner_chat_id=123)
+                # Transfer gift to another user with TON only
+                await app.send_resold_gift(gift_link="https://t.me/nft/NekoHelmet-9215", new_owner_chat_id=123, ton=True)
         """
         match = self.UPGRADED_GIFT_RE.match(gift_link)
 
@@ -70,7 +74,8 @@ class SendResoldGift:
 
         invoice = raw.types.InputInvoiceStarGiftResale(
             slug=match.group(1),
-            to_id=peer
+            to_id=peer,
+            ton=ton
         )
 
         form = await self.invoke(
