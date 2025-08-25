@@ -718,6 +718,7 @@ def pyrogram_api():
             RefundedPayment
             ReplyParameters
             SuccessfulPayment
+            SuggestedPostParameters
             SuggestedPostInfo
             SuggestedPostPaid
             SuggestedPostPrice
@@ -751,7 +752,13 @@ def pyrogram_api():
             ChatTheme
             GiftedStars
             GiftedTon
-            UpgradedGiftAttributeId
+            UpgradedGiftAttributeIdModel
+            UpgradedGiftAttributeIdSymbol
+            UpgradedGiftAttributeIdBackdrop
+            InputChatPhoto
+            InputChatPhotoPrevious
+            InputChatPhotoStatic
+            InputChatPhotoAnimation
         """,
         bot_keyboards="""
         Bot keyboards
@@ -833,7 +840,6 @@ def pyrogram_api():
             InputPrivacyRuleDisallowChats
             InputPrivacyRuleDisallowContacts
             InputPrivacyRuleDisallowUsers
-            InputSuggestedPostInfo
             InputTextMessageContent
             InputVenueMessageContent
         """,
