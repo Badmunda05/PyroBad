@@ -66,6 +66,7 @@ async def get_chunk(
 
     if reverse:
         messages.reverse()
+        
     return messages
 
 
@@ -160,6 +161,7 @@ class GetChatHistory:
                 min_id=min_id,
                 reverse=reverse
             )
+            
             if not messages:
                 return
 
@@ -168,5 +170,6 @@ class GetChatHistory:
                 yield message
 
                 current += 1
+                
                 if current >= total:
                     return
