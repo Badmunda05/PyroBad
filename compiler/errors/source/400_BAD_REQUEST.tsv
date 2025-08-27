@@ -183,6 +183,7 @@ EXTENDED_MEDIA_AMOUNT_INVALID	The specified `stars_amount` of the passed [inputM
 EXTENDED_MEDIA_PEER_INVALID	The specified chat type is invalid.
 EXTENDED_MEDIA_TYPE_INVALID	The specified extended media type is unsupported.
 EXTERNAL_URL_INVALID	The external media URL is invalid.
+FEATURE_DISABLED	This feature is disabled.
 FIELD_NAME_EMPTY	The field with the name FIELD_NAME is missing.
 FIELD_NAME_INVALID	The field with the name FIELD_NAME is invalid.
 FILE_CONTENT_TYPE_INVALID	File content-type is invalid.
