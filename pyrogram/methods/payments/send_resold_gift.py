@@ -71,6 +71,7 @@ class SendResoldGift:
         invoice = raw.types.InputInvoiceStarGiftResale(
             slug=match.group(1),
             to_id=peer
+            ton=True
         )
 
         form = await self.invoke(
