@@ -30,8 +30,6 @@ class MsgFactory:
         self.client = client
 
         self._last_msg_id = 0
-        self._last_sync_time = 0
-        self._last_monotonic = time.monotonic()
 
         self._msg_id_lock = asyncio.Lock()
         self._seq_no_lock = asyncio.Lock()
