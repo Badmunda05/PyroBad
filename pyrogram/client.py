@@ -111,6 +111,9 @@ class Client(Methods):
 
         ipv6 (``bool``, *optional*):
             Pass True to connect to Telegram using IPv6.
+            If the session was previously used with IPv4,
+            the first request will be made via IPv4,
+            after which the server address will be updated (works both ways).
             Defaults to False (IPv4).
 
         proxy (``dict``, *optional*):
@@ -419,7 +422,7 @@ class Client(Methods):
         else:
             self.loop = asyncio.get_event_loop()
 
-        self.__config = None
+        self.__config: "raw.types.Config" = None
 
     def __enter__(self):
         return self.start()
@@ -903,8 +906,14 @@ class Client(Methods):
             await self.storage.api_id(self.api_id)
 
             await self.storage.dc_id(2)
-            await self.storage.server_address("149.154.167.51")
-            await self.storage.port(443)
+
+            if self.test_mode:
+                await self.storage.server_address("2001:67c:4e8:f002::e" if self.ipv6 else "149.154.167.40")
+                await self.storage.port(80)
+            else:
+                await self.storage.server_address("2001:67c:4e8:f002::a" if self.ipv6 else "149.154.167.51")
+                await self.storage.port(443)
+
             await self.storage.date(0)
 
             await self.storage.test_mode(self.test_mode)
@@ -1365,7 +1374,7 @@ class Client(Methods):
                 Custom port to connect to.
                 Used only when creating a new session.
         """
-        if dc_id == await self.storage.dc_id():
+        if dc_id == await self.storage.dc_id() and not is_media:
             return self.session
 
         sessions = self.media_sessions if is_media else self.sessions
@@ -1420,13 +1429,16 @@ class Client(Methods):
 
     async def get_dc_option(
         self,
-        dc_id: int,
+        dc_id: int = None,
         is_media: bool = False,
         is_cdn: bool = False,
         ipv6: bool = False
     ) -> "raw.types.DcOption":
         if not self.__config:
             self.__config = await self.invoke(raw.functions.help.GetConfig())
+
+        if dc_id is None:
+            dc_id = self.__config.this_dc
 
         options = [dc for dc in self.__config.dc_options if dc.id == dc_id and dc.ipv6 == ipv6] # type: List[raw.types.DcOption]
 

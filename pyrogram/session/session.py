@@ -165,7 +165,6 @@ class Session:
             server_address=self.server_address,
             port=self.port,
             test_mode=self.test_mode,
-            ipv6=self.client.ipv6,
             proxy=self.client.proxy,
             media=self.is_media,
             protocol_factory=self.client.protocol_factory,

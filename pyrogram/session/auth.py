@@ -94,7 +94,6 @@ class Auth:
                 server_address=self.server_address,
                 port=self.port,
                 test_mode=self.test_mode,
-                ipv6=self.ipv6,
                 proxy=self.proxy,
                 media=False,
                 protocol_factory=self.protocol_factory,
