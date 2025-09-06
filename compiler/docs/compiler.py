@@ -636,6 +636,7 @@ def pyrogram_api():
             FoundContacts
             PrivacyRule
             StoriesStealthMode
+            UserRating
             BotVerification
             BusinessBotRights
             ChatSettings
@@ -709,6 +710,11 @@ def pyrogram_api():
             Invoice
             LinkPreviewOptions
             GiftCode
+            GiftPurchaseLimit
+            GiftResaleParameters
+            GiftResalePrice
+            GiftResalePriceStar
+            GiftResalePriceTon
             GiftUpgradePreview
             CheckedGiftCode
             ChecklistTask
