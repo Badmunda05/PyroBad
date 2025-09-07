@@ -3409,6 +3409,7 @@ class Message(Object, Update):
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
         view_once: bool = None,
+        protect_content: bool = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
@@ -3497,6 +3498,9 @@ class Message(Object, Update):
             view_once (``bool``, *optional*):
                 Self-Destruct Timer.
                 If True, the photo will self-destruct after it was viewed.
+            
+            protect_content (``bool``, *optional*):
+                Protects the contents of the sent message from forwarding and saving.
 
             business_connection_id (``str``, *optional*):
                 Unique identifier of the business connection on behalf of which the message will be sent.
@@ -3578,6 +3582,7 @@ class Message(Object, Update):
             direct_messages_topic_id=direct_messages_topic_id,
             effect_id=effect_id,
             reply_parameters=reply_parameters,
+            protect_content=protect_content,
             view_once=view_once,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
