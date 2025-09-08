@@ -1525,12 +1525,19 @@ class Client(Methods):
     def server_time(self) -> float:
         return self._last_sync_time + (time.monotonic() - self._last_monotonic)
 
+    @property
+    def uptime(self) -> float:
+        if not self._is_server_time_synced:
+            return 0
+        return int(time.monotonic() - self._last_monotonic)
+
     def _set_server_time(self, msg_id: int):
         if self._is_server_time_synced:
             return
 
         self._last_sync_time = msg_id / float(2**32)
         self._last_monotonic = time.monotonic()
+        self._is_server_time_synced = True
         log.info(f"Time synced: {utils.timestamp_to_datetime(self._last_sync_time)}")
 
     def guess_mime_type(self, filename: Union[str, BytesIO]) -> Optional[str]:
