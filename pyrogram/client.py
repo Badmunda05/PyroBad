@@ -1531,6 +1531,7 @@ class Client(Methods):
 
         self._last_sync_time = msg_id / float(2**32)
         self._last_monotonic = time.monotonic()
+        self._is_server_time_synced = True
         log.info(f"Time synced: {utils.timestamp_to_datetime(self._last_sync_time)}")
 
     def guess_mime_type(self, filename: Union[str, BytesIO]) -> Optional[str]:
