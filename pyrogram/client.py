@@ -1396,13 +1396,15 @@ class Client(Methods):
                     server_address or dc_option.ip_address,
                     port or dc_option.port,
                     await self.storage.test_mode()
-                ).create(),
-                await self.storage.test_mode(), is_media=is_media
+                ).create() if dc_id != await self.storage.dc_id()
+                else await self.storage.auth_key(),
+                await self.storage.test_mode(),
+                is_media=is_media
             )
 
             await session.start()
 
-            if export_authorization:
+            if dc_id != await self.storage.dc_id() and export_authorization:
                 for _ in range(3):
                     exported_auth = await self.invoke(
                         raw.functions.auth.ExportAuthorization(
@@ -1524,6 +1526,12 @@ class Client(Methods):
     @property
     def server_time(self) -> float:
         return self._last_sync_time + (time.monotonic() - self._last_monotonic)
+
+    @property
+    def uptime(self) -> int:
+        if not self._is_server_time_synced:
+            return 0
+        return int(time.monotonic() - self._last_monotonic)
 
     def _set_server_time(self, msg_id: int):
         if self._is_server_time_synced:
