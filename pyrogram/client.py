@@ -1527,12 +1527,6 @@ class Client(Methods):
     def server_time(self) -> float:
         return self._last_sync_time + (time.monotonic() - self._last_monotonic)
 
-    @property
-    def uptime(self) -> int:
-        if not self._is_server_time_synced:
-            return 0
-        return int(time.monotonic() - self._last_monotonic)
-
     def _set_server_time(self, msg_id: int):
         if self._is_server_time_synced:
             return
