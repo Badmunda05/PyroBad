@@ -1385,7 +1385,7 @@ class Client(Methods):
 
             dc_option = await self.get_dc_option(dc_id, is_media=is_media, ipv6=self.ipv6)
 
-            session = self.media_sessions[dc_id] = Session(
+            session = sessions[dc_id] = Session(
                 self,
                 dc_id,
                 server_address or dc_option.ip_address,
@@ -1396,13 +1396,15 @@ class Client(Methods):
                     server_address or dc_option.ip_address,
                     port or dc_option.port,
                     await self.storage.test_mode()
-                ).create(),
-                await self.storage.test_mode(), is_media=is_media
+                ).create() if dc_id != await self.storage.dc_id()
+                else await self.storage.auth_key(),
+                await self.storage.test_mode(),
+                is_media=is_media
             )
 
             await session.start()
 
-            if export_authorization:
+            if dc_id != await self.storage.dc_id() and export_authorization:
                 for _ in range(3):
                     exported_auth = await self.invoke(
                         raw.functions.auth.ExportAuthorization(
