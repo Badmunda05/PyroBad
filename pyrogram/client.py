@@ -1385,7 +1385,7 @@ class Client(Methods):
 
             dc_option = await self.get_dc_option(dc_id, is_media=is_media, ipv6=self.ipv6)
 
-            session = self.media_sessions[dc_id] = Session(
+            session = sessions[dc_id] = Session(
                 self,
                 dc_id,
                 server_address or dc_option.ip_address,
