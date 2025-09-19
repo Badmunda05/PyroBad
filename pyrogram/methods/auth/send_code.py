@@ -109,6 +109,11 @@ class SendCode:
                 await self.storage.server_address(dc_option.ip_address)
                 await self.storage.port(dc_option.port)
 
-                self.session = await self.get_session(temporary=True, export_authorization=False)
+                self.session = await self.get_session(
+                     server_address=await self.storage.server_address(),
+                     port=await self.storage.port(),
+                     export_authorization=False,
+                     temporary=True
+                )
             else:
                 return types.SentCode._parse(r)
