@@ -1287,7 +1287,6 @@ class Client(Methods):
             except Exception as e:
                 log.exception(e)
 
-
     async def get_session(
         self,
         dc_id: int,
