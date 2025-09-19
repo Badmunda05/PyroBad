@@ -34,7 +34,7 @@ class Dialog(Object):
             The last message sent in the dialog at this time.
 
         last_read_inbox_message_id (``int``):
-            dentifier of the last read incoming message.
+            Identifier of the last read incoming message.
 
         last_read_outbox_message_id (``int``):
             Identifier of the last read outgoing message.
