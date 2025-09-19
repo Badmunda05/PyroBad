@@ -1231,7 +1231,7 @@ class Client(Methods):
 
                             # https://core.telegram.org/cdn#decrypting-files
                             decrypted_chunk = await self.loop.run_in_executor(
-                                self.executor, 
+                                self.executor,
                                 aes.ctr256_decrypt,
                                 chunk,
                                 r.encryption_key,
@@ -1246,14 +1246,15 @@ class Client(Methods):
                             )
 
                             # https://core.telegram.org/cdn#verifying-files
-                            def _check_all():
+                            def _check_all_hashes():
                                 for i, h in enumerate(hashes):
                                     cdn_chunk = decrypted_chunk[h.limit * i: h.limit * (i + 1)]
                                     CDNFileHashMismatch.check(
                                         h.hash == sha256(cdn_chunk).digest(),
                                         "h.hash == sha256(cdn_chunk).digest()"
-                                    )           
-                            await self.loop.run_in_executor(self.executor, _check_all)
+                                    )
+
+                            await self.loop.run_in_executor(self.executor, _check_all_hashes)
 
                             yield decrypted_chunk
 
@@ -1286,79 +1287,6 @@ class Client(Methods):
             except Exception as e:
                 log.exception(e)
 
-    async def _get_session(
-        self,
-        dc_id: int,
-        is_media: Optional[bool] = False,
-        is_cdn: Optional[bool] = False,
-        export_authorization: Optional[bool] = True,
-        server_address: Optional[str] = None,
-        port: Optional[int] = None,
-        temporary: Optional[bool] = False
-    ) -> "Session":
-        if dc_id == await self.storage.dc_id() and (not is_media) and (not temporary):
-            return self.session
-
-        sessions = self.media_sessions if is_media else self.sessions
-
-        if sessions.get(dc_id) and (not temporary):
-            return sessions[dc_id]
-        
-        dc_option = await self.get_dc_option(dc_id, is_media=is_media, ipv6=self.ipv6, is_cdn=is_cdn)
-
-        if is_media:
-            auth_key = (await self._get_session(dc_id)).auth_key
-        else:
-            if dc_id != await self.storage.dc_id():
-                auth_key = await Auth(
-                    self,
-                    dc_id,
-                    server_address or dc_option.ip_address,
-                    port or dc_option.port,
-                    await self.storage.test_mode()
-                ).create()
-            else:
-                auth_key = await self.storage.auth_key()              
-
-        session = Session(
-            self,
-            dc_id,
-            server_address or dc_option.ip_address,
-            port or dc_option.port,
-            auth_key,
-            await self.storage.test_mode(),
-            is_media=is_media
-        )
-        
-        if not temporary:
-           sessions[dc_id] = session
-
-        await session.start()
-
-        if dc_id != await self.storage.dc_id() and export_authorization:
-            for _ in range(3):
-                exported_auth = await self.invoke(
-                    raw.functions.auth.ExportAuthorization(
-                        dc_id=dc_id
-                    )
-                )
-
-                try:
-                    await session.invoke(
-                        raw.functions.auth.ImportAuthorization(
-                            id=exported_auth.id,
-                            bytes=exported_auth.bytes
-                        )
-                    )
-                except AuthBytesInvalid:
-                    continue
-                else:
-                    break
-            else:
-                await session.stop()
-                raise AuthBytesInvalid
-
-        return session
 
     async def get_session(
         self,
@@ -1395,14 +1323,75 @@ class Client(Methods):
                 Used only when creating a new session.
 
             temporary (``bool``, *optional*):
-                Temporary sessions for perticular invoke.
+                Create temporary session instead of getting from storage.
                 Used only when uploading/downloading and don't forget to stop it.
         """
         async with self.sessions_lock:
-             return await self._get_session(
-                 dc_id, is_media, is_cdn, export_authorization,
-                 server_address, port, temporary
-             )
+            is_current_dc = await self.storage.dc_id() == dc_id
+
+            if not temporary and is_current_dc and not is_media:
+                return self.session
+
+            sessions = self.media_sessions if is_media else self.sessions
+
+            if not temporary and sessions.get(dc_id):
+                return sessions[dc_id]
+
+            dc_option = await self.get_dc_option(dc_id, is_media=is_media, ipv6=self.ipv6, is_cdn=is_cdn)
+
+            if is_media:
+                auth_key = (await self.get_session(dc_id)).auth_key
+            else:
+                if not is_current_dc:
+                    auth_key = await Auth(
+                        self,
+                        dc_id,
+                        server_address or dc_option.ip_address,
+                        port or dc_option.port,
+                        await self.storage.test_mode()
+                    ).create()
+                else:
+                    auth_key = await self.storage.auth_key()
+
+            session = Session(
+                self,
+                dc_id,
+                server_address or dc_option.ip_address,
+                port or dc_option.port,
+                auth_key,
+                await self.storage.test_mode(),
+                is_media=is_media
+            )
+
+            if not temporary:
+                sessions[dc_id] = session
+
+            await session.start()
+
+            if not is_current_dc and export_authorization:
+                for _ in range(3):
+                    exported_auth = await self.invoke(
+                        raw.functions.auth.ExportAuthorization(
+                            dc_id=dc_id
+                        )
+                    )
+
+                    try:
+                        await session.invoke(
+                            raw.functions.auth.ImportAuthorization(
+                                id=exported_auth.id,
+                                bytes=exported_auth.bytes
+                            )
+                        )
+                    except AuthBytesInvalid:
+                        continue
+                    else:
+                        break
+                else:
+                    await session.stop()
+                    raise AuthBytesInvalid
+
+            return session
 
     async def get_dc_option(
         self,
@@ -1429,7 +1418,7 @@ class Client(Methods):
                 return cdn_options[0]
 
             log.debug(
-                "No CDN datacenter found for DC%s, falling back to prod DC",
+                "No CDN datacenter found for DC%s, falling back to media DC",
                 dc_id
             )
 
