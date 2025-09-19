@@ -1360,9 +1360,6 @@ class Client(Methods):
 
             server_address = server_address or dc_option.ip_address
             port = port or dc_option.port
-        else:
-            server_address = server_address or await self.storage.server_address()
-            port = port or await self.storage.port()
 
         if is_media:
             auth_key = (await self.get_session(dc_id)).auth_key
