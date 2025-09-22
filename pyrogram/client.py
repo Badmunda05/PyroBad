@@ -27,7 +27,6 @@ import shutil
 import sys
 import time
 import math
-import tempfile
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from hashlib import sha256
