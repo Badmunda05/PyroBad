@@ -471,8 +471,8 @@ class Chat(Object):
             The DC ID where the stats are stored.
             Returned only in :meth:`~pyrogram.Client.get_chat`
 
-        theme_emoji (``str``, *optional*):
-            Emoji representing a specific chat theme.
+        theme (:obj:`~pyrogram.types.ChatTheme`, *optional*):
+            Theme set for the chat.
             Returned only in :meth:`~pyrogram.Client.get_chat`
 
         unread_count (``int``, *optional*):
@@ -635,7 +635,7 @@ class Chat(Object):
         read_outbox_max_id: Optional[int] = None,
         is_ads_restricted: Optional[bool] = None,
         stats_dc_id: Optional[int] = None,
-        theme_emoji: Optional[str] = None,
+        theme: Optional[str] = None,
         unread_count: Optional[int] = None,
         view_forum_as_messages: Optional[bool] = None,
         paid_message_star_count: Optional[int] = None,
@@ -770,7 +770,7 @@ class Chat(Object):
         self.read_outbox_max_id = read_outbox_max_id
         self.is_ads_restricted = is_ads_restricted
         self.stats_dc_id = stats_dc_id
-        self.theme_emoji = theme_emoji
+        self.theme = theme
         self.unread_count = unread_count
         self.view_forum_as_messages = view_forum_as_messages
         self.paid_message_star_count = paid_message_star_count
@@ -1007,10 +1007,7 @@ class Chat(Object):
 
         parsed_chat.folder_id = user.folder_id
         parsed_chat.message_auto_delete_time = user.ttl_period
-
-        if isinstance(user.theme, raw.types.ChatTheme):
-            parsed_chat.theme_emoji = user.theme.emoticon
-
+        parsed_chat.theme = await types.ChatTheme._parse(client, user.theme)
         parsed_chat.private_forward_name = user.private_forward_name
         parsed_chat.chat_admin_rights = types.ChatPrivileges._parse(user.bot_group_admin_rights)
         parsed_chat.channel_admin_rights = types.ChatPrivileges._parse(user.bot_broadcast_admin_rights)
@@ -1107,7 +1104,7 @@ class Chat(Object):
         # parsed_chat.call
         parsed_chat.message_auto_delete_time = chat.ttl_period
         # parsed_chat.groupcall_default_join_as
-        parsed_chat.theme_emoji = chat.theme_emoticon
+        parsed_chat.theme = chat.theme_emoticon
         parsed_chat.join_requests_count = chat.requests_pending
         # parsed_chat.recent_requesters
         parsed_chat.available_reactions = types.ChatReactions._parse(client, chat.available_reactions)
@@ -1190,7 +1187,7 @@ class Chat(Object):
         parsed_chat.message_auto_delete_time = channel.ttl_period
         # parsed_chat.pending_suggestions
         # parsed_chat.groupcall_default_join_as
-        parsed_chat.theme_emoji = channel.theme_emoticon
+        parsed_chat.theme = channel.theme_emoticon
         parsed_chat.join_requests_count = channel.requests_pending
         # parsed_chat.recent_requesters
 

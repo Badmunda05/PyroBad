@@ -1120,7 +1120,7 @@ class Message(Object, Update):
             # passport_data_received = ...
         elif isinstance(action, raw.types.MessageActionSetChatTheme):
             service_type = enums.MessageServiceType.CHAT_SET_THEME
-            chat_set_theme = types.ChatTheme._parse(action)
+            chat_set_theme = await types.ChatTheme._parse(client, action.theme)
         elif isinstance(action, raw.types.MessageActionSetChatWallPaper):
             service_type = enums.MessageServiceType.CHAT_SET_BACKGROUND
             chat_set_background = types.ChatBackground._parse(client, action.wallpaper, action.same, action.for_both)
