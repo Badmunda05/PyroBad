@@ -101,7 +101,7 @@ class ChatPermissions(Object):
         can_pin_messages: Optional[bool] = None,
         can_manage_topics: Optional[bool] = None,
 
-        can_send_media_messages: Optional[bool] = None,  # Audio files, documents, photos, videos, video notes, voice notes and polls
+        can_send_media_messages: Optional[bool] = None,  # Audio files, documents, photos, videos, video notes and voice notes. Deprecated
     ):
         super().__init__(None)
 
@@ -147,7 +147,7 @@ class ChatPermissions(Object):
                 can_manage_topics=not denied_permissions.manage_topics
             )
 
-    def write(self, until_date: datetime = None) -> "raw.types.ChatBannedRights":
+    def write(self, until_date: datetime = utils.zero_datetime()) -> "raw.types.ChatBannedRights":
         send_messages = not self.can_send_messages
         send_audios = not self.can_send_audios
         send_docs = not self.can_send_documents
@@ -155,6 +155,7 @@ class ChatPermissions(Object):
         send_videos = not self.can_send_videos
         send_roundvideos = not self.can_send_video_notes
         send_voices = not self.can_send_voice_notes
+        send_media = None
 
         # Because of backward compatibility
         if self.can_send_media_messages is not None:
@@ -163,6 +164,7 @@ class ChatPermissions(Object):
                 "Use `can_send_messages`, `can_send_audios`, `can_send_documents`, `can_send_photos`, `can_send_videos`, `can_send_video_notes`, `can_send_voice_notes`, `can_send_polls` instead."
             )
 
+            send_media = not self.can_send_media_messages
             send_audios = None
             send_docs = None
             send_photos = None
@@ -171,7 +173,7 @@ class ChatPermissions(Object):
             send_voices = None
 
         return raw.types.ChatBannedRights(
-            until_date=utils.datetime_to_timestamp(until_date) if until_date else 0,
+            until_date=utils.datetime_to_timestamp(until_date),
             # view_messages
             send_messages=send_messages,
             send_audios=send_audios,
@@ -192,5 +194,5 @@ class ChatPermissions(Object):
             manage_topics=not self.can_manage_topics,
             # send_plain
 
-            send_media=not self.can_send_media_messages,
+            send_media=send_media
         )
