@@ -221,6 +221,10 @@ def pyrogram_api():
             stop_transmission
             export_session_string
             set_parse_mode
+            set_dc
+            get_dc_option
+            get_session
+            get_file
         """,
         messages="""
         Messages
@@ -267,6 +271,8 @@ def pyrogram_api():
             get_media_group
             get_chat_history
             get_chat_history_count
+            read_mentions
+            read_reactions
             read_chat_history
             send_poll
             view_messages
@@ -638,7 +644,7 @@ def pyrogram_api():
             ChatPhoto
             ChatMember
             ChatPermissions
-            ChatPrivileges
+            ChatAdministratorRights
             ChatInviteLink
             ChatAdminWithInviteLinks
             ChatEvent
