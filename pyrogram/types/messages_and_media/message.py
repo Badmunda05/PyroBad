@@ -1882,11 +1882,12 @@ class Message(Object, Update):
         Use as a shortcut for:
 
         .. code-block:: python
+            from pyrogram import types
 
             await client.send_message(
                 chat_id=message.chat.id,
                 text="hello",
-                reply_to_message_id=message.id
+                reply_parameters=types.ReplyParameters(message_id=message.id)
             )
 
         Example:
