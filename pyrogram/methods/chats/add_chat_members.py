@@ -86,5 +86,10 @@ class AddChatMembers:
                     ]
                 )
             )
+            
+            if getattr(result, "missing_invitees", None):
+                return False  
+                
+            return True  
 
-        return True
+
