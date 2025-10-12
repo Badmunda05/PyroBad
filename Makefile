@@ -31,18 +31,18 @@ clean-docs:
 clean: clean-venv clean-build clean-api clean-docs
 	@echo "Cleaned all directories"
 
-api:
+api: clean-api
 	cd compiler/api && ../../$(PYTHON) compiler.py
 	cd compiler/errors && ../../$(PYTHON) compiler.py
 
-docs:
+docs: clean-docs
 	cd compiler/docs && ../../$(PYTHON) compiler.py
 	$(VENV)/bin/sphinx-build -b dirhtml "docs/source" "docs/build/html" -j auto
 
 archive-docs:
 	cd docs/build/html && zip -r ../docs.zip ./
 
-build:
+build: clean-build
 	hatch build
 
 tag:

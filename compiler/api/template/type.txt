@@ -2,12 +2,17 @@
 
 {warning}
 
+import sys
 from typing import Union
 from pyrogram import raw
 from pyrogram.raw.core import TLObject
 
-# We need to dynamically set `__doc__` due to `sphinx`
 {name} = Union[{types}]
-{name}.__doc__ = """
-    {docstring}
-"""
+
+# We need to dynamically set `__doc__` due to `sphinx`
+# TODO: Since 3.14, property __doc__ is read only
+# In future we need find solution to set docstring for typing types.
+if sys.version_info < (3, 14):
+    {name}.__doc__ = """
+        {docstring}
+    """
