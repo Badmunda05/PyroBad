@@ -38,6 +38,7 @@ from typing import AsyncGenerator, Callable, List, Optional, Type, Union
 import pyrogram
 from pyrogram import __license__, __version__, enums, raw, utils
 from pyrogram.crypto import aes
+from pyrogram.utils import get_event_loop
 from pyrogram.errors import (
     AuthBytesInvalid,
     BadRequest,
@@ -423,7 +424,7 @@ class Client(Methods):
         if isinstance(loop, asyncio.AbstractEventLoop):
             self.loop = loop
         else:
-            self.loop = asyncio.get_event_loop()
+            self.loop = get_event_loop()
 
         self.__config: "raw.types.Config" = None
 

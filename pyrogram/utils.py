@@ -697,3 +697,23 @@ def from_nano(nano: int) -> float:
 
 def to_nano(amount: float) -> int:
     return int(amount * 1e9)
+
+
+
+def get_event_loop() -> asyncio.AbstractEventLoop:
+    """
+    Since Python 3.14 asyncio.get_event_loop() no longer creates loops implicitly
+
+    The asyncio.get_event_loop() function now raises RuntimeError if no event loop exists.
+
+    Documentation: https://docs.python.org/3.14/library/asyncio-eventloop.html#asyncio.get_event_loop
+
+    This function is a wrapper around asyncio.get_event_loop() for backwards compatibility.
+    """
+    try:
+        return asyncio.get_event_loop()
+    except RuntimeError as ex:
+        if "There is no current event loop in thread" in str(ex):
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            return asyncio.get_event_loop()

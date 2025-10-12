@@ -22,6 +22,7 @@ import logging
 import socket
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Optional, Tuple, TypedDict
+from pyrogram.utils import get_event_loop
 
 import socks
 
@@ -68,7 +69,7 @@ class TCP:
         if isinstance(loop, asyncio.AbstractEventLoop):
             self.loop = loop
         else:
-            self.loop = asyncio.get_event_loop()
+            self.loop = get_event_loop()
 
     async def _connect_via_proxy(
         self,
