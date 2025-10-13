@@ -33,7 +33,7 @@ from importlib import import_module
 from io import BytesIO, StringIO
 from mimetypes import MimeTypes
 from pathlib import Path
-from typing import AsyncGenerator, Callable, List, Optional, Type, Union
+from typing import AsyncGenerator, Callable, Concatenate, List, Optional, ParamSpec, Type, Union
 
 import pyrogram
 from pyrogram import __license__, __version__, enums, raw, utils
@@ -69,6 +69,9 @@ from .parser import Parser
 from .session.internals import MsgId
 
 log = logging.getLogger(__name__)
+
+
+P = ParamSpec("P")
 
 
 class Client(Methods):
@@ -378,6 +381,7 @@ class Client(Methods):
             self.storage = SQLiteStorage(self.name, workdir=self.workdir)
 
         self.dispatcher: Dispatcher = Dispatcher(self)
+        self.error_handler: Callable[Concatenate[Exception, Client, P]] | None = None      
 
         self.rnd_id = MsgId
         self._last_sync_time = time.time()
@@ -791,6 +795,19 @@ class Client(Methods):
 
         return is_min
 
+    @property
+    def error_handler(self) -> Callable[Concatenate[Exception, Client, P], None]:
+        return self._error_handler
+
+    @error_handler.setter
+    def error_handler(self, callback: Callable[Concatenate[Exception, Client, P], None]) -> None:
+        self._error_handler = callback
+
+    @error_handler.deleter
+    def error_handler(self) -> None:
+        self._error_handler = None
+        
+    
     async def handle_updates(self, updates):
         self.last_update_time = datetime.now()
 
