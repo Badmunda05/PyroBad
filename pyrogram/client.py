@@ -381,7 +381,7 @@ class Client(Methods):
             self.storage = SQLiteStorage(self.name, workdir=self.workdir)
 
         self.dispatcher: Dispatcher = Dispatcher(self)
-        self.error_handler: Callable[Concatenate[Exception, Client, P]] | None = None      
+        self._error_handler: Callable[Concatenate[Exception, Client, P]] | None = None      
 
         self.rnd_id = MsgId
         self._last_sync_time = time.time()
