@@ -534,8 +534,9 @@ class Client(Methods):
 
                     if isinstance(email_sent_code, raw.types.account.EmailVerifiedLogin):
                         if isinstance(email_sent_code.sent_code, raw.types.auth.SentCodePaymentRequired):
+                            # TODO: raw.functions.auth.CheckPaidAuth
                             raise Unauthorized(
-                                "You need to pay for or purchase premium to continue authorization "
+                                f"You need to pay {email_sent_code.sent_code.amount}{email_sent_code.sent_code.currency} or purchase premium to continue authorization "
                                 "process, which is currently not supported by Pyrogram."
                             )
                 except BadRequest as e:

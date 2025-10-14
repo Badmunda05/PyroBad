@@ -366,6 +366,9 @@ class User(Object, Update):
             Information about gifts that can be received by the user.
             Returned only in :meth:`~pyrogram.Client.get_me`
 
+        note (:obj:`~pyrogram.types.FormattedText`, *optional*):
+            A note about your contact.
+
         raw (:obj:`~pyrogram.raw.base.User` | :obj:`~pyrogram.raw.base.UserStatus`, *optional*):
             The raw user or user status object, as received from the Telegram API.
 
@@ -468,6 +471,7 @@ class User(Object, Update):
         pending_rating: Optional["types.UserRating"] = None,
         pending_rating_date: Optional[datetime] = None,
         accepted_gift_types: Optional["types.AcceptedGiftTypes"] = None,
+        note: Optional["types.FormattedText"] = None,
         raw: Optional[Union["raw.base.User", "raw.base.UserStatus"]] = None
     ):
         super().__init__(client)
@@ -557,6 +561,7 @@ class User(Object, Update):
         self.pending_rating = pending_rating
         self.pending_rating_date = pending_rating_date
         self.accepted_gift_types = accepted_gift_types
+        self.note = note
         self.raw = raw
 
     @property
@@ -675,6 +680,7 @@ class User(Object, Update):
         # parsed_user.profile_photo = user.profile_photo
         # parsed_user.fallback_photo = user.fallback_photo
         # parsed_user.bot_info = user.bot_info
+        # parsed_user.bot_forum_view
 
         if user.pinned_msg_id:
             parsed_user.pinned_message = await client.get_messages(chat_id=parsed_user.id, pinned=True)
@@ -698,7 +704,7 @@ class User(Object, Update):
             ) or None
 
         parsed_user.business_work_hours = types.BusinessWorkingHours._parse(user.business_work_hours)
-        parsed_user.business_location = types.Location._parse(client, user.business_location)
+        parsed_user.business_location = types.Location._parse_business(user.business_location)
         parsed_user.business_greeting_message = types.BusinessMessage._parse(client, user.business_greeting_message, users)
         parsed_user.business_away_message = types.BusinessMessage._parse(client, user.business_away_message, users)
         parsed_user.business_intro = await types.BusinessIntro._parse(client, user.business_intro)
@@ -739,6 +745,7 @@ class User(Object, Update):
         parsed_user.pending_rating = types.UserRating._parse(user.stars_my_pending_rating)
         parsed_user.pending_rating_date = utils.timestamp_to_datetime(user.stars_my_pending_rating_date)
         parsed_user.accepted_gift_types = types.AcceptedGiftTypes._parse(user.disallowed_gifts)
+        parsed_user.note = types.FormattedText._parse(client, user.note)
 
         return parsed_user
 

@@ -48,6 +48,9 @@ class FormattedText(Object):
 
     @staticmethod
     def _parse(client: "pyrogram.Client", text: "raw.types.TextWithEntities") -> "FormattedText":
+        if not isinstance(text, raw.types.TextWithEntities):
+            return None
+
         entities = types.List(
             filter(
                 lambda x: x is not None,
@@ -58,4 +61,10 @@ class FormattedText(Object):
         return FormattedText(
             text=text.text,
             entities=entities or None,
+        )
+
+    async def write(self) -> "raw.types.TextWithEntities":
+        return raw.types.TextWithEntities(
+            text=self.text,
+            entities=[await entity.write() for entity in self.entities or []]
         )

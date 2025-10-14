@@ -180,6 +180,9 @@ class MessageServiceType(AutoName):
     SUGGEST_PROFILE_PHOTO = auto()
     "Suggest profile photo"
 
+    SUGGEST_BIRTHDAY = auto()
+    "Suggest birthday"
+
     CHAT_SET_BACKGROUND = auto()
     "Set chat background"
 

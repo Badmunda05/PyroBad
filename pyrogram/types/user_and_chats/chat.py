@@ -501,6 +501,10 @@ class Chat(Object):
             Information about gifts that can be received by the user.
             Returned only in :meth:`~pyrogram.Client.get_chat`
 
+        note (:obj:`~pyrogram.types.FormattedText`, *optional*):
+            A note about your contact.
+            Returned only in :meth:`~pyrogram.Client.get_chat`
+
         raw (:obj:`~pyrogram.raw.types.UserFull` | :obj:`~pyrogram.raw.types.ChatFull` | :obj:`~pyrogram.raw.types.ChannelFull`, *optional*):
             The raw chat or user object, as received from the Telegram API.
 
@@ -642,6 +646,7 @@ class Chat(Object):
         is_paid_messages_available: Optional[bool] = None,
         display_gifts_button: Optional[bool] = None,
         accepted_gift_types: Optional["types.AcceptedGiftTypes"] = None,
+        note: Optional["types.FormattedText"] = None,
         raw: Optional[Union["raw.types.UserFull", "raw.types.ChatFull", "raw.types.ChannelFull"]] = None
     ):
         super().__init__(client)
@@ -777,6 +782,7 @@ class Chat(Object):
         self.is_paid_messages_available = is_paid_messages_available
         self.display_gifts_button = display_gifts_button
         self.accepted_gift_types = accepted_gift_types
+        self.note = note
         self.raw = raw
 
     # region Deprecated
@@ -997,10 +1003,10 @@ class Chat(Object):
         parsed_chat.can_view_revenue = user.can_view_revenue
         parsed_chat.bot_can_manage_emoji_status = user.bot_can_manage_emoji_status
         parsed_chat.bio = user.about or None
-        # parsed_chat.personal_photo
-        # parsed_chat.profile_photo
-        # parsed_chat.fallback_photo
-        # parsed_chat.bot_info
+        # parsed_chat.personal_photo = user.personal_photo
+        # parsed_chat.photo = user.profile_photo
+        # parsed_chat.public_photo = user.fallback_photo
+        # parsed_chat.bot_info = user.bot_info
 
         if user.pinned_msg_id:
             parsed_chat.pinned_message = await client.get_messages(chat_id=parsed_chat.id, pinned=True)
@@ -1011,9 +1017,7 @@ class Chat(Object):
         parsed_chat.private_forward_name = user.private_forward_name
         parsed_chat.chat_admin_rights = types.ChatAdministratorRights._parse(user.bot_group_admin_rights)
         parsed_chat.channel_admin_rights = types.ChatAdministratorRights._parse(user.bot_broadcast_admin_rights)
-        # parsed_chat.premium_gifts
         parsed_chat.chat_background = types.ChatBackground._parse(client, user.wallpaper)
-
 
         if user.stories:
             parsed_chat.stories = types.List(
@@ -1026,7 +1030,7 @@ class Chat(Object):
             ) or None
 
         parsed_chat.business_work_hours = types.BusinessWorkingHours._parse(user.business_work_hours)
-        parsed_chat.business_location = types.Location._parse(client, user.business_location)
+        parsed_chat.business_location = types.Location._parse_business(user.business_location)
         parsed_chat.business_greeting_message = types.BusinessMessage._parse(client, user.business_greeting_message, users)
         parsed_chat.business_away_message = types.BusinessMessage._parse(client, user.business_away_message, users)
         parsed_chat.business_intro = await types.BusinessIntro._parse(client, user.business_intro)
@@ -1069,6 +1073,7 @@ class Chat(Object):
         parsed_chat.paid_message_star_count = user.send_paid_messages_stars
         parsed_chat.display_gifts_button = user.display_gifts_button
         parsed_chat.accepted_gift_types = types.AcceptedGiftTypes._parse(user.disallowed_gifts)
+        parsed_chat.note = types.FormattedText._parse(client, user.note)
 
         return parsed_chat
 
