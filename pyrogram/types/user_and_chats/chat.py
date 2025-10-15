@@ -502,7 +502,7 @@ class Chat(Object):
             Returned only in :meth:`~pyrogram.Client.get_chat`
 
         note (:obj:`~pyrogram.types.FormattedText`, *optional*):
-            A note about your contact.
+            Note added to the user's contact.
             Returned only in :meth:`~pyrogram.Client.get_chat`
 
         raw (:obj:`~pyrogram.raw.types.UserFull` | :obj:`~pyrogram.raw.types.ChatFull` | :obj:`~pyrogram.raw.types.ChannelFull`, *optional*):

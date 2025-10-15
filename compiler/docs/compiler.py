@@ -434,6 +434,7 @@ def pyrogram_api():
             get_contacts
             get_contacts_count
             search_contacts
+            set_contact_note
         """,
         payments="""
         Payments
@@ -447,6 +448,7 @@ def pyrogram_api():
             add_collection_gifts
             create_gift_collection
             delete_gift_collection
+            drop_gift_original_details
             get_gift_collections
             remove_collection_gifts
             reorder_collection_gifts
@@ -467,6 +469,7 @@ def pyrogram_api():
             set_gift_resale_price
             set_pinned_gifts
             show_gift
+            suggest_birthday
             transfer_gift
             upgrade_gift
         """,
@@ -743,6 +746,7 @@ def pyrogram_api():
             GiftResalePriceStar
             GiftResalePriceTon
             GiftUpgradePreview
+            GiftUpgradePrice
             CheckedGiftCode
             ChecklistTask
             ChecklistTasksAdded

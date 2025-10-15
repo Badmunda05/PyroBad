@@ -34,6 +34,7 @@ class FormattedText(Object):
         entities (List of :obj:`~pyrogram.types.MessageEntity`):
             Entities contained in the text. Entities can be nested, but must not mutually intersect with each other.
     """
+    # TODO: add parse_mode for write
 
     def __init__(
         self,

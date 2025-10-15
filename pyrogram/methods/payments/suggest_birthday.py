@@ -16,47 +16,44 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, Optional
+
+from typing import Union
 
 import pyrogram
-from pyrogram import raw
+from pyrogram import raw, types
 
 
-class SetSlowMode:
-    async def set_slow_mode(
+class SuggestBirthday:
+    async def suggest_birthday(
         self: "pyrogram.Client",
         chat_id: Union[int, str],
-        seconds: Optional[int]
+        birthday: "types.Birthday"
     ) -> bool:
-        """Set the slow mode interval for a chat.
+        """Drops original details for an upgraded gift.
 
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
+                For your personal cloud (Saved Messages) you can simply use "me" or "self".
+                For a contact that exists in your Telegram address book you can use his phone number (str).
 
-            seconds (``int`` | ``None``):
-                Seconds in which members will be able to send only one message per this interval.
-                Valid values are: 0 or None (off), 5, 10, 30, 60 (1m), 300 (5m), 900 (15m) or 3600 (1h).
+            birthday (:obj:`types.Birthday`):
+                Birthday in the format "YYYY-MM-DD".
 
         Returns:
-            ``bool``: True on success.
+            ``bool``: On success, True is returned.
 
         Example:
             .. code-block:: python
 
-                # Set slow mode to 60 seconds
-                await app.set_slow_mode(chat_id, 60)
-
-                # Disable slow mode
-                await app.set_slow_mode(chat_id, None)
+                await app.suggest_birthday(chat_id=123456, birthday=types.Birthday(day=1, month=1, year=2000))
         """
-
         await self.invoke(
-            raw.functions.channels.ToggleSlowMode(
-                channel=await self.resolve_peer(chat_id),
-                seconds=seconds or 0
+            raw.functions.users.SuggestBirthday(
+                id=await self.resolve_peer(chat_id),
+                birthday=birthday.write()
             )
         )
 

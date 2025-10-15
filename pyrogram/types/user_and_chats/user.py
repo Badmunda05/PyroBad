@@ -367,7 +367,7 @@ class User(Object, Update):
             Returned only in :meth:`~pyrogram.Client.get_me`
 
         note (:obj:`~pyrogram.types.FormattedText`, *optional*):
-            A note about your contact.
+            Note added to the user's contact.
 
         raw (:obj:`~pyrogram.raw.base.User` | :obj:`~pyrogram.raw.base.UserStatus`, *optional*):
             The raw user or user status object, as received from the Telegram API.

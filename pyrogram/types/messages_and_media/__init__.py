@@ -52,6 +52,7 @@ from .gift_purchase_limit import GiftPurchaseLimit
 from .gift_resale_parameters import GiftResaleParameters
 from .gift_resale_price import GiftResalePrice, GiftResalePriceStar, GiftResalePriceTon
 from .gift_upgrade_preview import GiftUpgradePreview
+from .gift_upgrade_price import GiftUpgradePrice
 from .invoice import Invoice
 from .link_preview_options import LinkPreviewOptions
 from .giveaway import Giveaway
@@ -164,6 +165,7 @@ __all__ = [
     "GiftResalePriceStar",
     "GiftResalePriceTon",
     "GiftUpgradePreview",
+    "GiftUpgradePrice",
     "Giveaway",
     "InputChecklistTask",
     "Invoice",

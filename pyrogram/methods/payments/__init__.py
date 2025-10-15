@@ -23,6 +23,7 @@ from .check_gift_code import CheckGiftCode
 from .convert_gift_to_stars import ConvertGiftToStars
 from .create_gift_collection import CreateGiftCollection
 from .delete_gift_collection import DeleteGiftCollection
+from .drop_gift_original_details import DropGiftOriginalDetails
 from .get_available_gifts import GetAvailableGifts
 from .get_chat_gifts import GetChatGifts
 from .get_chat_gifts_count import GetChatGiftsCount
@@ -46,6 +47,7 @@ from .set_gift_collection_name import SetGiftCollectionName
 from .set_gift_resale_price import SetGiftResalePrice
 from .set_pinned_gifts import SetPinnedGifts
 from .show_gift import ShowGift
+from .suggest_birthday import SuggestBirthday
 from .transfer_gift import TransferGift
 from .upgrade_gift import UpgradeGift
 
@@ -58,6 +60,7 @@ class Payments(
     ConvertGiftToStars,
     CreateGiftCollection,
     DeleteGiftCollection,
+    DropGiftOriginalDetails,
     GetAvailableGifts,
     GetChatGifts,
     GetChatGiftsCount,
@@ -81,6 +84,7 @@ class Payments(
     SetGiftResalePrice,
     SetPinnedGifts,
     ShowGift,
+    SuggestBirthday,
     TransferGift,
     UpgradeGift
 ):

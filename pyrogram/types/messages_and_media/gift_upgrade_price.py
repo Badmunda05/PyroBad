@@ -16,54 +16,38 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from datetime import datetime
 
-from pyrogram import raw
+from pyrogram import raw, utils
+
 from ..object import Object
 
 
-class Birthday(Object):
-    """Birthday information of a user.
+class GiftUpgradePrice(Object):
+    """Describes a price required to pay to upgrade a gift.
 
     Parameters:
-        day (``int``):
-            Birthday day.
+        date (:py:obj:`~datetime.datetime`):
+            Date when the price will be in effect.
 
-        month (``int``):
-            Birthday month.
-
-        year (``int``, *optional*):
-            Birthday year.
+        star_count (``int``):
+            The amount of Telegram Stars required to pay to upgrade the gift.
     """
 
     def __init__(
         self,
         *,
-        day: int,
-        month: int,
-        year: int = None
-
+        date: datetime,
+        star_count: int
     ):
-        self.day = day
-        self.month = month
-        self.year = year
+        super().__init__()
+
+        self.date = date
+        self.star_count = star_count
 
     @staticmethod
-    def _parse(
-        birthday: "raw.types.Birthday" = None
-    ) -> Optional["Birthday"]:
-        if not birthday:
-            return
-
-        return Birthday(
-            day=birthday.day,
-            month=birthday.month,
-            year=getattr(birthday, "year", None)
-        )
-
-    def write(self):
-        return raw.types.Birthday(
-            day=self.day,
-            month=self.month,
-            year=self.year
+    def _parse(attr: "raw.base.StarGiftUpgradePrice") -> "GiftUpgradePrice":
+        return GiftUpgradePrice(
+            date=utils.timestamp_to_datetime(attr.date),
+            star_count=attr.upgrade_stars
         )
