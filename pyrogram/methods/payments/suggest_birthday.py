@@ -16,54 +16,45 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+
 from typing import Union
 
 import pyrogram
-from pyrogram import errors, raw
+from pyrogram import raw, types
 
 
-class ToggleForumTopics:
-    async def toggle_forum_topics(
+class SuggestBirthday:
+    async def suggest_birthday(
         self: "pyrogram.Client",
         chat_id: Union[int, str],
-        is_forum: bool = False,
-        has_forum_tabs: bool = False
+        birthday: "types.Birthday"
     ) -> bool:
-        """Enable or disable forum functionality in a supergroup.
+        """Drops original details for an upgraded gift.
 
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
+                For your personal cloud (Saved Messages) you can simply use "me" or "self".
+                For a contact that exists in your Telegram address book you can use his phone number (str).
 
-            enabled (``bool``):
-                The new status. Pass True to enable forum topics.
-
-            has_forum_tabs (``bool``):
-                Whether to enable or disable tabs in the forum. Defaults to False.
+            birthday (:obj:`types.Birthday`):
+                Birthday in the format "YYYY-MM-DD".
 
         Returns:
-            ``bool``: True on success. False otherwise.
+            ``bool``: On success, True is returned.
 
         Example:
             .. code-block:: python
 
-                # Change status of topics to disabled
-                await app.toggle_forum_topics()
-
-                # Change status of topics to enabled
-                await app.toggle_forum_topics(is_forum=True)
+                await app.suggest_birthday(chat_id=123456, birthday=types.Birthday(day=1, month=1, year=2000))
         """
-        try:
-            r = await self.invoke(
-                raw.functions.channels.ToggleForum(
-                    channel=await self.resolve_peer(chat_id),
-                    enabled=is_forum,
-                    tabs=has_forum_tabs
-                )
+        await self.invoke(
+            raw.functions.users.SuggestBirthday(
+                id=await self.resolve_peer(chat_id),
+                birthday=birthday.write()
             )
+        )
 
-            return bool(r)
-        except errors.RPCError:
-            return False
+        return True

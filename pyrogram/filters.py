@@ -470,11 +470,22 @@ contact = create(contact_filter)
 
 # region location_filter
 async def location_filter(_, __, m: Message):
-    return bool(m.location)
+    return bool(m.location and not m.location.live_period)
 
 
 location = create(location_filter)
 """Filter messages that contain :obj:`~pyrogram.types.Location` objects."""
+
+
+# endregion
+
+# region live_location_filter
+async def live_location_filter(_, __, m: Message):
+    return bool(m.location and m.location.live_period)
+
+
+live_location = create(live_location_filter)
+"""Filter messages that contain :obj:`~pyrogram.types.Location` objects with a live period."""
 
 
 # endregion

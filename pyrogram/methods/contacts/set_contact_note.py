@@ -16,48 +16,42 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional, Union
+
 import pyrogram
 from pyrogram import raw, types
 
 
-class GetUpgradedGiftValueInfo:
-    async def get_upgraded_gift_value_info(
+class SetContactNote:
+    async def set_contact_note(
         self: "pyrogram.Client",
-        link: str
-    ) -> "types.UpgradedGiftValueInfo":
-        """Returns information about value of an upgraded gift by its name.
+        user_id: Union[int, str],
+        note: Optional["types.FormattedText"] = None
+    ):
+        """Changes a note of a contact user.
 
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
-            link (``str``):
-                The gift link or slug itself.
+            user_id (``int`` | ``str``):
+                Unique identifier (int) or username (str) of the target user.
+
+            note (:obj:`~pyrogram.types.FormattedText`, *optional*):
+                Note to set for the user.
 
         Returns:
-            :obj:`~pyrogram.types.UpgradedGiftValueInfo`: Information about the gift value is returned.
+            ``bool``: On success, True is returned.
 
         Example:
             .. code-block:: python
 
-                # Get information about upgraded gift value by link
-                gift = await client.get_upgraded_gift_value_info("https://t.me/nft/SignetRing-903")
-
-                # Get information about upgraded gift value by slug
-                gift = await client.get_upgraded_gift_value_info("SignetRing-903")
+                await app.set_contact_note(12345678, types.FormattedText(text="My best friend!"))
         """
-        match = self.UPGRADED_GIFT_RE.match(link)
-
-        if match:
-            slug = match.group(1)
-        elif isinstance(link, str):
-            slug = link
-        else:
-            raise ValueError("Invalid gift link")
-
         r = await self.invoke(
-            raw.functions.payments.GetUniqueStarGiftValueInfo(
-                slug=slug.replace(" ", "")
+            raw.functions.contacts.UpdateContactNote(
+                id=await self.resolve_peer(user_id),
+                note=await note.write() if note is not None else raw.types.TextWithEntities(text="", entities=[])
             )
         )
 
-        return types.UpgradedGiftValueInfo._parse(r)
+        return r
