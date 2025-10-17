@@ -407,6 +407,7 @@ class Client(Methods):
         self.stop_handler = None
         self.connect_handler = None
         self.disconnect_handler = None
+        self.error_handler = None
 
         self.me: Optional[User] = None
 

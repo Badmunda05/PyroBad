@@ -382,8 +382,24 @@ class Dispatcher:
                                 raise
                             except pyrogram.ContinuePropagation:
                                 continue
-                            except Exception as e:
-                                log.exception(e)
+                            except Exception as exc:
+                                if error_handler := self.client.error_handler:
+                                    try:
+                                        if inspect.iscoroutinefunction(error_handler):
+                                            await error_handler(exc, handler, self.client, *args)
+                                        else:
+                                            await self.client.loop.run_in_executor(
+                                                self.client.executor,
+                                                error_handler,
+                                                exc,
+                                                handler,
+                                                self.client,
+                                                *args
+                                            )
+                                    except Exception:
+                                        log.exception("Error handler raised an exception:")
+                                else:
+                                    log.exception(exc)
 
                             break
             except pyrogram.StopPropagation:
