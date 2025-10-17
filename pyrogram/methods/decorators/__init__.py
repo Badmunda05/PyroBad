@@ -29,6 +29,7 @@ from .on_start import OnStart
 from .on_stop import OnStop
 from .on_connect import OnConnect
 from .on_disconnect import OnDisconnect
+from .on_error import OnError
 from .on_edited_business_message import OnEditedBusinessMessage
 from .on_edited_message import OnEditedMessage
 from .on_inline_query import OnInlineQuery
@@ -59,6 +60,7 @@ class Decorators(
     OnStop,
     OnConnect,
     OnDisconnect,
+    OnError,
     OnShippingQuery,
     OnUserStatus,
     OnInlineQuery,
