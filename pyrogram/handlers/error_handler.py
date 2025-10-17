@@ -30,7 +30,7 @@ class ErrorHandler(Handler):
 
     Parameters:
         callback (``Callable``):
-            Pass a function that will be called when an update handler raises an exception. It takes *(exc)*, *(handler)", *(client)*
+            Pass a function that will be called when an update handler raises an exception. It takes *(exc)*, *(handler)*, *(client)*
             as positional arguments (look at the section below for a detailed description).
 
     Other parameters:
