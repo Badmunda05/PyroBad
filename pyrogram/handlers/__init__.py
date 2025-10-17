@@ -29,6 +29,7 @@ from .start_handler import StartHandler
 from .stop_handler import StopHandler
 from .connect_handler import ConnectHandler
 from .disconnect_handler import DisconnectHandler
+from .error_handler import ErrorHandler
 from .edited_business_message_handler import EditedBusinessMessageHandler
 from .edited_message_handler import EditedMessageHandler
 from .inline_query_handler import InlineQueryHandler
