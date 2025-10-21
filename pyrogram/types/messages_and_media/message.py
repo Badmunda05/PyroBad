@@ -1410,6 +1410,7 @@ class Message(Object, Update):
                 media_type = enums.MessageMediaType.STORY
             elif isinstance(media, raw.types.MessageMediaDocument):
                 doc = media.document
+                has_media_spoiler = media.spoiler
 
                 if isinstance(doc, raw.types.Document):
                     attributes = {type(i): i for i in doc.attributes}
@@ -1422,9 +1423,13 @@ class Message(Object, Update):
 
                     if raw.types.DocumentAttributeAnimated in attributes:
                         video_attributes = attributes.get(raw.types.DocumentAttributeVideo, None)
-                        animation = types.Animation._parse(client, doc, video_attributes, file_name)
-                        media_type = enums.MessageMediaType.ANIMATION
-                        has_media_spoiler = media.spoiler
+
+                        if video_attributes and video_attributes.round_message:
+                            video_note = types.VideoNote._parse(client, doc, video_attributes, media.ttl_seconds)
+                            media_type = enums.MessageMediaType.VIDEO_NOTE
+                        else:
+                            animation = types.Animation._parse(client, doc, video_attributes, file_name)
+                            media_type = enums.MessageMediaType.ANIMATION
                     elif raw.types.DocumentAttributeSticker in attributes:
                         sticker = await types.Sticker._parse(client, doc, attributes)
                         media_type = enums.MessageMediaType.STICKER
@@ -1437,7 +1442,6 @@ class Message(Object, Update):
                         else:
                             video = types.Video._parse(client, doc, video_attributes, file_name, media.ttl_seconds, media.video_cover, media.video_timestamp, media.alt_documents)
                             media_type = enums.MessageMediaType.VIDEO
-                            has_media_spoiler = media.spoiler
                     elif raw.types.DocumentAttributeAudio in attributes:
                         audio_attributes = attributes[raw.types.DocumentAttributeAudio]
 
