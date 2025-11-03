@@ -449,6 +449,7 @@ def pyrogram_api():
             create_gift_collection
             delete_gift_collection
             drop_gift_original_details
+            edit_star_subscription
             get_gift_collections
             remove_collection_gifts
             reorder_collection_gifts
@@ -497,6 +498,7 @@ def pyrogram_api():
             set_bot_commands
             get_bot_commands
             delete_bot_commands
+            edit_user_star_subscription
             set_bot_default_privileges
             get_bot_default_privileges
             set_chat_menu_button
