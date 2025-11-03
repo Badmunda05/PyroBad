@@ -40,6 +40,7 @@ from .hide_gift import HideGift
 from .remove_collection_gifts import RemoveCollectionGifts
 from .reorder_collection_gifts import ReorderCollectionGifts
 from .reorder_gift_collections import ReorderGiftCollections
+from .reuse_star_subscription import ReuseStarSubscription
 from .search_gifts_for_resale import SearchGiftsForResale
 from .send_gift import SendGift
 from .send_payment_form import SendPaymentForm
@@ -78,6 +79,7 @@ class Payments(
     RemoveCollectionGifts,
     ReorderCollectionGifts,
     ReorderGiftCollections,
+    ReuseStarSubscription,
     SearchGiftsForResale,
     SendGift,
     SendPaymentForm,

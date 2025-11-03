@@ -454,6 +454,7 @@ def pyrogram_api():
             remove_collection_gifts
             reorder_collection_gifts
             reorder_gift_collections
+            reuse_star_subscription
             set_gift_collection_name
             get_gift_upgrade_preview
             get_payment_form
