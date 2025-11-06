@@ -83,6 +83,9 @@ class Gift(Object):
         host_id (``int``, *optional*):
             Identifier of the user or the chat to which the upgraded gift was assigned from blockchain.
 
+        host (:obj:`~pyrogram.types.Chat`, *optional*):
+            User or the chat to which the upgraded gift was assigned from blockchain.
+
         owner (:obj:`~pyrogram.types.Chat`, *optional*):
             Current gift owner.
 
@@ -224,6 +227,7 @@ class Gift(Object):
         locked_until_date: Optional[datetime] = None,
         from_user: Optional["types.User"] = None,
         host_id: Optional[int] = None,
+        host: Optional["types.Chat"] = None,
         owner: Optional["types.Chat"] = None,
         owner_name: Optional[str] = None,
         owner_address: Optional[str] = None,
@@ -283,6 +287,7 @@ class Gift(Object):
         self.locked_until_date = locked_until_date
         self.from_user = from_user
         self.host_id = host_id
+        self.host = host
         self.owner = owner
         self.owner_name = owner_name
         self.owner_address = owner_address
@@ -383,7 +388,8 @@ class Gift(Object):
         if not isinstance(star_gift, raw.types.StarGiftUnique):
             return
 
-        owner_id = utils.get_raw_peer_id(star_gift.owner_id)
+        raw_host_id = utils.get_raw_peer_id(star_gift.host_id)
+        raw_owner_id = utils.get_raw_peer_id(star_gift.owner_id)
 
         return Gift(
             id=star_gift.id,
@@ -401,7 +407,8 @@ class Gift(Object):
             is_theme_available=star_gift.theme_available,
             used_theme_chat_id=utils.get_peer_id(star_gift.theme_peer) if star_gift.theme_peer else None,
             host_id=utils.get_peer_id(star_gift.host_id) if star_gift.host_id else None,
-            owner=types.Chat._parse_chat(client, users.get(owner_id) or chats.get(owner_id)),
+            host=types.Chat._parse_chat(client, users.get(raw_host_id) or chats.get(raw_host_id)),
+            owner=types.Chat._parse_chat(client, users.get(raw_owner_id) or chats.get(raw_owner_id)),
             owner_name=star_gift.owner_name,
             owner_address=star_gift.owner_address,
             gift_address=star_gift.gift_address,
