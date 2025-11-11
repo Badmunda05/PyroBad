@@ -339,7 +339,7 @@ class Gift(Object):
             return await Gift._parse_regular(client, gift, users, chats)
         elif isinstance(gift, raw.types.StarGiftUnique):
             return await Gift._parse_unique(client, gift, users, chats)
-        elif isinstance(gift, raw.types.StarGiftSaved):
+        elif isinstance(gift, raw.types.SavedStarGift):
             return await Gift._parse_saved(client, gift, users, chats)
 
     @staticmethod
