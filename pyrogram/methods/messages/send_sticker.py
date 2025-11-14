@@ -279,7 +279,6 @@ class SendSticker:
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
                             noforwards=protect_content,
-                            allow_paid_floodskip=allow_paid_broadcast,
                             allow_paid_stars=paid_message_star_count,
                             suggested_post=suggested_post_parameters.write() if suggested_post_parameters else None,
                             reply_markup=await reply_markup.write(self) if reply_markup else None,
