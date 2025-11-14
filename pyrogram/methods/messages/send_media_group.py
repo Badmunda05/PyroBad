@@ -514,7 +514,6 @@ class SendMediaGroup:
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 noforwards=protect_content,
                 invert_media=show_caption_above_media,
-                allow_paid_floodskip=allow_paid_broadcast,
                 allow_paid_stars=paid_message_star_count,
                 effect=effect_id,
             ),
