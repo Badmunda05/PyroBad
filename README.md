@@ -74,7 +74,7 @@ pip3 install kurigram
 
 Dev version
 ``` bash
-pip3 install https://github.com/KurimuzonAkuma/pyrogram/archive/dev.zip --force-reinstall
+pip3 install https://github.com/madrik1337/kurigram/archive/dev.zip --force-reinstall
 ```
 
 ### Resources
