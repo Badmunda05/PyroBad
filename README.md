@@ -24,9 +24,6 @@
 
 ## Pyrogram
 
-> [!NOTE]
-> Unfortunately, the original pyrogram is no longer supported. I will try to be your @delivrance.
-
 > Elegant, modern and asynchronous Telegram MTProto API framework in Python for users and bots
 
 ``` python
@@ -74,7 +71,7 @@ pip3 install kurigram
 
 Dev version
 ``` bash
-pip3 install https://github.com/KurimuzonAkuma/pyrogram/archive/dev.zip --force-reinstall
+pip3 install https://github.com/KurimuzonAkuma/kurigram/archive/dev.zip --force-reinstall
 ```
 
 ### Resources
