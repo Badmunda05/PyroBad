@@ -58,6 +58,7 @@ class SendInvoice:
         allow_paid_broadcast: Optional[bool] = None,
         direct_messages_topic_id: Optional[int] = None,
         suggested_post_parameters: Optional["types.SuggestedPostParameters"] = None,
+        subscription_expiration_date: Optional[int] = None,
         reply_markup: Optional[Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -169,6 +170,11 @@ class SendInvoice:
             suggested_post_parameters (:obj:`~pyrogram.types.SuggestedPostParameters`, *optional*):
                 Information about the suggested post.
 
+            subscription_expiration_date (``int``, *optional*):
+                Expiration date of the subscription, in Unix time.
+                Currently the only allowed subscription period is 30*24*60*60 (1 month).
+                For recurring payments only.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -222,7 +228,9 @@ class SendInvoice:
                 phone_to_provider=send_phone_number_to_provider,
                 email_to_provider=send_email_to_provider,
                 max_tip_amount=max_tip_amount,
-                suggested_tip_amounts=suggested_tip_amounts
+                suggested_tip_amounts=suggested_tip_amounts,
+                recurring=True if subscription_expiration_date is not None else None,
+                subscription_period=subscription_expiration_date
             ),
             payload=payload.encode() if isinstance(payload, str) else payload,
             provider=provider_token,

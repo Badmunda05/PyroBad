@@ -544,6 +544,9 @@ class Message(Object, Update):
 
         channel_post (``bool``, *optional*):
             True, if the message is a channel post.
+
+        repeat_period (``int``, *optional*):
+            Period after which the message will be sent again in seconds.
     """
     def __init__(
         self,
@@ -700,6 +703,7 @@ class Message(Object, Update):
         fact_check: Optional["types.FactCheck"] = None,
         suggested_post_info: Optional["types.SuggestedPostInfo"] = None,
         channel_post: Optional[bool] = None,
+        repeat_period: Optional[int] = None,
         raw: Optional["raw.types.Message"] = None
     ):
         super().__init__(client)
@@ -848,6 +852,7 @@ class Message(Object, Update):
         self.fact_check = fact_check
         self.suggested_post_info = suggested_post_info
         self.channel_post = channel_post
+        self.repeat_period = repeat_period
         self.raw = raw
 
     @staticmethod
@@ -1180,7 +1185,7 @@ class Message(Object, Update):
             checklist_tasks_done = types.ChecklistTasksDone._parse(message)
         elif isinstance(action, raw.types.MessageActionTodoAppendTasks):
             service_type = enums.MessageServiceType.CHECKLIST_TASKS_ADDED
-            checklist_tasks_added = types.ChecklistTasksAdded._parse(client, message)
+            checklist_tasks_added = types.ChecklistTasksAdded._parse(client, message, users, chats)
 
         parsed_message = Message(
             id=message.id,
@@ -1468,7 +1473,7 @@ class Message(Object, Update):
                 media_type = enums.MessageMediaType.PAID_MEDIA
             elif isinstance(media, raw.types.MessageMediaToDo):
                 media_type = enums.MessageMediaType.CHECKLIST
-                checklist = types.Checklist._parse(client, media, users)
+                checklist = types.Checklist._parse(client, media, users, chats)
             else:
                 media_type = enums.MessageMediaType.UNSUPPORTED
                 media = None
@@ -1582,6 +1587,7 @@ class Message(Object, Update):
             fact_check=types.FactCheck._parse(client, message.factcheck, users),
             suggested_post_info=types.SuggestedPostInfo._parse(message.suggested_post),
             channel_post=message.post,
+            repeat_period=message.schedule_repeat_period,
             raw=message,
             client=client
         )
@@ -1880,6 +1886,7 @@ class Message(Object, Update):
         show_caption_above_media: bool = None,
         reply_parameters: "types.ReplyParameters" = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         protect_content: bool = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
@@ -1957,6 +1964,9 @@ class Message(Object, Update):
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
 
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             protect_content (``bool``, *optional*):
                 Protects the contents of the sent message from forwarding and saving.
 
@@ -2015,6 +2025,7 @@ class Message(Object, Update):
             show_caption_above_media=show_caption_above_media,
             reply_parameters=reply_parameters,
             schedule_date=schedule_date,
+            repeat_period=repeat_period,
             protect_content=protect_content,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
@@ -2058,13 +2069,15 @@ class Message(Object, Update):
         direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         progress: Callable = None,
         progress_args: tuple = (),
 
         reply_to_message_id: int = None,
         quote_text: str = None,
         quote_entities: List["types.MessageEntity"] = None,
-    ) -> "Message":
+    ) -> Optional["Message"]:
         """Bound method *reply_animation* :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2142,6 +2155,12 @@ class Message(Object, Update):
 
             reply_parameters (:obj:`~pyrogram.types.ReplyParameters`, *optional*):
                 Describes reply parameters for the message that is being sent.
+
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             business_connection_id (``str``, *optional*):
                 Unique identifier of the business connection on behalf of which the message will be sent.
@@ -2226,6 +2245,8 @@ class Message(Object, Update):
             direct_messages_topic_id=direct_messages_topic_id,
             effect_id=effect_id,
             reply_parameters=reply_parameters,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
@@ -2255,6 +2276,8 @@ class Message(Object, Update):
         direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
@@ -2271,7 +2294,7 @@ class Message(Object, Update):
         reply_to_message_id: int = None,
         quote_text: str = None,
         quote_entities: List["types.MessageEntity"] = None,
-    ) -> "Message":
+    ) -> Optional["Message"]:
         """Bound method *reply_audio* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2343,6 +2366,12 @@ class Message(Object, Update):
 
             reply_parameters (:obj:`~pyrogram.types.ReplyParameters`, *optional*):
                 Describes reply parameters for the message that is being sent.
+
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             business_connection_id (``str``, *optional*):
                 Unique identifier of the business connection on behalf of which the message will be sent.
@@ -2425,6 +2454,8 @@ class Message(Object, Update):
             direct_messages_topic_id=direct_messages_topic_id,
             effect_id=effect_id,
             reply_parameters=reply_parameters,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
@@ -2784,6 +2815,7 @@ class Message(Object, Update):
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         protect_content: bool = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
@@ -2801,7 +2833,7 @@ class Message(Object, Update):
         reply_to_message_id: int = None,
         quote_text: str = None,
         quote_entities: List["types.MessageEntity"] = None,
-    ) -> "Message":
+    ) -> Optional["Message"]:
         """Bound method *reply_document* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -2876,6 +2908,9 @@ class Message(Object, Update):
 
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             protect_content (``bool``, *optional*):
                 Protects the contents of the sent message from forwarding and saving.
@@ -2961,6 +2996,7 @@ class Message(Object, Update):
             effect_id=effect_id,
             reply_parameters=reply_parameters,
             schedule_date=schedule_date,
+            repeat_period=repeat_period,
             protect_content=protect_content,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
@@ -3435,6 +3471,8 @@ class Message(Object, Update):
         direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         view_once: bool = None,
         protect_content: bool = None,
         business_connection_id: str = None,
@@ -3453,7 +3491,7 @@ class Message(Object, Update):
         reply_to_message_id: int = None,
         quote_text: str = None,
         quote_entities: List["types.MessageEntity"] = None,
-    ) -> "Message":
+    ) -> Optional["Message"]:
         """Bound method *reply_photo* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3521,6 +3559,12 @@ class Message(Object, Update):
 
             reply_parameters (:obj:`~pyrogram.types.ReplyParameters`, *optional*):
                 Describes reply parameters for the message that is being sent.
+
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             view_once (``bool``, *optional*):
                 Self-Destruct Timer.
@@ -3609,6 +3653,8 @@ class Message(Object, Update):
             direct_messages_topic_id=direct_messages_topic_id,
             effect_id=effect_id,
             reply_parameters=reply_parameters,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             protect_content=protect_content,
             view_once=view_once,
             business_connection_id=business_connection_id,
@@ -3647,6 +3693,7 @@ class Message(Object, Update):
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         business_connection_id: str = None,
         options_parse_mode: List["types.MessageEntity"] = None,
         allow_paid_broadcast: bool = None,
@@ -3762,6 +3809,9 @@ class Message(Object, Update):
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
 
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             business_connection_id (``str``, *optional*):
                 Unique identifier of the business connection on behalf of which the message will be sent.
 
@@ -3824,6 +3874,7 @@ class Message(Object, Update):
             effect_id=effect_id,
             reply_parameters=reply_parameters,
             schedule_date=schedule_date,
+            repeat_period=repeat_period,
             business_connection_id=business_connection_id,
             options_parse_mode=options_parse_mode,
             allow_paid_broadcast=allow_paid_broadcast,
@@ -3850,6 +3901,8 @@ class Message(Object, Update):
         direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
@@ -3866,7 +3919,7 @@ class Message(Object, Update):
         reply_to_message_id: int = None,
         quote_text: str = None,
         quote_entities: List["types.MessageEntity"] = None,
-    ) -> "Message":
+    ) -> Optional["Message"]:
         """Bound method *reply_sticker* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -3926,6 +3979,12 @@ class Message(Object, Update):
 
             reply_parameters (:obj:`~pyrogram.types.ReplyParameters`, *optional*):
                 Describes reply parameters for the message that is being sent.
+
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             business_connection_id (``str``, *optional*):
                 Unique identifier of the business connection on behalf of which the message will be sent.
@@ -4005,6 +4064,8 @@ class Message(Object, Update):
             direct_messages_topic_id=direct_messages_topic_id,
             effect_id=effect_id,
             reply_parameters=reply_parameters,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
@@ -4196,6 +4257,8 @@ class Message(Object, Update):
         direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         no_sound: bool = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
@@ -4213,7 +4276,7 @@ class Message(Object, Update):
         reply_to_message_id: int = None,
         quote_text: str = None,
         quote_entities: List["types.MessageEntity"] = None,
-    ) -> "Message":
+    ) -> Optional["Message"]:
         """Bound method *reply_video* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -4314,6 +4377,12 @@ class Message(Object, Update):
             reply_parameters (:obj:`~pyrogram.types.ReplyParameters`, *optional*):
                 Describes reply parameters for the message that is being sent.
 
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             no_sound (``bool``, *optional*):
                 Pass True, if the uploaded video is a video message with no sound.
                 Doesn't work for external links.
@@ -4406,6 +4475,8 @@ class Message(Object, Update):
             direct_messages_topic_id=direct_messages_topic_id,
             effect_id=effect_id,
             reply_parameters=reply_parameters,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             no_sound=no_sound,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
@@ -4432,6 +4503,8 @@ class Message(Object, Update):
         direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         protect_content: bool = None,
         view_once: bool = None,
         business_connection_id: str = None,
@@ -4451,7 +4524,7 @@ class Message(Object, Update):
         quote_text: str = None,
         parse_mode: Optional["enums.ParseMode"] = None,
         quote_entities: List["types.MessageEntity"] = None,
-    ) -> "Message":
+    ) -> Optional["Message"]:
         """Bound method *reply_video_note* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -4510,6 +4583,12 @@ class Message(Object, Update):
 
             reply_parameters (:obj:`~pyrogram.types.ReplyParameters`, *optional*):
                 Describes reply parameters for the message that is being sent.
+
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             protect_content (``bool``, *optional*):
                 Protects the contents of the sent message from forwarding and saving.
@@ -4595,6 +4674,8 @@ class Message(Object, Update):
             direct_messages_topic_id=direct_messages_topic_id,
             effect_id=effect_id,
             reply_parameters=reply_parameters,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             protect_content=protect_content,
             view_once=view_once,
             business_connection_id=business_connection_id,
@@ -4624,6 +4705,8 @@ class Message(Object, Update):
         direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         view_once: bool = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
@@ -4641,7 +4724,7 @@ class Message(Object, Update):
         reply_to_message_id: int = None,
         quote_text: str = None,
         quote_entities: List["types.MessageEntity"] = None,
-    ) -> "Message":
+    ) -> Optional["Message"]:
         """Bound method *reply_voice* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -4701,6 +4784,12 @@ class Message(Object, Update):
 
             reply_parameters (:obj:`~pyrogram.types.ReplyParameters`, *optional*):
                 Describes reply parameters for the message that is being sent.
+
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             view_once (``bool``, *optional*):
                 Self-Destruct Timer.
@@ -4784,6 +4873,8 @@ class Message(Object, Update):
             direct_messages_topic_id=direct_messages_topic_id,
             effect_id=effect_id,
             reply_parameters=reply_parameters,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             view_once=view_once,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
@@ -4814,6 +4905,7 @@ class Message(Object, Update):
         show_caption_above_media: bool = None,
         reply_parameters: "types.ReplyParameters" = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         protect_content: bool = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
@@ -4901,6 +4993,9 @@ class Message(Object, Update):
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
 
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             protect_content (``bool``, *optional*):
                 Protects the contents of the sent message from forwarding and saving.
 
@@ -4954,6 +5049,7 @@ class Message(Object, Update):
             show_caption_above_media=show_caption_above_media,
             reply_parameters=reply_parameters,
             schedule_date=schedule_date,
+            repeat_period=repeat_period,
             protect_content=protect_content,
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
@@ -4978,6 +5074,7 @@ class Message(Object, Update):
         effect_id: Optional[int] = None,
         reply_parameters: Optional["types.ReplyParameters"] = None,
         schedule_date: Optional[datetime] = None,
+        repeat_period: Optional[int] = None,
         business_connection_id: Optional[str] = None,
         paid_message_star_count: int = None,
         reply_markup: Optional[
@@ -5042,6 +5139,9 @@ class Message(Object, Update):
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
 
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             business_connection_id (``str``, *optional*):
                 Unique identifier of the business connection on behalf of which the message will be sent.
 
@@ -5081,6 +5181,7 @@ class Message(Object, Update):
             effect_id=effect_id,
             reply_parameters=reply_parameters,
             schedule_date=schedule_date,
+            repeat_period=repeat_period,
             business_connection_id=business_connection_id,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
@@ -5351,6 +5452,7 @@ class Message(Object, Update):
         hide_sender_name: bool = None,
         hide_captions: bool = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         allow_paid_broadcast: bool = None,
         video_start_timestamp: int = None,
         paid_message_star_count: int = None
@@ -5389,6 +5491,9 @@ class Message(Object, Update):
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
 
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             hide_sender_name (``bool``, *optional*):
                 If True, the original author of the message will not be shown.
 
@@ -5420,6 +5525,7 @@ class Message(Object, Update):
             message_thread_id=message_thread_id,
             disable_notification=disable_notification,
             schedule_date=schedule_date,
+            repeat_period=repeat_period,
             hide_sender_name=hide_sender_name,
             hide_captions=hide_captions,
             allow_paid_broadcast=allow_paid_broadcast,
@@ -5838,7 +5944,6 @@ class Message(Object, Update):
         y: int = None,
         quote: bool = None,
         timeout: int = 10,
-        request_write_access: bool = True,
         password: str = None
     ):
         """Bound method *click* of :obj:`~pyrogram.types.Message`.

@@ -39,7 +39,7 @@ class GetChatGifts:
     ) -> AsyncGenerator["types.Gift", None]:
         """Get all gifts owned by specified chat.
 
-        .. include:: /_includes/usable-by/users.rst
+        .. include:: /_includes/usable-by/users-bots.rst
 
         Parameters:
             chat_id (``int`` | ``str``):
