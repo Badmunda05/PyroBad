@@ -50,8 +50,8 @@ keywords = [
 ]
 
 [project.urls]
-Homepage = "https://kurigram.live"
-Documentation = "https://docs.kurigram.live"
+Homepage = "https://kurigram.icu"
+Documentation = "https://docs.kurigram.icu"
 Source = "https://github.com/KurimuzonAkuma/pyrogram"
 Issues = "https://github.com/KurimuzonAkuma/pyrogram/issues"
 Community = "https://t.me/kurigram_chat"
@@ -67,9 +67,9 @@ dev = [
 ]
 
 docs = [
-    "Sphinx<=8.2.3",
-    "furo<=2025.7.19",
-    "sphinx-autobuild<=2024.10.3",
+    "Sphinx<=9.0.0",
+    "shibuya<=2025.11.10",
+    "sphinx-autobuild<=2025.8.25",
     "sphinx-copybutton<=0.5.2",
     "pygments<=2.19.2",
 ]
