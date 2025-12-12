@@ -5153,6 +5153,7 @@ class Message(Object, Update):
             reply_markup=reply_markup,
 
             disable_web_page_preview=disable_web_page_preview,
+            business_connection_id=self.business_connection_id
         )
 
     edit = edit_text

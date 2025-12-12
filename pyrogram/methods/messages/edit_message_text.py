@@ -39,6 +39,7 @@ class EditMessageText:
         schedule_date: datetime = None,
         reply_markup: "types.InlineKeyboardMarkup" = None,
         disable_web_page_preview: bool = None,
+        business_connection_id: str = None,
     ) -> "types.Message":
         """Edit the text of messages.
 
@@ -108,7 +109,8 @@ class EditMessageText:
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
                 **await utils.parse_text_entities(self, text, parse_mode, entities)
-            )
+            ),
+            business_connection_id=business_connection_id
         )
 
         for i in r.updates:
