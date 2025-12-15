@@ -54,7 +54,7 @@ class ErrorHandler(Handler):
             The original arguments passed to the handler.
     """
 
-    def __init__(self, callback: Callable, exceptions: Exception | Sequence[Exception, ...] | None = None):
+    def __init__(self, callback: Callable, exceptions: Exception | Sequence[Exception] | None = None):
         super().__init__(callback)
 
         exceptions = exceptions or (Exception,)
