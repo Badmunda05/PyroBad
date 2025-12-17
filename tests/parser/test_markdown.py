@@ -61,10 +61,10 @@ def test_markdown_unparse_spoiler():
 
 
 def test_markdown_unparse_url():
-    expected = '[URL](https://pyrogram.org/)'
+    expected = '[URL](https://kurigram.icu/)'
     text = "URL"
     entities = pyrogram.types.List([pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.TEXT_LINK,
-                                                                 offset=0, length=3, url='https://pyrogram.org/')])
+                                                                 offset=0, length=3, url='https://kurigram.icu/')])
 
     assert Markdown.unparse(text=text, entities=entities) == expected
 

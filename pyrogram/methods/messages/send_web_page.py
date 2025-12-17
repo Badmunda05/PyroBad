@@ -143,10 +143,10 @@ class SendWebPage:
             .. code-block:: python
 
                 # Simple example
-                await app.send_web_page("me", "https://docs.pyrogram.org")
+                await app.send_web_page("me", "https://docs.kurigram.icu")
 
                 # Make web preview image larger
-                await app.send_web_page("me", "https://docs.pyrogram.org", link_preview_options=types.LinkPreviewOptions(
+                await app.send_web_page("me", "https://docs.kurigram.icu", link_preview_options=types.LinkPreviewOptions(
                     prefer_large_media=True
                 ))
 

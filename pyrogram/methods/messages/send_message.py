@@ -146,7 +146,7 @@ class SendMessage:
 
                 await app.send_message(
                     "me",
-                    "https://docs.pyrogram.org",
+                    "https://docs.kurigram.icu",
                     link_preview_options=types.LinkPreviewOptions(is_disabled=True)
                 )
 
@@ -177,7 +177,7 @@ class SendMessage:
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [InlineKeyboardButton("Data", callback_data="callback_data")],
-                            [InlineKeyboardButton("Docs", url="https://docs.pyrogram.org")]
+                            [InlineKeyboardButton("Docs", url="https://docs.kurigram.icu")]
                         ]))
         """
         link_preview_options = link_preview_options or self.link_preview_options

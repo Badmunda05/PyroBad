@@ -36,10 +36,10 @@ class MessageEntityType(AutoName):
     "``/start@pyrogrambot``"
 
     URL = raw.types.MessageEntityUrl
-    "``https://pyrogram.org`` (see ``url``)"
+    "``https://kurigram.icu`` (see ``url``)"
 
     EMAIL = raw.types.MessageEntityEmail
-    "``do-not-reply@pyrogram.org``"
+    "``do-not-reply@kurigram.icu``"
 
     PHONE_NUMBER = raw.types.MessageEntityPhone
     "``+1-123-456-7890``"

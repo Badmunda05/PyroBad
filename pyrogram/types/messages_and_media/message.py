@@ -4932,13 +4932,13 @@ class Message(Object, Update):
 
             await client.send_web_page(
                 chat_id=message.chat.id,
-                url="https://docs.pyrogram.org"
+                url="https://docs.kurigram.icu"
             )
 
         Example:
             .. code-block:: python
 
-                await message.reply_web_page("https://docs.pyrogram.org")
+                await message.reply_web_page("https://docs.kurigram.icu")
 
         Parameters:
             text (``str``, *optional*):

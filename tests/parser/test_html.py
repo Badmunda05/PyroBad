@@ -70,10 +70,10 @@ def test_html_unparse_spoiler():
 
 
 def test_html_unparse_url():
-    expected = '<a href="https://pyrogram.org/">URL</a>'
+    expected = '<a href="https://kurigram.icu/">URL</a>'
     text = "URL"
     entities = pyrogram.types.List([pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.TEXT_LINK,
-                                                                 offset=0, length=3, url='https://pyrogram.org/')])
+                                                                 offset=0, length=3, url='https://kurigram.icu/')])
 
     assert HTML.unparse(text=text, entities=entities) == expected
 
