@@ -206,3 +206,9 @@ class MessageServiceType(AutoName):
 
     CHECKLIST_TASKS_ADDED = auto()
     "Checklist tasks added"
+
+    UPGRADED_GIFT_PURCHASE_OFFER = auto()
+    "Upgraded gift purchase offer"
+
+    UPGRADED_GIFT_PURCHASE_OFFER_DECLINED = auto()
+    "Upgraded gift purchase offer declined"

@@ -16,30 +16,19 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from enum import auto
 
-import pyrogram
-from pyrogram import raw, types
+from .auto_name import AutoName
 
 
-class GetBoostsStatus:
-    async def get_boosts_status(
-        self: "pyrogram.Client",
-        chat_id: Union[int, str]
-    ) -> "types.BoostsStatus":
-        """Get boosts status of channel
+class GiftPurchaseOfferState(AutoName):
+    """Gift purchase offer state enumeration used in :obj:`~pyrogram.types.UpgradedGiftPurchaseOffer`."""
 
-        .. include:: /_includes/usable-by/users.rst
+    PENDING = auto()
+    """The offer must be accepted or rejected"""
 
-        Parameters:
-            chat_id (``int`` | ``str``):
-                Unique identifier (int) or username (str) of the target chat.
+    ACCEPTED = auto()
+    """The offer was accepted"""
 
-        Returns:
-            :obj:`~pyrogram.types.BoostsStatus`: On success.
-        """
-        r = await self.invoke(
-            raw.functions.premium.GetBoostsStatus(peer=await self.resolve_peer(chat_id))
-        )
-
-        return types.BoostsStatus._parse(r)
+    REJECTED = auto()
+    """The offer was rejected"""

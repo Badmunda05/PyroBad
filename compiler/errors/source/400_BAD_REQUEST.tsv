@@ -266,6 +266,7 @@ INPUT_LAYER_INVALID	The specified layer is invalid.
 INPUT_METHOD_INVALID	The method invoked is invalid in the current schema.
 INPUT_PEERS_EMPTY	The specified peer array is empty.
 INPUT_REQUEST_TOO_LONG	The request payload is too long.
+INPUT_STARS_NANOS_INVALID	The specified stars nano amount is invalid.
 INPUT_TEXT_EMPTY	The specified text is empty.
 INPUT_TEXT_TOO_LONG	The specified text is too long.
 INPUT_USER_DEACTIVATED	The target user has been deleted/deactivated.

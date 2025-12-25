@@ -141,6 +141,9 @@ class Gift(Object):
         value_amount (``int``, *optional*):
             Estimated value of the gift; in the smallest units of the currency.
 
+        value_usd_amount (``int``, *optional*):
+            Estimated value of the gift in USD cents.
+
         prepaid_upgrade_hash (``str``, *optional*):
             Hash of the upgrade message.
 
@@ -158,6 +161,9 @@ class Gift(Object):
 
         can_resell_at (:py:obj:`~datetime.datetime`, *optional*):
             Date when the gift can be resold.
+
+        can_send_purchase_offer (``bool``, *optional*):
+            True, if an offer to purchase the gift can be sent using :meth:`~pyrogram.Client.send_gift_purchase_offer`.
 
         is_limited (``bool``, *optional*):
             True, if the number of gifts is limited.
@@ -202,6 +208,15 @@ class Gift(Object):
 
         used_theme_chat_id (``int``, *optional*):
             Identifier of the chat for which the gift is used to set a theme.
+
+        auction_info (:obj:`~pyrogram.types.GiftAuction`, *optional*):
+            Information about the auction on which the gift can be purchased.
+
+        unique_gift_number (``int``, *optional*):
+            Unique number of the gift among gifts upgraded from the same gift after upgrade.
+
+        upgrade_variant_count (``int``, *optional*):
+            Number of unique gift variants that are available for the upgraded gift.
 
         raw (:obj:`~pyrogram.raw.base.StarGift`, *optional*):
             The raw object as received from the server.
@@ -251,12 +266,14 @@ class Gift(Object):
         resale_parameters: Optional["types.GiftResaleParameters"] = None,
         value_currency: Optional[str] = None,
         value_amount: Optional[int] = None,
+        value_usd_amount: Optional[int] = None,
         prepaid_upgrade_hash: Optional[str] = None,
         drop_original_details_star_count: Optional[int] = None,
         can_upgrade: Optional[bool] = None,
         can_export_at: Optional[datetime] = None,
         can_transfer_at: Optional[datetime] = None,
         can_resell_at: Optional[datetime] = None,
+        can_send_purchase_offer: Optional[bool] = None,
         is_limited: Optional[bool] = None,
         is_name_hidden: Optional[bool] = None,
         is_saved: Optional[bool] = None,
@@ -271,6 +288,9 @@ class Gift(Object):
         is_upgrade_separate: Optional[bool] = None,
         is_theme_available: Optional[bool] = None,
         used_theme_chat_id: Optional[int] = None,
+        auction_info: Optional["types.GiftAuction"] = None,
+        unique_gift_number: Optional[int] = None,
+        upgrade_variant_count: Optional[int] = None,
         raw: Optional["raw.base.StarGift"] = None
     ):
         super().__init__(client)
@@ -311,12 +331,14 @@ class Gift(Object):
         self.resale_parameters = resale_parameters
         self.value_currency = value_currency
         self.value_amount = value_amount
+        self.value_usd_amount = value_usd_amount
         self.prepaid_upgrade_hash = prepaid_upgrade_hash
         self.drop_original_details_star_count = drop_original_details_star_count
         self.can_upgrade = can_upgrade
         self.can_export_at = can_export_at
         self.can_transfer_at = can_transfer_at
         self.can_resell_at = can_resell_at
+        self.can_send_purchase_offer = can_send_purchase_offer
         self.is_limited = is_limited
         self.is_name_hidden = is_name_hidden
         self.is_saved = is_saved
@@ -331,10 +353,13 @@ class Gift(Object):
         self.is_upgrade_separate = is_upgrade_separate
         self.is_theme_available = is_theme_available
         self.used_theme_chat_id = used_theme_chat_id
+        self.auction_info = auction_info
+        self.unique_gift_number = unique_gift_number
+        self.upgrade_variant_count = upgrade_variant_count
         self.raw = raw
 
     @staticmethod
-    async def _parse(client, gift, users: Dict[int, "raw.base.User"] = {}, chats: Dict[int, "raw.base.Chat"] = {}):
+    async def _parse(client: "pyrogram.Client", gift: Union["raw.base.StarGift", "raw.base.SavedStarGift"], users: Dict[int, "raw.base.User"] = {}, chats: Dict[int, "raw.base.Chat"] = {}):
         if isinstance(gift, raw.types.StarGift):
             return await Gift._parse_regular(client, gift, users, chats)
         elif isinstance(gift, raw.types.StarGiftUnique):
@@ -344,7 +369,7 @@ class Gift(Object):
 
     @staticmethod
     async def _parse_regular(
-        client,
+        client: "pyrogram.Client",
         star_gift: "raw.types.StarGift",
         users: Dict[int, "raw.base.User"],
         chats: Dict[int, "raw.base.Chat"]
@@ -374,13 +399,15 @@ class Gift(Object):
             last_sale_date=utils.timestamp_to_datetime(star_gift.last_sale_date),
             locked_until_date=utils.timestamp_to_datetime(star_gift.locked_until_date),
             publisher_chat=types.Chat._parse_chat(client, chats.get(utils.get_raw_peer_id(star_gift.released_by))),
+            auction_info=await types.GiftAuction._parse(star_gift),
+            upgrade_variant_count=star_gift.upgrade_variants,
             raw=star_gift,
             client=client
         )
 
     @staticmethod
     async def _parse_unique(
-        client,
+        client: "pyrogram.Client",
         star_gift: "raw.types.StarGiftUnique",
         users: Dict[int, "raw.base.User"] = {},
         chats: Dict[int, "raw.base.Chat"] = {}
@@ -416,6 +443,8 @@ class Gift(Object):
             publisher_chat=types.Chat._parse_chat(client, chats.get(utils.get_raw_peer_id(star_gift.released_by))),
             value_currency=star_gift.value_currency,
             value_amount=star_gift.value_amount,
+            value_usd_amount=star_gift.value_usd_amount,
+            can_send_purchase_offer=bool(star_gift.offer_min_stars),
             is_upgraded=True,
             raw=star_gift,
             client=client
@@ -459,6 +488,7 @@ class Gift(Object):
         parsed_gift.convert_price = parsed_gift.convert_price or saved_gift.convert_stars
         parsed_gift.upgrade_price = parsed_gift.upgrade_price or saved_gift.upgrade_stars
         parsed_gift.transfer_price = parsed_gift.transfer_price or saved_gift.transfer_stars
+        parsed_gift.unique_gift_number = saved_gift.gift_num
 
         return parsed_gift
 
@@ -768,4 +798,65 @@ class Gift(Object):
             entities=entities,
             is_private=is_private,
             pay_for_upgrade=pay_for_upgrade
+        )
+
+    async def get_auction_state(self) -> "types.GiftAuctionState":
+        """Bound method *get_auction_state* of :obj:`~pyrogram.types.Gift`.
+
+        .. note::
+
+            For regular gifts only.
+
+        Use as a shortcut for:
+
+        .. code-block:: python
+
+            await client.get_gift_auction_state(
+                auction_id=gift.id
+            )
+
+        Returns:
+            :obj:`~pyrogram.types.GiftAuctionState`: The auction state of the gift.
+        """
+
+        return await self._client.get_gift_auction_state(auction_id=self.id)
+
+    async def send_purchase_offer(
+        self,
+        price: "types.GiftResalePrice",
+        duration: int,
+        paid_message_star_count: Optional[int] = None
+    ) -> Optional["types.Message"]:
+        """Shortcut for method :obj:`~pyrogram.Client.send_gift_purchase_offer` will automatically fill method attributes:
+
+        * owner_id
+        * gift_id
+
+        Parameters:
+            price (:obj:`~pyrogram.types.GiftResalePrice`):
+                The price that the user agreed to pay for the gift.
+
+            duration (``int``):
+                Duration of the offer, in seconds.
+                Must be one of 21600, 43200, 86400, 129600, 172800, or 259200.
+
+            paid_message_star_count (``int``, *optional*):
+                The number of Telegram Stars the user agreed to pay additionally for sending of the offer message to the current gift owner.
+                Pass User.paid_message_star_count for users and None otherwise.
+
+        Returns:
+            :obj:`~pyrogram.types.Message`: On success, the sent Message is returned.
+        """
+        if not self.can_send_purchase_offer:
+            raise ValueError("This gift cannot be purchased via offer.")
+
+        if not self.owner:
+            raise ValueError("Gift owner not found.")
+
+        return await self._client.send_gift_purchase_offer(
+            owner_id=self.owner.id,
+            gift_name=self.name,
+            price=price,
+            duration=duration,
+            paid_message_star_count=paid_message_star_count
         )

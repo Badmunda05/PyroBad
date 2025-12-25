@@ -16,30 +16,36 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
-
 import pyrogram
-from pyrogram import raw, types
+from pyrogram import raw, types, utils
 
 
-class GetBoostsStatus:
-    async def get_boosts_status(
+class ProcessGiftPurchaseOffer:
+    async def process_gift_purchase_offer(
         self: "pyrogram.Client",
-        chat_id: Union[int, str]
-    ) -> "types.BoostsStatus":
-        """Get boosts status of channel
+        message_id: int,
+        approve: bool
+    ) -> "types.Message":
+        """Handles a pending gift purchase offer.
 
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
-            chat_id (``int`` | ``str``):
-                Unique identifier (int) or username (str) of the target chat.
+            message_id (``int``):
+                Identifier of the message with the gift purchase offer.
+
+            approve (``bool``):
+                Pass True to approve the request.
+                Pass False to decline it.
 
         Returns:
-            :obj:`~pyrogram.types.BoostsStatus`: On success.
+            :obj:`~pyrogram.types.Message`: On success, the sent Message is returned.
         """
         r = await self.invoke(
-            raw.functions.premium.GetBoostsStatus(peer=await self.resolve_peer(chat_id))
+            raw.functions.payments.ResolveStarGiftOffer(
+                offer_msg_id=message_id,
+                decline=not approve
+            )
         )
 
-        return types.BoostsStatus._parse(r)
+        return next(iter(await utils.parse_messages(client=self, messages=r)), None)

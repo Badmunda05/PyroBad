@@ -59,12 +59,14 @@ class SendInvoice:
         direct_messages_topic_id: Optional[int] = None,
         suggested_post_parameters: Optional["types.SuggestedPostParameters"] = None,
         subscription_expiration_date: Optional[int] = None,
-        reply_markup: Optional[Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply"
-        ]] = None,
+        reply_markup: Optional[
+            Union[
+                "types.InlineKeyboardMarkup",
+                "types.ReplyKeyboardMarkup",
+                "types.ReplyKeyboardRemove",
+                "types.ForceReply"
+            ]
+        ] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
@@ -119,13 +121,13 @@ class SendInvoice:
                 URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service. People like it better when they see what they are paying for.
 
             photo_size (``int``, *optional*):
-                Photo size in bytes
+                Photo size in bytes.
 
             photo_width (``int``, *optional*):
-                Photo width
+                Photo width.
 
             photo_height (``int``, *optional*):
-                Photo height
+                Photo height.
 
             need_name (``bool``, *optional*):
                 Pass True if you require the user's full name to complete the order. Ignored for payments in `Telegram Stars <https://t.me/BotNews/90>`_.

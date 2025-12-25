@@ -20,6 +20,8 @@ from typing import List, Optional
 
 import pyrogram
 from pyrogram import raw, types
+from pyrogram import enums
+from pyrogram import utils
 
 from ..object import Object
 
@@ -31,20 +33,24 @@ class FormattedText(Object):
         text (``str``):
             The text.
 
-        entities (List of :obj:`~pyrogram.types.MessageEntity`):
+        parse_mode (:obj:`~pyrogram.types.ParseMode`, *optional*):
+            Parse mode of the text.
+
+        entities (List of :obj:`~pyrogram.types.MessageEntity`, *optional*):
             Entities contained in the text. Entities can be nested, but must not mutually intersect with each other.
     """
-    # TODO: add parse_mode for write
 
     def __init__(
         self,
         *,
         text: str,
+        parse_mode: Optional["enums.ParseMode"] = None,
         entities: Optional[List["types.MessageEntity"]] = None,
     ):
         super().__init__()
 
         self.text = text
+        self.parse_mode = parse_mode
         self.entities = entities
 
     @staticmethod
@@ -65,7 +71,9 @@ class FormattedText(Object):
         )
 
     async def write(self) -> "raw.types.TextWithEntities":
+        message, entities = (await utils.parse_text_entities(self, self.text, self.parse_mode, self.entities)).values()
+
         return raw.types.TextWithEntities(
-            text=self.text,
-            entities=[await entity.write() for entity in self.entities or []]
+            text=message,
+            entities=entities or []
         )
