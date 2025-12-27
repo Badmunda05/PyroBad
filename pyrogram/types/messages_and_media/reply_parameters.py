@@ -34,9 +34,11 @@ class ReplyParameters(Object):
             Unique identifier for the story in the chat.
 
         chat_id (``int`` | ``str``, *optional*):
+            If the message to be replied to is from a different chat.
             Unique identifier (int) or username (str) of the target chat.
             For your personal cloud (Saved Messages) you can simply use "me" or "self".
             For a contact that exists in your Telegram address book you can use his phone number (str).
+            Not supported for messages sent on behalf of a business account and messages from channel direct messages chats.
 
         quote (``str``, *optional*):
             Quoted part of the message to be replied to, 0-1024 characters after entities parsing.
@@ -52,6 +54,9 @@ class ReplyParameters(Object):
 
         quote_position (``int``, *optional*):
             Position of the quote in the original message in UTF-16 code units.
+
+        checklist_task_id (``int``, *optional*):
+            Identifier of the specific checklist task to be replied to.
     """
 
     def __init__(
@@ -63,7 +68,8 @@ class ReplyParameters(Object):
         quote: Optional[str] = None,
         quote_parse_mode: Optional["enums.ParseMode"] = None,
         quote_entities: Optional[List["types.MessageEntity"]] = None,
-        quote_position: Optional[int] = None
+        quote_position: Optional[int] = None,
+        checklist_task_id: Optional[int] = None
     ):
         super().__init__()
 
@@ -74,3 +80,4 @@ class ReplyParameters(Object):
         self.quote_parse_mode = quote_parse_mode
         self.quote_entities = quote_entities
         self.quote_position = quote_position
+        self.checklist_task_id = checklist_task_id

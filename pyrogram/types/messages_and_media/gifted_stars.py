@@ -18,13 +18,13 @@
 
 import random
 
-from pyrogram import raw, types, utils
+from pyrogram import raw, types
 
 from ..object import Object
 
 
 class GiftedStars(Object):
-    """Telegram Premium was gifted to the user.
+    """Telegram Stars were gifted to a user.
 
     Parameters:
         gifter (:obj:`~pyrogram.types.User`, *optional*):

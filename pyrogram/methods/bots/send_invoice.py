@@ -55,13 +55,18 @@ class SendInvoice:
         protect_content: Optional[bool] = None,
         message_effect_id: Optional[int] = None,
         reply_parameters: Optional["types.ReplyParameters"] = None,
-        allow_paid_broadcast: bool = None,
-        reply_markup: Optional[Union[
-            "types.InlineKeyboardMarkup",
-            "types.ReplyKeyboardMarkup",
-            "types.ReplyKeyboardRemove",
-            "types.ForceReply"
-        ]] = None,
+        allow_paid_broadcast: Optional[bool] = None,
+        direct_messages_topic_id: Optional[int] = None,
+        suggested_post_parameters: Optional["types.SuggestedPostParameters"] = None,
+        subscription_expiration_date: Optional[int] = None,
+        reply_markup: Optional[
+            Union[
+                "types.InlineKeyboardMarkup",
+                "types.ReplyKeyboardMarkup",
+                "types.ReplyKeyboardRemove",
+                "types.ForceReply"
+            ]
+        ] = None,
         caption: str = "",
         parse_mode: Optional["enums.ParseMode"] = None,
         caption_entities: Optional[List["types.MessageEntity"]] = None,
@@ -116,13 +121,13 @@ class SendInvoice:
                 URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service. People like it better when they see what they are paying for.
 
             photo_size (``int``, *optional*):
-                Photo size in bytes
+                Photo size in bytes.
 
             photo_width (``int``, *optional*):
-                Photo width
+                Photo width.
 
             photo_height (``int``, *optional*):
-                Photo height
+                Photo height.
 
             need_name (``bool``, *optional*):
                 Pass True if you require the user's full name to complete the order. Ignored for payments in `Telegram Stars <https://t.me/BotNews/90>`_.
@@ -159,7 +164,18 @@ class SendInvoice:
                 If True, you will be allowed to send up to 1000 messages per second.
                 Ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message.
                 The relevant Stars will be withdrawn from the bot's balance.
-                For bots only.
+
+            direct_messages_topic_id (``int``, *optional*):
+                Unique identifier of the topic in a channel direct messages chat administered by the current user.
+                For directs only only.
+
+            suggested_post_parameters (:obj:`~pyrogram.types.SuggestedPostParameters`, *optional*):
+                Information about the suggested post.
+
+            subscription_expiration_date (``int``, *optional*):
+                Expiration date of the subscription, in Unix time.
+                Currently the only allowed subscription period is 30*24*60*60 (1 month).
+                For recurring payments only.
 
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
@@ -214,7 +230,9 @@ class SendInvoice:
                 phone_to_provider=send_phone_number_to_provider,
                 email_to_provider=send_email_to_provider,
                 max_tip_amount=max_tip_amount,
-                suggested_tip_amounts=suggested_tip_amounts
+                suggested_tip_amounts=suggested_tip_amounts,
+                recurring=True if subscription_expiration_date is not None else None,
+                subscription_period=subscription_expiration_date
             ),
             payload=payload.encode() if isinstance(payload, str) else payload,
             provider=provider_token,
@@ -231,13 +249,15 @@ class SendInvoice:
             reply_to=await utils.get_reply_to(
                 self,
                 reply_parameters,
-                message_thread_id
+                message_thread_id,
+                direct_messages_topic_id=direct_messages_topic_id
             ),
             random_id=self.rnd_id(),
             noforwards=protect_content,
             allow_paid_floodskip=allow_paid_broadcast,
             reply_markup=await reply_markup.write(self) if reply_markup else None,
             effect=message_effect_id,
+            suggested_post=suggested_post_parameters.write() if suggested_post_parameters else None,
             **await utils.parse_text_entities(self, caption, parse_mode, caption_entities)
         )
 

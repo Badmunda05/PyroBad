@@ -33,8 +33,8 @@ class MessageServiceType(AutoName):
     NEW_CHAT_MEMBERS = auto()
     "New members join"
 
-    LEFT_CHAT_MEMBERS = auto()
-    "Left chat members"
+    LEFT_CHAT_MEMBER = auto()
+    "Left chat member"
 
     NEW_CHAT_TITLE = auto()
     "New chat title"
@@ -99,6 +99,9 @@ class MessageServiceType(AutoName):
     GIFTED_STARS = auto()
     "Gifted stars"
 
+    GIFTED_TON = auto()
+    "Gifted TON"
+
     VIDEO_CHAT_STARTED = auto()
     "Video chat started"
 
@@ -132,11 +135,26 @@ class MessageServiceType(AutoName):
     REFUNDED_PAYMENT = auto()
     "Refunded payment"
 
-    CHAT_TTL_CHANGED = auto()
+    SUGGESTED_POST_APPROVAL_FAILED = auto()
+    "Suggested post approval failed"
+
+    SUGGESTED_POST_APPROVED = auto()
+    "Suggested post approved"
+
+    SUGGESTED_POST_DECLINED = auto()
+    "Suggested post declined"
+
+    SUGGESTED_POST_PAID = auto()
+    "Suggested post paid"
+
+    SUGGESTED_POST_REFUNDED = auto()
+    "Suggested post refunded"
+
+    SET_MESSAGE_AUTO_DELETE_TIME = auto()
     "Chat TTL changed"
 
-    BOOST_APPLY = auto()
-    "Boost apply"
+    CHAT_BOOST = auto()
+    "Boost applied to the chat"
 
     GIFT = auto()
     "Star gift"
@@ -157,10 +175,13 @@ class MessageServiceType(AutoName):
     "Proximity alert triggered"
 
     HISTORY_CLEARED = auto()
-    "History clear"
+    "Chat history cleared"
 
     SUGGEST_PROFILE_PHOTO = auto()
     "Suggest profile photo"
+
+    SUGGEST_BIRTHDAY = auto()
+    "Suggest birthday"
 
     CHAT_SET_BACKGROUND = auto()
     "Set chat background"
@@ -179,3 +200,15 @@ class MessageServiceType(AutoName):
 
     DIRECT_MESSAGE_PRICE_CHANGED = auto()
     "Direct message price"
+
+    CHECKLIST_TASKS_DONE = auto()
+    "Checklist tasks done"
+
+    CHECKLIST_TASKS_ADDED = auto()
+    "Checklist tasks added"
+
+    UPGRADED_GIFT_PURCHASE_OFFER = auto()
+    "Upgraded gift purchase offer"
+
+    UPGRADED_GIFT_PURCHASE_OFFER_DECLINED = auto()
+    "Upgraded gift purchase offer declined"

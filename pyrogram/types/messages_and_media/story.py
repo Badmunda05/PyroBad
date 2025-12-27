@@ -437,6 +437,7 @@ class Story(Object, Update):
         link_preview_options: "types.LinkPreviewOptions" = None,
         disable_notification: bool = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         protect_content: bool = None,
         paid_message_star_count: int = None,
         reply_markup: Union[
@@ -491,6 +492,9 @@ class Story(Object, Update):
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
 
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             protect_content (``bool``, *optional*):
                 Protects the contents of the sent message from forwarding and saving.
 
@@ -516,6 +520,7 @@ class Story(Object, Update):
             link_preview_options=link_preview_options,
             disable_notification=disable_notification,
             schedule_date=schedule_date,
+            repeat_period=repeat_period,
             protect_content=protect_content,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
@@ -538,6 +543,8 @@ class Story(Object, Update):
         thumb: Union[str, BinaryIO] = None,
         file_name: str = None,
         disable_notification: bool = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         paid_message_star_count: int = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
@@ -611,6 +618,12 @@ class Story(Object, Update):
                 Sends the message silently.
                 Users will receive a notification with no sound.
 
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
@@ -665,6 +678,8 @@ class Story(Object, Update):
             thumb=thumb,
             file_name=file_name,
             disable_notification=disable_notification,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
             progress=progress,
@@ -683,6 +698,8 @@ class Story(Object, Update):
         thumb: Union[str, BinaryIO] = None,
         file_name: str = None,
         disable_notification: bool = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         paid_message_star_count: int = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
@@ -753,6 +770,12 @@ class Story(Object, Update):
                 Sends the message silently.
                 Users will receive a notification with no sound.
 
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
@@ -806,6 +829,8 @@ class Story(Object, Update):
             thumb=thumb,
             file_name=file_name,
             disable_notification=disable_notification,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
             progress=progress,
@@ -966,6 +991,8 @@ class Story(Object, Update):
         ttl_seconds: int = None,
         view_once: bool = None,
         disable_notification: bool = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         paid_message_star_count: int = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
@@ -1029,6 +1056,12 @@ class Story(Object, Update):
                 Sends the message silently.
                 Users will receive a notification with no sound.
 
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
@@ -1080,6 +1113,8 @@ class Story(Object, Update):
             ttl_seconds=ttl_seconds,
             view_once=view_once,
             disable_notification=disable_notification,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
             progress=progress,
@@ -1091,6 +1126,8 @@ class Story(Object, Update):
         sticker: Union[str, BinaryIO],
         disable_notification: bool = None,
         paid_message_star_count: int = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -1133,6 +1170,12 @@ class Story(Object, Update):
 
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
+
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
@@ -1178,6 +1221,8 @@ class Story(Object, Update):
             disable_notification=disable_notification,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             progress=progress,
             progress_args=progress_args
         )
@@ -1190,6 +1235,7 @@ class Story(Object, Update):
         caption_entities: List["types.MessageEntity"] = None,
         has_spoiler: bool = None,
         ttl_seconds: int = None,
+        view_once: bool = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
@@ -1199,6 +1245,8 @@ class Story(Object, Update):
         file_name: str = None,
         supports_streaming: bool = True,
         disable_notification: bool = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         no_sound: bool = None,
         paid_message_star_count: int = None,
         reply_markup: Union[
@@ -1255,6 +1303,10 @@ class Story(Object, Update):
                 If you set a timer, the video will self-destruct in *ttl_seconds*
                 seconds after it was viewed.
 
+            view_once (``bool``, *optional*):
+                Self-Destruct Timer.
+                If True, the photo will self-destruct after it was viewed.
+
             duration (``int``, *optional*):
                 Duration of sent video in seconds.
 
@@ -1290,6 +1342,12 @@ class Story(Object, Update):
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
                 Users will receive a notification with no sound.
+
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             no_sound (``bool``, *optional*):
                 Pass True, if the uploaded video is a video message with no sound.
@@ -1344,6 +1402,7 @@ class Story(Object, Update):
             caption_entities=caption_entities,
             has_spoiler=has_spoiler,
             ttl_seconds=ttl_seconds,
+            view_once=view_once,
             duration=duration,
             width=width,
             height=height,
@@ -1353,6 +1412,8 @@ class Story(Object, Update):
             file_name=file_name,
             supports_streaming=supports_streaming,
             disable_notification=disable_notification,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             no_sound=no_sound,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
@@ -1367,6 +1428,8 @@ class Story(Object, Update):
         length: int = 1,
         thumb: Union[str, BinaryIO] = None,
         disable_notification: bool = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         view_once: bool = None,
         paid_message_star_count: int = None,
         reply_markup: Union[
@@ -1421,6 +1484,12 @@ class Story(Object, Update):
                 Sends the message silently.
                 Users will receive a notification with no sound.
 
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             view_once (``bool``, *optional*):
                 Self-Destruct Timer.
                 If True, the video note will self-destruct after it was viewed.
@@ -1473,6 +1542,8 @@ class Story(Object, Update):
             length=length,
             thumb=thumb,
             disable_notification=disable_notification,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             view_once=view_once,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
@@ -1488,6 +1559,8 @@ class Story(Object, Update):
         caption_entities: List["types.MessageEntity"] = None,
         duration: int = 0,
         disable_notification: bool = None,
+        schedule_date: datetime = None,
+        repeat_period: int = None,
         view_once: bool = None,
         paid_message_star_count: int = None,
         reply_markup: Union[
@@ -1543,6 +1616,12 @@ class Story(Object, Update):
                 Sends the message silently.
                 Users will receive a notification with no sound.
 
+            schedule_date (:py:obj:`~datetime.datetime`, *optional*):
+                Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             view_once (``bool``, *optional*):
                 Self-Destruct Timer.
                 If True, the voice note will self-destruct after it was listened.
@@ -1596,6 +1675,8 @@ class Story(Object, Update):
             caption_entities=caption_entities,
             duration=duration,
             disable_notification=disable_notification,
+            schedule_date=schedule_date,
+            repeat_period=repeat_period,
             view_once=view_once,
             paid_message_star_count=paid_message_star_count,
             reply_markup=reply_markup,
@@ -1898,6 +1979,7 @@ class Story(Object, Update):
         message_thread_id: int = None,
         disable_notification: bool = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         paid_message_star_count: int = None,
     ) -> Optional["types.Message"]:
         """Bound method *forward* of :obj:`~pyrogram.types.Story`.
@@ -1934,6 +2016,9 @@ class Story(Object, Update):
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
 
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
+
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
@@ -1950,6 +2035,7 @@ class Story(Object, Update):
             message_thread_id=message_thread_id,
             disable_notification=disable_notification,
             schedule_date=schedule_date,
+            repeat_period=repeat_period,
             paid_message_star_count=paid_message_star_count,
         )
 

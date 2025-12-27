@@ -30,7 +30,7 @@ class SetSlowMode:
     ) -> bool:
         """Set the slow mode interval for a chat.
 
-        .. include:: /_includes/usable-by/users-bots.rst
+        .. include:: /_includes/usable-by/users.rst
 
         Parameters:
             chat_id (``int`` | ``str``):
@@ -38,7 +38,7 @@ class SetSlowMode:
 
             seconds (``int`` | ``None``):
                 Seconds in which members will be able to send only one message per this interval.
-                Valid values are: 0 or None (off), 10, 30, 60 (1m), 300 (5m), 900 (15m) or 3600 (1h).
+                Valid values are: 0 or None (off), 5, 10, 30, 60 (1m), 300 (5m), 900 (15m) or 3600 (1h).
 
         Returns:
             ``bool``: True on success.

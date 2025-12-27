@@ -17,25 +17,29 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from typing import TypeVar
 
 import pyrogram
 from pyrogram import raw
 from pyrogram.raw.core import TLObject
 from pyrogram.session import Session
-from pyrogram.methods.messages.business_session import get_session
 
 log = logging.getLogger(__name__)
+
+ReturnType = TypeVar('ReturnType')
 
 
 class Invoke:
     async def invoke(
         self: "pyrogram.Client",
-        query: TLObject,
+        query: TLObject[ReturnType],
         retries: int = Session.MAX_RETRIES,
         timeout: float = Session.WAIT_TIMEOUT,
         sleep_threshold: float = None,
+        retry_delay: float = Session.RETRY_DELAY,
+        recaptcha_token: str = None,
         business_connection_id: str = None
-    ):
+    ) -> ReturnType:
         """Invoke raw Telegram functions.
 
         This method makes it possible to manually call every single Telegram API method in a low-level manner.
@@ -54,14 +58,20 @@ class Invoke:
             query (``RawFunction``):
                 The API Schema function filled with proper arguments.
 
-            retries (``int``):
+            retries (``int``, *optional*):
                 Number of retries.
 
-            timeout (``float``):
+            timeout (``float``, *optional*):
                 Timeout in seconds.
 
-            sleep_threshold (``float``):
+            sleep_threshold (``float``, *optional*):
                 Sleep threshold in seconds.
+
+            retry_delay (``float``, *optional*):
+                Retry delay in seconds on errors.
+
+            recaptcha_token (``str``, *optional*):
+                ReCaptcha token.
 
             business_connection_id (``str``, *optional*):
                 Unique identifier of the business connection.
@@ -83,7 +93,10 @@ class Invoke:
                 query=query
             )
 
-            session = await get_session(self, business_connection_id)
+            session = await self.get_session(business_connection_id=business_connection_id)
+
+        if recaptcha_token:
+            query = raw.functions.InvokeWithReCaptcha(token=recaptcha_token, query=query)
 
         if self.no_updates:
             query = raw.functions.InvokeWithoutUpdates(query=query)
@@ -92,10 +105,11 @@ class Invoke:
             query = raw.functions.InvokeWithTakeout(takeout_id=self.takeout_id, query=query)
 
         r = await session.invoke(
-            query, retries, timeout,
-            (sleep_threshold
-             if sleep_threshold is not None
-             else self.sleep_threshold)
+            query=query, retries=retries, timeout=timeout,
+            sleep_threshold=(
+                sleep_threshold if sleep_threshold is not None else self.sleep_threshold
+            ),
+            retry_delay=retry_delay
         )
 
         await self.fetch_peers(getattr(r, "users", []))

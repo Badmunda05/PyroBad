@@ -39,12 +39,18 @@ from .poll_type import PollType
 from .privacy_key import PrivacyKey
 from .privacy_rule_type import PrivacyRuleType
 from .profile_color import ProfileColor
+from .profile_tab import ProfileTab
 from .reply_color import ReplyColor
 from .sent_code_type import SentCodeType
+from .sticker_type import StickerType
 from .gift_attribute_type import GiftAttributeType
 from .gift_for_resale_order import GiftForResaleOrder
+from .gift_purchase_offer_state import GiftPurchaseOfferState
+from .mask_point_type import MaskPointType
 from .media_area_type import MediaAreaType
 from .stories_privacy_rules import StoriesPrivacyRules
+from .suggested_post_refund_reason import SuggestedPostRefundReason
+from .suggested_post_state import SuggestedPostState
 from .user_status import UserStatus
 
 __all__ = [
@@ -71,11 +77,17 @@ __all__ = [
     'PrivacyKey',
     'PrivacyRuleType',
     'ProfileColor',
+    'ProfileTab',
     'ReplyColor',
     'SentCodeType',
+    'StickerType',
     'GiftAttributeType',
     'GiftForResaleOrder',
+    'GiftPurchaseOfferState',
+    'MaskPointType',
     'MediaAreaType',
     'StoriesPrivacyRules',
+    'SuggestedPostRefundReason',
+    'SuggestedPostState',
     'UserStatus'
 ]

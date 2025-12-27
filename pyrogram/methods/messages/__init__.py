@@ -16,9 +16,12 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from .add_checklist_tasks import AddChecklistTasks
 from .add_to_gifs import AddToGifs
+from .approve_suggested_post import ApproveSuggestedPost
 from .copy_media_group import CopyMediaGroup
 from .copy_message import CopyMessage
+from .decline_suggested_post import DeclineSuggestedPost
 from .delete_chat_history import DeleteChatHistory
 from .delete_direct_messages_chat_topic_history import DeleteDirectMessagesChatTopicHistory
 from .delete_messages import DeleteMessages
@@ -28,6 +31,7 @@ from .edit_inline_media import EditInlineMedia
 from .edit_inline_reply_markup import EditInlineReplyMarkup
 from .edit_inline_text import EditInlineText
 from .edit_message_caption import EditMessageCaption
+from .edit_message_checklist import EditMessageChecklist
 from .edit_message_media import EditMessageMedia
 from .edit_message_reply_markup import EditMessageReplyMarkup
 from .edit_message_text import EditMessageText
@@ -41,10 +45,15 @@ from .get_direct_messages_chat_topic_history import GetDirectMessagesChatTopicHi
 from .get_discussion_message import GetDiscussionMessage
 from .get_discussion_replies import GetDiscussionReplies
 from .get_discussion_replies_count import GetDiscussionRepliesCount
+from .get_main_web_app import GetMainWebApp
 from .get_media_group import GetMediaGroup
 from .get_messages import GetMessages
 from .get_scheduled_messages import GetScheduledMessages
 from .get_stickers import GetStickers
+from .get_web_app_link_url import GetWebAppLinkUrl
+from .get_web_app_url import GetWebAppUrl
+from .mark_checklist_tasks_as_done import MarkChecklistTasksAsDone
+from .open_web_app import OpenWebApp
 from .read_chat_history import ReadChatHistory
 from .read_mentions import ReadMentions
 from .read_reactions import ReadReactions
@@ -59,6 +68,7 @@ from .send_animation import SendAnimation
 from .send_audio import SendAudio
 from .send_cached_media import SendCachedMedia
 from .send_chat_action import SendChatAction
+from .send_checklist import SendChecklist
 from .send_contact import SendContact
 from .send_dice import SendDice
 from .send_document import SendDocument
@@ -88,9 +98,13 @@ from .vote_poll import VotePoll
 
 
 class Messages(
+    AddChecklistTasks,
     AddToGifs,
+    ApproveSuggestedPost,
+    DeclineSuggestedPost,
     DeleteMessages,
     EditMessageCaption,
+    EditMessageChecklist,
     EditMessageReplyMarkup,
     EditMessageMedia,
     EditMessageText,
@@ -101,8 +115,13 @@ class Messages(
     GetMessages,
     GetScheduledMessages,
     GetStickers,
+    GetWebAppLinkUrl,
+    GetWebAppUrl,
+    MarkChecklistTasksAsDone,
+    OpenWebApp,
     SendAudio,
     SendChatAction,
+    SendChecklist,
     SendContact,
     SendDocument,
     SendAnimation,
@@ -152,6 +171,7 @@ class Messages(
     SendReaction,
     GetDiscussionReplies,
     GetDiscussionRepliesCount,
+    GetMainWebApp,
     StreamMedia,
     TranslateMessageText,
     TranslateText,

@@ -24,30 +24,27 @@ from typing import List, Optional
 
 import pyrogram
 from pyrogram import filters, handlers, raw, types
-from pyrogram.methods.messages.inline_session import get_session
 
 log = logging.getLogger(__name__)
 
+
 class QRLogin:
     def __init__(self, client, except_ids: List[int] = []):
-        self.client = client
-        self.request = raw.functions.auth.ExportLoginToken(
-            api_id=client.api_id,
-            api_hash=client.api_hash,
-            except_ids=except_ids
-        )
-        self.r = None
+        self.client: "pyrogram.Client" = client
+        self.except_ids: List[int] = except_ids
+        self.r: "raw.base.auth.LoginToken" = None
 
     async def recreate(self):
-        self.r = await self.client.invoke(self.request)
-
-        return self.r
+        self.r = await self.client.invoke(
+            raw.functions.auth.ExportLoginToken(
+                api_id=self.client.api_id,
+                api_hash=self.client.api_hash,
+                except_ids=self.except_ids,
+            )
+        )
 
     async def wait(self, timeout: float = None) -> Optional["types.User"]:
         if timeout is None:
-            if not self.r:
-                raise asyncio.TimeoutError
-
             timeout = self.r.expires - int(datetime.datetime.now().timestamp())
 
         event = asyncio.Event()
@@ -58,9 +55,7 @@ class QRLogin:
         handler = self.client.add_handler(
             handlers.RawUpdateHandler(
                 raw_handler,
-                filters=filters.create(
-                    lambda _, __, u: isinstance(u, raw.types.UpdateLoginToken)
-                )
+                filters=filters.create(lambda _, __, u: isinstance(u, raw.types.UpdateLoginToken)),
             )
         )
 
@@ -70,27 +65,46 @@ class QRLogin:
             await asyncio.wait_for(event.wait(), timeout=timeout)
         finally:
             self.client.remove_handler(*handler)
-            await self.client.dispatcher.stop(clear=False)
+            await self.client.dispatcher.stop(clear_handlers=False)
 
-        await self.recreate()
+        r = await self.client.invoke(
+            raw.functions.auth.ExportLoginToken(
+                api_id=self.client.api_id,
+                api_hash=self.client.api_hash,
+                except_ids=self.except_ids,
+            )
+        )
 
-        if isinstance(self.r, raw.types.auth.LoginTokenMigrateTo):
-            session = await get_session(self.client, self.r.dc_id)
-            self.r = await session.invoke(
-                raw.functions.auth.ImportLoginToken(
-                    token=self.token
-                )
+        if isinstance(r, raw.types.auth.LoginTokenMigrateTo):
+            dc_option = await self.client.get_dc_option(r.dc_id, ipv6=self.client.ipv6)
+            await self.client.session.stop()
+
+            self.client.session = await self.client.get_session(
+                dc_id=r.dc_id,
+                server_address=dc_option.ip_address,
+                port=dc_option.port,
+                export_authorization=False,
+                temporary=True
             )
 
-        if isinstance(self.r, raw.types.auth.LoginTokenSuccess):
-            user = types.User._parse(self.client, self.r.authorization.user)
+            await self.client.storage.dc_id(r.dc_id)
+            await self.client.storage.server_address(dc_option.ip_address)
+            await self.client.storage.port(dc_option.port)
+            await self.client.storage.auth_key(self.client.session.auth_key)       
+
+            r = await self.client.invoke(
+                raw.functions.auth.ImportLoginToken(token=r.token)
+            )
+
+        if isinstance(r, raw.types.auth.LoginTokenSuccess):
+            user = types.User._parse(self.client, r.authorization.user)
 
             await self.client.storage.user_id(user.id)
             await self.client.storage.is_bot(False)
 
             return user
 
-        raise TypeError('Unexpected login token response: {}'.format(self.r))
+        raise TypeError("Unexpected login token response: {}".format(r))
 
     @property
     def url(self) -> str:

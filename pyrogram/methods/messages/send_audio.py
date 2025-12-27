@@ -44,14 +44,16 @@ class SendAudio:
         file_name: str = None,
         disable_notification: bool = None,
         message_thread_id: int = None,
-        direct_messages_chat_topic_id: int = None,
+        direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         protect_content: bool = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_parameters: "types.SuggestedPostParameters" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -124,7 +126,7 @@ class SendAudio:
                 Unique identifier for the target message thread (topic) of the forum.
                 For forums only.
 
-            direct_messages_chat_topic_id (``int``, *optional*):
+            direct_messages_topic_id (``int``, *optional*):
                 Unique identifier of the topic in a channel direct messages chat administered by the current user.
                 For directs only only.
 
@@ -137,6 +139,9 @@ class SendAudio:
 
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             protect_content (``bool``, *optional*):
                 Protects the contents of the sent message from forwarding and saving.
@@ -152,6 +157,9 @@ class SendAudio:
 
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
+
+            suggested_post_parameters (:obj:`~pyrogram.types.SuggestedPostParameters`, *optional*):
+                Information about the suggested post.
 
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
@@ -314,15 +322,17 @@ class SendAudio:
                                 self,
                                 reply_parameters,
                                 message_thread_id,
-                                direct_messages_chat_topic_id
+                                direct_messages_topic_id
                             ),
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
+                            schedule_repeat_period=repeat_period,
                             noforwards=protect_content,
                             allow_paid_floodskip=allow_paid_broadcast,
                             reply_markup=await reply_markup.write(self) if reply_markup else None,
                             effect=effect_id,
                             allow_paid_stars=paid_message_star_count,
+                            suggested_post=suggested_post_parameters.write() if suggested_post_parameters else None,
                             **await utils.parse_text_entities(self, caption, parse_mode, caption_entities)
                         ),
                         business_connection_id=business_connection_id

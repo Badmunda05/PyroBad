@@ -16,7 +16,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 from typing import Optional
 
 import pyrogram
@@ -28,7 +27,7 @@ class UpgradeGift:
         self: "pyrogram.Client",
         owned_gift_id: str,
         keep_original_details: Optional[bool] = None,
-        # star_count: int = None
+        star_count: int = None,
         business_connection_id: str = None
     ) -> Optional["types.Message"]:
         """Upgrade a given regular gift to a unique gift.
@@ -50,6 +49,9 @@ class UpgradeGift:
             keep_original_details (``bool``, *optional*):
                 Pass True to keep the original gift text, sender and receiver in the upgraded gift.
 
+            star_count (``int``, *optional*):
+                The amount of Telegram Stars required to pay for the upgrade.
+
             business_connection_id (``str``, *optional*):
                 Unique identifier of the business connection.
                 For bots only.
@@ -66,25 +68,7 @@ class UpgradeGift:
                 # Upgrade gift in channel (owned_gift_id packed in format chatID_savedID)
                 await app.upgrade_gift(owned_gift_id="123_456")
         """
-        if not isinstance(owned_gift_id, str):
-            raise ValueError(f"owned_gift_id has to be str, but {type(owned_gift_id)} was provided")
-
-        saved_gift_match = re.match(r"^(-\d+)_(\d+)$", owned_gift_id)
-        slug_match = self.UPGRADED_GIFT_RE.match(owned_gift_id)
-
-        if saved_gift_match:
-            stargift = raw.types.InputSavedStarGiftChat(
-                peer=await self.resolve_peer(saved_gift_match.group(1)),
-                saved_id=int(saved_gift_match.group(2))
-            )
-        elif slug_match:
-            stargift = raw.types.InputSavedStarGiftSlug(
-                slug=slug_match.group(1)
-            )
-        else:
-            stargift = raw.types.InputSavedStarGiftUser(
-                msg_id=int(owned_gift_id)
-            )
+        stargift = await utils.get_input_stargift(self, owned_gift_id)
 
         try:
             r = await self.invoke(
@@ -100,14 +84,23 @@ class UpgradeGift:
                 keep_original_details=keep_original_details
             )
 
+            form = await self.invoke(
+                raw.functions.payments.GetPaymentForm(
+                    invoice=invoice
+                ),
+                business_connection_id=business_connection_id
+            )
+
+            if star_count is not None:
+                if star_count < 0:
+                    raise ValueError("Invalid amount of Telegram Stars specified.")
+
+                if form.invoice.prices[0].amount > star_count:
+                    raise ValueError("Have not enough Telegram Stars.")
+
             r = await self.invoke(
                 raw.functions.payments.SendStarsForm(
-                    form_id=(await self.invoke(
-                        raw.functions.payments.GetPaymentForm(
-                            invoice=invoice
-                        ),
-                        business_connection_id=business_connection_id
-                    )).form_id,
+                    form_id=form.form_id,
                     invoice=invoice
                 ),
                 business_connection_id=business_connection_id

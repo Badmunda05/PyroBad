@@ -28,6 +28,9 @@ from pyrogram.file_id import FileType
 
 log = logging.getLogger(__name__)
 
+# Maximum file size for local video note (10 MB)
+_MAX_VIDEO_NOTE_SIZE_BYTES: int = 10 * 1024 * 1024
+
 class SendVideoNote:
     async def send_video_note(
         self: "pyrogram.Client",
@@ -38,15 +41,17 @@ class SendVideoNote:
         thumb: Union[str, BinaryIO] = None,
         disable_notification: bool = None,
         message_thread_id: int = None,
-        direct_messages_chat_topic_id: int = None,
+        direct_messages_topic_id: int = None,
         effect_id: int = None,
         reply_parameters: "types.ReplyParameters" = None,
         schedule_date: datetime = None,
+        repeat_period: int = None,
         protect_content: bool = None,
         view_once: bool = None,
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_parameters: "types.SuggestedPostParameters" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -81,6 +86,10 @@ class SendVideoNote:
                 pass a binary file-like object with its attribute ".name" set for in-memory uploads.
                 Sending video notes by a URL is currently unsupported.
 
+                .. note::
+                    When uploading from local file: if the file is larger than 10 MB, Telegram will upload
+                    it as a regular video instead of a video note.
+
             duration (``int``, *optional*):
                 Duration of sent video in seconds.
 
@@ -101,7 +110,7 @@ class SendVideoNote:
                 Unique identifier for the target message thread (topic) of the forum.
                 For forums only.
 
-            direct_messages_chat_topic_id (``int``, *optional*):
+            direct_messages_topic_id (``int``, *optional*):
                 Unique identifier of the topic in a channel direct messages chat administered by the current user.
                 For directs only only.
 
@@ -114,6 +123,9 @@ class SendVideoNote:
 
             schedule_date (:py:obj:`~datetime.datetime`, *optional*):
                 Date when the message will be automatically sent.
+
+            repeat_period (``int``, *optional*):
+                Period after which the message will be sent again in seconds.
 
             protect_content (``bool``, *optional*):
                 Protects the contents of the sent message from forwarding and saving.
@@ -133,6 +145,9 @@ class SendVideoNote:
 
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
+
+            suggested_post_parameters (:obj:`~pyrogram.types.SuggestedPostParameters`, *optional*):
+                Information about the suggested post.
 
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
@@ -238,6 +253,16 @@ class SendVideoNote:
         try:
             if isinstance(video_note, str):
                 if os.path.isfile(video_note):
+
+                    # Notify user why the sent video is not video note
+                    file_size = os.path.getsize(video_note)
+                    if file_size > _MAX_VIDEO_NOTE_SIZE_BYTES:
+                        log.warning(
+                           "Video note file size (%.1f MB) exceeds 10 MB limit. "
+                           "Telegram will treat it as a regular video instead of a video note.",
+                           file_size / (1024 * 1024),
+                        )
+
                     thumb = await self.save_file(thumb)
                     file = await self.save_file(video_note, progress=progress, progress_args=progress_args)
                     media = raw.types.InputMediaUploadedDocument(
@@ -286,13 +311,15 @@ class SendVideoNote:
                                 self,
                                 reply_parameters,
                                 message_thread_id,
-                                direct_messages_chat_topic_id
+                                direct_messages_topic_id
                             ),
                             random_id=self.rnd_id(),
                             schedule_date=utils.datetime_to_timestamp(schedule_date),
+                            schedule_repeat_period=repeat_period,
                             noforwards=protect_content,
                             allow_paid_floodskip=allow_paid_broadcast,
                             allow_paid_stars=paid_message_star_count,
+                            suggested_post=suggested_post_parameters.write() if suggested_post_parameters else None,
                             reply_markup=await reply_markup.write(self) if reply_markup else None,
                             message="",
                             effect=effect_id
