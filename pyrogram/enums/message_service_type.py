@@ -210,5 +210,5 @@ class MessageServiceType(AutoName):
     UPGRADED_GIFT_PURCHASE_OFFER = auto()
     "Upgraded gift purchase offer"
 
-    UPGRADED_GIFT_PURCHASE_OFFER_DECLINED = auto()
+    UPGRADED_GIFT_PURCHASE_OFFER_REJECTED = auto()
     "Upgraded gift purchase offer declined"

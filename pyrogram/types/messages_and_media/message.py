@@ -502,8 +502,8 @@ class Message(Object, Update):
         upgraded_gift_purchase_offer (:obj:`~pyrogram.types.UpgradedGiftPurchaseOffer`, *optional*):
             Service message: An offer to purchase an upgraded gift was sent or received.
 
-        upgraded_gift_purchase_offer_declined (:obj:`~pyrogram.types.UpgradedGiftPurchaseOfferDeclined`, *optional*):
-            Service message: An offer to purchase a gift was declined or expired.
+        upgraded_gift_purchase_offer_rejected (:obj:`~pyrogram.types.UpgradedGiftPurchaseOfferRejected`, *optional*):
+            Service message: An offer to purchase a gift was rejected or expired.
 
         business_connection_id (``str``, *optional*):
             Unique identifier of the business connection from which the message was received.
@@ -695,7 +695,7 @@ class Message(Object, Update):
         giveaway_prize_stars: Optional["types.GiveawayPrizeStars"] = None,
         screenshot_taken: Optional["types.ScreenshotTaken"] = None,
         upgraded_gift_purchase_offer: Optional["types.UpgradedGiftPurchaseOffer"] = None,
-        upgraded_gift_purchase_offer_declined: Optional["types.UpgradedGiftPurchaseOfferDeclined"] = None,
+        upgraded_gift_purchase_offer_rejected: Optional["types.UpgradedGiftPurchaseOfferRejected"] = None,
         business_connection_id: Optional[str] = None,
         reply_markup: Optional[
             Union[
@@ -808,7 +808,7 @@ class Message(Object, Update):
         self.giveaway_prize_stars = giveaway_prize_stars
         self.screenshot_taken = screenshot_taken
         self.upgraded_gift_purchase_offer = upgraded_gift_purchase_offer
-        self.upgraded_gift_purchase_offer_declined = upgraded_gift_purchase_offer_declined
+        self.upgraded_gift_purchase_offer_rejected = upgraded_gift_purchase_offer_rejected
         self.business_connection_id = business_connection_id
         self.reply_markup = reply_markup
         self.forum_topic_created = forum_topic_created
@@ -946,7 +946,7 @@ class Message(Object, Update):
         chat_shared = None
         screenshot_taken = None
         upgraded_gift_purchase_offer = None
-        upgraded_gift_purchase_offer_declined = None
+        upgraded_gift_purchase_offer_rejected = None
         # passport_data_send = None
         # passport_data_received = None
         chat_set_theme = None
@@ -1150,8 +1150,8 @@ class Message(Object, Update):
                 chats
             )
         elif isinstance(action, raw.types.MessageActionStarGiftPurchaseOfferDeclined):
-            service_type = enums.MessageServiceType.UPGRADED_GIFT_PURCHASE_OFFER_DECLINED
-            upgraded_gift_purchase_offer_declined = await types.UpgradedGiftPurchaseOfferDeclined._parse(
+            service_type = enums.MessageServiceType.UPGRADED_GIFT_PURCHASE_OFFER_REJECTED
+            upgraded_gift_purchase_offer_rejected = await types.UpgradedGiftPurchaseOfferRejected._parse(
                 client,
                 action,
                 getattr(message.reply_to, "reply_to_msg_id", None),
@@ -1273,7 +1273,7 @@ class Message(Object, Update):
             chat_shared=chat_shared,
             screenshot_taken=screenshot_taken,
             upgraded_gift_purchase_offer=upgraded_gift_purchase_offer,
-            upgraded_gift_purchase_offer_declined=upgraded_gift_purchase_offer_declined,
+            upgraded_gift_purchase_offer_rejected=upgraded_gift_purchase_offer_rejected,
             chat_set_theme=chat_set_theme,
             chat_set_background=chat_set_background,
             set_message_auto_delete_time=set_message_auto_delete_time,
@@ -9310,7 +9310,7 @@ class Message(Object, Update):
             input_invoice=invoice
         )
 
-    async def approve_gift_purchase_offer(self) -> "types.Message":
+    async def accept_gift_purchase_offer(self) -> "types.Message":
         """Shortcut for method :obj:`~pyrogram.Client.process_gift_purchase_offer` will automatically fill method attributes:
 
         * message_id
@@ -9320,7 +9320,7 @@ class Message(Object, Update):
         """
         return await self._client.process_gift_purchase_offer(
             message_id=self.id,
-            approve=True
+            accept=True
         )
 
     async def reject_gift_purchase_offer(self) -> "types.Message":
@@ -9333,5 +9333,5 @@ class Message(Object, Update):
         """
         return await self._client.process_gift_purchase_offer(
             message_id=self.id,
-            approve=False
+            accept=False
         )

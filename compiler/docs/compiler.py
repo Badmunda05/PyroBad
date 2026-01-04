@@ -802,6 +802,7 @@ def pyrogram_api():
             UpgradedGiftValueInfo
             UpgradedGiftAttributeId
             UpgradedGiftPurchaseOffer
+            UpgradedGiftPurchaseOfferRejected
             UpgradedGiftAttributeIdModel
             UpgradedGiftAttributeIdSymbol
             UpgradedGiftAttributeIdBackdrop
@@ -1030,7 +1031,7 @@ def pyrogram_api():
             Message.read
             Message.view
             Message.pay
-            Message.approve_gift_purchase_offer
+            Message.accept_gift_purchase_offer
             Message.reject_gift_purchase_offer
         """,
         chat="""
