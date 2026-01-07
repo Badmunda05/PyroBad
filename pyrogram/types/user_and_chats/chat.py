@@ -1342,8 +1342,7 @@ class Chat(Object):
         """
         return await self._client.unarchive_chats(self.id)
 
-    # TODO: Remove notes about "All Members Are Admins" for basic groups, the attribute doesn't exist anymore
-    async def set_title(self, title: str) -> bool:
+    async def set_title(self, title: str) -> "types.Message":
         """Bound method *set_title* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -1360,17 +1359,12 @@ class Chat(Object):
 
                 await chat.set_title("Lounge")
 
-        .. note::
-
-            In regular groups (non-supergroups), this method will only work if the "All Members Are Admins"
-            setting is off.
-
         Parameters:
             title (``str``):
                 New chat title, 1-255 characters.
 
         Returns:
-            ``bool``: True on success.
+            :obj:`~pyrogram.types.Message`: On success, the sent service message is returned.
 
         Raises:
             RPCError: In case of Telegram RPC error.
@@ -1420,7 +1414,7 @@ class Chat(Object):
         photo: Union[str, BinaryIO] = None,
         video: Union[str, BinaryIO] = None,
         video_start_ts: float = None,
-    ) -> bool:
+    ) -> "types.Message":
         """Bound method *set_photo* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -1463,7 +1457,7 @@ class Chat(Object):
                 The timestamp in seconds of the video frame to use as photo profile preview.
 
         Returns:
-            ``bool``: True on success.
+            :obj:`~pyrogram.types.Message`: On success, the sent service message is returned.
 
         Raises:
             RPCError: In case of a Telegram RPC error.
@@ -1825,7 +1819,7 @@ class Chat(Object):
         self,
         user_ids: Union[Union[int, str], List[Union[int, str]]],
         forward_limit: int = 100
-    ) -> bool:
+    ) -> List["types.FailedToAddMember"]:
         """Bound method *add_members* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:
@@ -1840,7 +1834,7 @@ class Chat(Object):
                 await chat.add_members(user_id)
 
         Returns:
-            ``bool``: On success, True is returned.
+            List of :obj:`~pyrogram.types.FailedToAddMember`: On success, an empty list is returned, otherwise a list of :obj:`~pyrogram.types.FailedToAddMember` is returned.
         """
         return await self._client.add_chat_members(
             self.id,
