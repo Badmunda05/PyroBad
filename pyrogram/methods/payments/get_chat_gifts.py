@@ -127,7 +127,7 @@ class GetChatGifts:
             receiver = users.get(raw_peer_id) or chats.get(raw_peer_id)
 
             user_star_gifts = [
-                await types.Gift._parse(self, gift, receiver, users, chats)
+                await types.Gift._parse(self, gift, receiver, users=users, chats=chats)
                 for gift in r.gifts
             ]
 

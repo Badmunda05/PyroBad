@@ -1183,7 +1183,7 @@ class Message(Object, Update):
             service_type = enums.MessageServiceType.GIFT
             is_prepaid_upgrade=action.prepaid_upgrade
             is_from_auction=getattr(action, "auction_acquired", None)
-            gift = await types.Gift._parse(client, action, users, chats)
+            gift = await types.Gift._parse(client, action, users=users, chats=chats)
         elif isinstance(action, raw.types.MessageActionSuggestProfilePhoto):
             service_type = enums.MessageServiceType.SUGGEST_PROFILE_PHOTO
             suggest_profile_photo = types.Photo._parse(client, action.photo)

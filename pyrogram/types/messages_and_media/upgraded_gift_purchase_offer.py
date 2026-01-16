@@ -72,7 +72,7 @@ class UpgradedGiftPurchaseOffer(Object):
             price = types.GiftResalePriceStar(star_count=action.price.amount)
 
         return UpgradedGiftPurchaseOffer(
-            gift=await types.Gift._parse(client, action.gift, users, chats),
+            gift=await types.Gift._parse(client, action.gift, users=users, chats=chats),
             state=enums.GiftPurchaseOfferState.ACCEPTED
             if action.accepted
             else enums.GiftPurchaseOfferState.REJECTED
@@ -131,7 +131,7 @@ class UpgradedGiftPurchaseOfferRejected(Object):
             price = types.GiftResalePriceStar(star_count=action.price.amount)
 
         return UpgradedGiftPurchaseOfferRejected(
-            gift=await types.Gift._parse(client, action.gift, users, chats),
+            gift=await types.Gift._parse(client, action.gift, users=users, chats=chats),
             price=price,
             offer_message_id=offer_message_id,
             was_expired=bool(action.expired),

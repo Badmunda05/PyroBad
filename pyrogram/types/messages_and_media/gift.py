@@ -559,9 +559,9 @@ class Gift(Object):
             return
 
         if isinstance(saved_gift.gift, raw.types.StarGift):
-            parsed_gift = await Gift._parse_regular(client, saved_gift.gift, users, chats)
+            parsed_gift = await Gift._parse_regular(client, saved_gift.gift, users=users, chats=chats)
         elif isinstance(saved_gift.gift, raw.types.StarGiftUnique):
-            parsed_gift = await Gift._parse_upgraded(client, saved_gift.gift, users, chats)
+            parsed_gift = await Gift._parse_upgraded(client, saved_gift.gift, users=users, chats=chats)
 
         raw_from_id = utils.get_raw_peer_id(saved_gift.from_id)
 
@@ -615,7 +615,7 @@ class Gift(Object):
             raw_sender_id = utils.get_raw_peer_id(action_gift.from_id)
             raw_receiver_id = utils.get_raw_peer_id(action_gift.peer)
 
-            parsed_gift = await Gift._parse_regular(client, action_gift.gift, users, chats)
+            parsed_gift = await Gift._parse_regular(client, action_gift.gift, users=users, chats=chats)
 
             if action_gift.saved_id:
                 parsed_gift.received_gift_id = str(action_gift.saved_id)
@@ -647,7 +647,7 @@ class Gift(Object):
             raw_sender_id = utils.get_raw_peer_id(action_gift.from_id)
             raw_receiver_id = utils.get_raw_peer_id(action_gift.peer)
 
-            parsed_gift = await Gift._parse_upgraded(client, action_gift.gift, users, chats)
+            parsed_gift = await Gift._parse_upgraded(client, action_gift.gift, users=users, chats=chats)
 
             if action_gift.saved_id:
                 parsed_gift.received_gift_id = str(action_gift.saved_id)
