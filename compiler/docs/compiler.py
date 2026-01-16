@@ -1213,6 +1213,7 @@ def pyrogram_api():
             SentCodeType
             StoriesPrivacyRules
             UserStatus
+            UpgradedGiftOrigin
             GiftAttributeType
             MediaAreaType
             PrivacyRuleType

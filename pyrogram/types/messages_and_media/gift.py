@@ -35,6 +35,9 @@ class Gift(Object):
         type (:obj:`~pyrogram.enums.GiftType`):
             Type of the gift.
 
+        origin (:obj:`~pyrogram.enums.UpgradedGiftOrigin`, *optional*):
+            Origin of the gift.
+
         received_gift_id (``str``, *optional*):
             Unique identifier of the received gift for the current user.
 
@@ -270,6 +273,7 @@ class Gift(Object):
         client: "pyrogram.Client" = None,
         id: int,
         type: "enums.GiftType",
+        origin: Optional["enums.UpgradedGiftOrigin"] = None,
         received_gift_id: Optional[str] = None,
         regular_gift_id: Optional[int] = None,
         publisher_chat: Optional["types.Chat"] = None,
@@ -352,6 +356,7 @@ class Gift(Object):
 
         self.id = id
         self.type = type
+        self.origin = origin
         self.received_gift_id = received_gift_id
         self.regular_gift_id = regular_gift_id
         self.publisher_chat = publisher_chat
@@ -617,7 +622,6 @@ class Gift(Object):
     ) -> "Gift":
         # TODO: fix receiver
         if isinstance(action_gift, raw.types.MessageActionStarGift):
-            # prepaid_upgrade
             # auction_acquired
             # upgrade_msg_id
             # peer
@@ -649,16 +653,25 @@ class Gift(Object):
 
             return parsed_gift
         elif isinstance(action_gift, raw.types.MessageActionStarGiftUnique):
-            # transferred
-            # prepaid_upgrade
-            # assigned
-            # from_offer
             # peer
 
             raw_sender_id = utils.get_raw_peer_id(action_gift.from_id)
             raw_receiver_id = utils.get_raw_peer_id(action_gift.peer)
 
             parsed_gift = await Gift._parse_upgraded(client, action_gift.gift, users=users, chats=chats)
+
+            if action_gift.from_offer:
+                parsed_gift.origin = enums.UpgradedGiftOrigin.OFFER
+            elif action_gift.assigned:
+                parsed_gift.origin = enums.UpgradedGiftOrigin.BLOCKCHAIN
+            elif action_gift.prepaid_upgrade:
+                parsed_gift.origin = enums.UpgradedGiftOrigin.GIFTED_UPGRADE
+            elif action_gift.resale_amount:
+                parsed_gift.origin = enums.UpgradedGiftOrigin.RESALE
+            elif action_gift.upgrade:
+                parsed_gift.origin = enums.UpgradedGiftOrigin.UPGRADE
+            elif action_gift.transferred:
+                parsed_gift.origin = enums.UpgradedGiftOrigin.TRANSFER
 
             if action_gift.saved_id:
                 parsed_gift.received_gift_id = str(action_gift.saved_id)
