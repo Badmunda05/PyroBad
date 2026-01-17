@@ -1496,9 +1496,7 @@ class Chat(Object):
         )
 
     async def ban_member(
-        self,
-        user_id: Union[int, str],
-        until_date: datetime = utils.zero_datetime()
+        self, user_id: Union[int, str], until_date: datetime = utils.zero_datetime()
     ) -> Union["types.Message", bool]:
         """Bound method *ban_member* of :obj:`~pyrogram.types.Chat`.
 
@@ -1515,12 +1513,6 @@ class Chat(Object):
             .. code-block:: python
 
                 await chat.ban_member(123456789)
-
-        .. note::
-
-            In regular groups (non-supergroups), this method will only work if the "All Members Are Admins" setting is
-            off in the target group. Otherwise members may only be removed by the group's creator or by the member
-            that added them.
 
         Parameters:
             user_id (``int`` | ``str``):
@@ -1540,9 +1532,7 @@ class Chat(Object):
             RPCError: In case of a Telegram RPC error.
         """
         return await self._client.ban_chat_member(
-            chat_id=self.id,
-            user_id=user_id,
-            until_date=until_date
+            chat_id=self.id, user_id=user_id, until_date=until_date
         )
 
     async def unban_member(
