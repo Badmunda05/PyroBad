@@ -749,7 +749,7 @@ def pyrogram_api():
             Invoice
             LinkPreviewOptions
             GiftCollection
-            GiftCode
+            PremiumGiftCode
             GiftPurchaseLimit
             GiftResaleParameters
             GiftResalePrice

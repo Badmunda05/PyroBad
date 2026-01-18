@@ -50,7 +50,7 @@ from .game import Game
 from .general_forum_topic_hidden import GeneralForumTopicHidden
 from .general_forum_topic_unhidden import GeneralForumTopicUnhidden
 from .gift_collection import GiftCollection
-from .gift_code import GiftCode
+from .premium_gift_code import PremiumGiftCode
 from .gift_purchase_limit import GiftPurchaseLimit
 from .gift_resale_parameters import GiftResaleParameters
 from .gift_resale_price import GiftResalePrice, GiftResalePriceStar, GiftResalePriceTon
@@ -171,7 +171,7 @@ __all__ = [
     "GeneralForumTopicHidden",
     "GeneralForumTopicUnhidden",
     "GiftCollection",
-    "GiftCode",
+    "PremiumGiftCode",
     "GiftPurchaseLimit",
     "GiftResaleParameters",
     "GiftResalePrice",
