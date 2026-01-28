@@ -23,6 +23,16 @@ from pyrogram import raw, types, utils
 
 
 class GetMessages:
+# Invalid arguments (chat and string message_id provided)
+    @overload
+    async def get_messages(
+        self: "pyrogram.Client",
+        chat_id: Union[int, str],
+        message_ids: str,
+        reply: None = None,
+        pinned: None = None,
+        replies: int = 1,
+    ) -> None: ...
     # Invalid arguments (only chat provided)
     @overload
     async def get_messages(
@@ -31,6 +41,16 @@ class GetMessages:
         message_ids: None = None,
         reply: None = None,
         pinned: None = None,
+        replies: int = 1,
+    ) -> None: ...
+# Invalid arguments (only pinned provided)
+    @overload
+    async def get_messages(
+        self: "pyrogram.Client",
+        chat_id: None = None,
+        message_ids: None = None,
+        reply: None = None,
+        pinned: bool = True,
         replies: int = 1,
     ) -> None: ...
     # Invalid arguments (nothing provided)
