@@ -33,6 +33,16 @@ class GetMessages:
         pinned: None = None,
         replies: int = 1,
     ) -> None: ...
+# Invalid arguments (only int|Iterable message_ids provided)
+    @overload
+    async def get_messages(
+        self: "pyrogram.Client",
+        chat_id: None = None,
+        message_ids: Union[int, Iterable[int]] = 0,
+        reply: None = None,
+        pinned: None = None,
+        replies: int = 1,
+    ) -> None: ...
     # Invalid arguments (only chat provided)
     @overload
     async def get_messages(
