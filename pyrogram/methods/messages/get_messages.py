@@ -23,31 +23,73 @@ from pyrogram import raw, types, utils
 
 
 class GetMessages:
+    # Invalid arguments (only chat provided)
     @overload
     async def get_messages(
         self: "pyrogram.Client",
-        chat_id: Optional[Union[int, str]] = None,
-        message_ids: Optional[Union[int, str]] = None,
-        reply: Optional[bool] = None,
-        pinned: Optional[bool] = None,
-        replies: int = 1
-    ) -> Optional["types.Message"]:...
+        chat_id: Union[int, str],
+        message_ids: None = None,
+        reply: None = None,
+        pinned: None = None,
+        replies: int = 1,
+    ) -> None: ...
+    # Invalid arguments (nothing provided)
     @overload
     async def get_messages(
         self: "pyrogram.Client",
-        chat_id: Optional[Union[int, str]] = None,
-        message_ids: Optional[Iterable[int]] = None,
+        chat_id: None = None,
+        message_ids: None = None,
+        reply: None = None,
+        pinned: None = None,
+        replies: int = 1,
+    ) -> None: ...
+    # One message
+    @overload
+    async def get_messages(
+        self: "pyrogram.Client",
+        chat_id: Union[int, str],
+        message_ids: Union[int, str],
         reply: Optional[bool] = None,
         pinned: Optional[bool] = None,
-        replies: int = 1
-    ) -> List["types.Message"]:...
+        replies: int = 1,
+    ) -> Optional["types.Message"]: ...
+    # One message with string
+    @overload
+    async def get_messages(
+        self: "pyrogram.Client",
+        chat_id: None = None,
+        message_ids: str = "",
+        reply: Optional[bool] = None,
+        pinned: Optional[bool] = None,
+        replies: int = 1,
+    ) -> Optional["types.Message"]: ...
+# Many messages
+    @overload
+    async def get_messages(
+        self: "pyrogram.Client",
+        chat_id: Union[int, str],
+        message_ids: Iterable[int],
+        reply: Optional[bool] = None,
+        pinned: Optional[bool] = None,
+        replies: int = 1,
+    ) -> List["types.Message"]: ...
+    # Pinned message
+    @overload
+    async def get_messages(
+        self: "pyrogram.Client",
+        chat_id: Union[int, str],
+        message_ids: None = None,
+        reply: Optional[bool] = None,
+        pinned: bool = False,
+        replies: int = 1,
+    ) -> Optional["types.Message"]: ...
     async def get_messages(
         self: "pyrogram.Client",
         chat_id: Optional[Union[int, str]] = None,
         message_ids: Optional[Union[int, Iterable[int], str]] = None,
         reply: Optional[bool] = None,
         pinned: Optional[bool] = None,
-        replies: int = 1
+        replies: int = 1,
     ) -> Union[Optional["types.Message"], List["types.Message"]]:
         """Get one or more messages from a chat by using message identifiers or link.
 
