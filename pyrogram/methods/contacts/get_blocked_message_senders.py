@@ -28,7 +28,7 @@ class GetBlockedMessageSenders:
         block_list: "enums.BlockList" = enums.BlockList.MAIN,
         offset: int = 0,
         limit: int = 0,
-    ) -> AsyncGenerator["types.Chat"]:
+    ) -> AsyncGenerator["types.Chat", None]:
         """Returns users and chats that were blocked by the current user.
 
         .. include:: /_includes/usable-by/users.rst
@@ -52,24 +52,30 @@ class GetBlockedMessageSenders:
                     print(chat)
         """
 
+        current = 0
         total = abs(limit) or (1 << 31) - 1
         limit = min(100, total)
 
-        r = await self.invoke(
-            raw.functions.contacts.GetBlocked(
-                offset=offset,
-                limit=limit,
-                my_stories_from=block_list == enums.BlockList.STORIES,
+        while True:
+            r = await self.invoke(
+                raw.functions.contacts.GetBlocked(
+                    offset=offset,
+                    limit=limit,
+                    my_stories_from=block_list == enums.BlockList.STORIES,
+                )
             )
-        )
 
-        users = {i.id: i for i in r.users}
-        chats = {i.id: i for i in r.chats}
+            if not r.blocked:
+                return
 
-        for peer in r.blocked:
-            if isinstance(peer.peer_id, raw.types.PeerUser):
-                yield types.User._parse(self, users[peer.peer_id.user_id])
-            elif isinstance(peer.peer_id, raw.types.PeerChat):
-                yield types.Chat._parse(self, chats[peer.peer_id.chat_id])
-            elif isinstance(peer.peer_id, raw.types.PeerChannel):
-                yield types.Chat._parse(self, chats[peer.peer_id.channel_id])
+            users = {i.id: i for i in r.users}
+            chats = {i.id: i for i in r.chats}
+
+            for peer in r.blocked:
+                yield types.Chat._parse_chat(self, users[peer.peer_id.user_id])
+
+                current += 1
+                if current >= total:
+                    return
+
+            offset += len(r.blocked)
