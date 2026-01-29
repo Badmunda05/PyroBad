@@ -28,7 +28,7 @@ class GetBlockedMessageSenders:
         block_list: enums.BlockList = enums.BlockList.MAIN,
         offset: int = 0,
         limit: int = 0,
-    ) -> AsyncGenerator["types.User", None]:
+    ) -> AsyncGenerator["types.User"]:
         """Returns users and chats that were blocked by the current user.
 
         .. include:: /_includes/usable-by/users.rst
@@ -65,7 +65,4 @@ class GetBlockedMessageSenders:
         chats = {i.id: i for i in r.chats}
 
         for peer in r.blocked:
-            if isinstance(peer, raw.types.PeerUser) and peer.user_id in users:
-                yield types.User._parse(self, users[peer.user_id])
-            elif isinstance(peer, raw.types.PeerChat) and peer.chat_id in chats:
-                yield types.Chat._parse(self, chats[peer.chat_id])
+            yield types.User._parse(self, users[peer.peer_id.user_id])
