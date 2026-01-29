@@ -16,24 +16,16 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from .add_contact import AddContact
-from .delete_contacts import DeleteContacts
-from .get_blocked_message_senders import GetBlockedMessageSenders
-from .get_contacts import GetContacts
-from .get_contacts_count import GetContactsCount
-from .import_contacts import ImportContacts
-from .search_contacts import SearchContacts
-from .set_contact_note import SetContactNote
+from enum import auto
+
+from .auto_name import AutoName
 
 
-class Contacts(
-    GetBlockedMessageSenders,
-    GetContacts,
-    DeleteContacts,
-    ImportContacts,
-    GetContactsCount,
-    AddContact,
-    SearchContacts,
-    SetContactNote,
-):
-    pass
+class BlockList(AutoName):
+    """Block list enumeration used in :obj:`~pyrogram.types.User`."""
+
+    MAIN = auto()
+    "The main block list that disallows writing messages to the current user, receiving their status and photo, viewing of stories, and some other actions"
+
+    STORIES = auto()
+    "The block list that disallows viewing of stories of the current user"

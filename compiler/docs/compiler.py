@@ -432,6 +432,7 @@ def pyrogram_api():
             add_contact
             delete_contacts
             import_contacts
+            get_blocked_message_senders
             get_contacts
             get_contacts_count
             search_contacts
@@ -1187,6 +1188,7 @@ def pyrogram_api():
     categories = dict(
         enums="""
         Enumerations
+            BlockList
             BusinessSchedule
             ChatAction
             ChatEventAction
