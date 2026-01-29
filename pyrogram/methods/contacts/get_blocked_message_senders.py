@@ -25,10 +25,10 @@ from pyrogram import enums, raw, types
 class GetBlockedMessageSenders:
     async def get_blocked_message_senders(
         self: "pyrogram.Client",
-        block_list: enums.BlockList = enums.BlockList.MAIN,
+        block_list: "enums.BlockList" = enums.BlockList.MAIN,
         offset: int = 0,
         limit: int = 0,
-    ) -> AsyncGenerator["types.User"]:
+    ) -> AsyncGenerator["types.Chat"]:
         """Returns users and chats that were blocked by the current user.
 
         .. include:: /_includes/usable-by/users.rst
@@ -38,26 +38,28 @@ class GetBlockedMessageSenders:
                 The block list from which to return users.
 
             offset (``int``, *optional*):
-                Number of users and chats to skip in the result; must be non-negative.
+                Number of users and chats to skip in the result, must be non-negative.
 
             limit (``int``, *optional*):
-                The maximum number of users and chats to return; up to 100.
+                The maximum number of users and chats to return.
 
         Returns:
-            AsyncGenerator of :obj:`~pyrogram.types.User`: An async generator that yields User objects.
+            AsyncGenerator of :obj:`~pyrogram.types.Chat`: An async generator that yields Chat objects.
 
         Example:
             .. code-block:: python
-                async for user in app.get_blocked_message_senders():
-                    print(user)
+                async for chat in app.get_blocked_message_senders():
+                    print(chat)
         """
+
+        total = abs(limit) or (1 << 31) - 1
+        limit = min(100, total)
+
         r = await self.invoke(
             raw.functions.contacts.GetBlocked(
                 offset=offset,
                 limit=limit,
-                my_stories_from=True
-                if block_list == enums.BlockList.STORIES
-                else False,
+                my_stories_from=block_list == enums.BlockList.STORIES,
             )
         )
 
@@ -65,4 +67,9 @@ class GetBlockedMessageSenders:
         chats = {i.id: i for i in r.chats}
 
         for peer in r.blocked:
-            yield types.User._parse(self, users[peer.peer_id.user_id])
+            if isinstance(peer.peer_id, raw.types.PeerUser):
+                yield types.User._parse(self, users[peer.peer_id.user_id])
+            elif isinstance(peer.peer_id, raw.types.PeerChat):
+                yield types.Chat._parse(self, chats[peer.peer_id.chat_id])
+            elif isinstance(peer.peer_id, raw.types.PeerChannel):
+                yield types.Chat._parse(self, chats[peer.peer_id.channel_id])
