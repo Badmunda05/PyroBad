@@ -32,8 +32,8 @@ class GetMessages:
         reply: None = None,
         pinned: None = None,
         replies: int = 1,
-    ) -> None: ...
-    # Invalid arguments (only int|Iterable message_ids provided)
+    ) -> Optional["types.Message"]: ...
+    # Invalid arguments (only message_ids with type int or Iterable of int provided)
     @overload
     async def get_messages(
         self: "pyrogram.Client",
