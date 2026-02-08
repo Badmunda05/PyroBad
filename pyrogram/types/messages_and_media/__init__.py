@@ -34,6 +34,7 @@ from .checklist_tasks_done import ChecklistTasksDone
 from .checklist import Checklist
 from .contact_registered import ContactRegistered
 from .contact import Contact
+from .craft_gift_result import CraftGiftResult, CraftGiftResultSuccess, CraftGiftResultFail
 from .dice import Dice
 from .direct_message_price_changed import DirectMessagePriceChanged
 from .direct_messages_topic import DirectMessagesTopic
@@ -123,6 +124,7 @@ from .upgraded_gift_attribute_id_backdrop import UpgradedGiftAttributeIdBackdrop
 from .upgraded_gift_attribute_id_model import UpgradedGiftAttributeIdModel
 from .upgraded_gift_attribute_id_symbol import UpgradedGiftAttributeIdSymbol
 from .upgraded_gift_attribute_id import UpgradedGiftAttributeId
+from .upgraded_gift_attribute_rarity import UpgradedGiftAttributeRarity, UpgradedGiftAttributeRarityPerMille, UpgradedGiftAttributeRarityUncommon, UpgradedGiftAttributeRarityRare, UpgradedGiftAttributeRarityEpic, UpgradedGiftAttributeRarityLegendary
 from .upgraded_gift_original_details import UpgradedGiftOriginalDetails
 from .upgraded_gift_purchase_offer import UpgradedGiftPurchaseOffer, UpgradedGiftPurchaseOfferRejected
 from .upgraded_gift_value_info import UpgradedGiftValueInfo
@@ -155,6 +157,9 @@ __all__ = [
     "Checklist",
     "ContactRegistered",
     "Contact",
+    "CraftGiftResult",
+    "CraftGiftResultSuccess",
+    "CraftGiftResultFail",
     "Dice",
     "DirectMessagePriceChanged",
     "DirectMessagesTopic",
@@ -248,6 +253,12 @@ __all__ = [
     "UpgradedGiftAttributeIdModel",
     "UpgradedGiftAttributeIdSymbol",
     "UpgradedGiftAttributeId",
+    "UpgradedGiftAttributeRarity",
+    "UpgradedGiftAttributeRarityPerMille",
+    "UpgradedGiftAttributeRarityUncommon",
+    "UpgradedGiftAttributeRarityRare",
+    "UpgradedGiftAttributeRarityEpic",
+    "UpgradedGiftAttributeRarityLegendary",
     "UpgradedGiftOriginalDetails",
     "UpgradedGiftPurchaseOffer",
     "UpgradedGiftPurchaseOfferRejected",

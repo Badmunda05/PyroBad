@@ -17,6 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from .business_schedule import BusinessSchedule
+from .button_style import ButtonStyle
 from .chat_action import ChatAction
 from .chat_event_action import ChatEventAction
 from .chat_join_type import ChatJoinType
@@ -57,6 +58,7 @@ from .user_status import UserStatus
 
 __all__ = [
     'BusinessSchedule',
+    'ButtonStyle',
     'ChatAction',
     'ChatEventAction',
     'ChatJoinType',

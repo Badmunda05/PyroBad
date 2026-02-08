@@ -21,26 +21,17 @@ from enum import auto
 from .auto_name import AutoName
 
 
-class UpgradedGiftOrigin(AutoName):
-    """Origin from which the upgraded gift was obtained. Used in :obj:`~pyrogram.types.Gift`."""
+class ButtonStyle(AutoName):
+    """Button style type enumeration used in :obj:`~pyrogram.types.KeyboardButton` and :obj:`~pyrogram.types.InlineKeyboardButton`."""
 
-    UPGRADE = auto()
-    "The gift was obtained by upgrading of a previously received gift."
+    DEFAULT = auto()
+    "The button has default style"
 
-    TRANSFER = auto()
-    "The gift was transferred from another owner."
+    PRIMARY = auto()
+    "The button has dark blue color"
 
-    RESALE = auto()
-    "The gift was bought from another user."
+    DANGER = auto()
+    "The button has red color"
 
-    BLOCKCHAIN = auto()
-    "The gift was assigned from blockchain and isn't owned by the current user. The gift can't be transferred, resold or withdrawn to blockchain."
-
-    GIFTED_UPGRADE = auto()
-    "The sender or receiver of the message has paid for upgraid of the gift, which has been completed."
-
-    OFFER = auto()
-    "The gift was bought through an offer."
-
-    CRAFT = auto()
-    "The gift was crafted from other gifts."
+    SUCCESS = auto()
+    "The button has green color"
