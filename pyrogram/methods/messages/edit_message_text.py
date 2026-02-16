@@ -122,6 +122,16 @@ class EditMessageText:
                 id=message_id,
                 no_webpage=getattr(link_preview_options, "is_disabled", None),
                 invert_media=getattr(link_preview_options, "show_above_text", None),
+                media=(
+                    raw.types.InputMediaWebPage(
+                        url=link_preview_options.url,
+                        force_large_media=link_preview_options.prefer_large_media,
+                        force_small_media=link_preview_options.prefer_small_media,
+                        optional=True
+                    )
+                    if link_preview_options and getattr(link_preview_options, "url", None)
+                    else None
+                ),
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
                 reply_markup=await reply_markup.write(self) if reply_markup else None,
                 **await utils.parse_text_entities(self, text, parse_mode, entities)
