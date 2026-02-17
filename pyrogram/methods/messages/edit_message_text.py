@@ -129,7 +129,7 @@ class EditMessageText:
                         force_small_media=link_preview_options.prefer_small_media,
                         optional=True
                     )
-                    if link_preview_options and getattr(link_preview_options, "url", None)
+                    if link_preview_options and link_preview_options.url
                     else None
                 ),
                 schedule_date=utils.datetime_to_timestamp(schedule_date),
