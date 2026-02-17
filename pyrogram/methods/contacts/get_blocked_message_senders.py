@@ -19,7 +19,7 @@
 from typing import AsyncGenerator
 
 import pyrogram
-from pyrogram import enums, raw, types
+from pyrogram import enums, raw, types, utils
 
 
 class GetBlockedMessageSenders:
@@ -71,11 +71,14 @@ class GetBlockedMessageSenders:
             users = {i.id: i for i in r.users}
             chats = {i.id: i for i in r.chats}
 
-            for peer in r.blocked:
-                yield types.Chat._parse_chat(self, users[peer.peer_id.user_id])
+            offset += len(r.blocked)
+
+            for blocked_user in r.blocked:
+                peer_id = utils.get_raw_peer_id(blocked_user.peer_id)
+
+                yield types.Chat._parse_chat(self, users.get(peer_id) or chats.get(peer_id))
 
                 current += 1
+
                 if current >= total:
                     return
-
-            offset += len(r.blocked)
