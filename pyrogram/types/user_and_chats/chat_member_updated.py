@@ -59,10 +59,10 @@ class ChatMemberUpdated(Object, Update):
         chat: "types.Chat",
         from_user: "types.User",
         date: datetime,
-        old_chat_member: Optional["types.ChatMember"],
-        new_chat_member: Optional["types.ChatMember"],
-        invite_link: "types.ChatInviteLink" = None,
-        via_join_request: bool = None
+        old_chat_member: Optional["types.ChatMember"] = None,
+        new_chat_member: Optional["types.ChatMember"] = None,
+        invite_link: Optional["types.ChatInviteLink"] = None,
+        via_join_request: Optional[bool] = None
     ):
         super().__init__(client)
 
