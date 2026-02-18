@@ -20,10 +20,13 @@ from collections.abc import Sequence
 from typing import Callable, Optional
 
 import pyrogram
+from pyrogram.filters import filters
+
 
 class OnError:
     def on_error(
-        self: Optional["OnError"] = None,
+        self: Optional["OnError" | Filter] = None,
+        filters: Optional[Filter] = None,
         exceptions: Exception | tuple[Exception, ...] | None = None,
         group: int = 0,
     ) -> Callable:
@@ -35,6 +38,10 @@ class OnError:
         .. include:: /_includes/usable-by/users-bots.rst
 
         Parameters:
+            filters (:obj:`~pyrogram.filters`, *optional*):
+                Pass one or more filters to allow only a subset of messages to be passed
+                in your function.
+
             exceptions (``Exception`` |  ``Sequence[Exception]``, *optional*):
                 An exception type or a sequence of exception types that this handler should handle.
                 If None, the handler will catch any exception that is a subclass of ``Exception``.
@@ -46,13 +53,14 @@ class OnError:
 
         def decorator(func: Callable) -> Callable:
             if isinstance(self, pyrogram.Client):
-                self.add_handler(pyrogram.handlers.ErrorHandler(func, exceptions), group)
+                self.add_handler(pyrogram.handlers.ErrorHandler(func, filters, exceptions), group)
             else:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
 
-                func.handlers.append((pyrogram.handlers.ErrorHandler(func, exceptions), group))
+                func.handlers.append((pyrogram.handlers.ErrorHandler(func, filters, exceptions), group))
 
             return func
 
         return decorator
+        
