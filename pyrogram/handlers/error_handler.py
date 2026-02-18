@@ -20,6 +20,7 @@ from collections.abc import Sequence
 from typing import Callable
 
 import pyrogram
+from pyrogram.filters import Filter
 from pyrogram.types import Update
 
 from .handler import Handler
@@ -37,6 +38,10 @@ class ErrorHandler(Handler):
         callback (``Callable``):
             A function that will be called whenever an unexpected error is raised.
             It takes the following positional arguments: *(exception, handler, client, *args)*.
+
+        filters (:obj:`Filter`, *optional*):
+            Pass one or more filters to allow only a subset of updates to be passed
+            in your callback function.
 
         exceptions (``Exception`` | ``Sequence[Exception]``, *optional*):
             An exception type or a sequence of exception types that this handler should handle.
@@ -67,14 +72,17 @@ class ErrorHandler(Handler):
 
     """
 
-    def __init__(self, callback: Callable, exceptions: Exception | Sequence[Exception] | None = None):
-        super().__init__(callback)
+    def __init__(
+        self,
+        callback: Callable,
+        filters: Filter | None = None,
+        exceptions: Exception | Sequence[Exception] | None = None
+    ):
+        super().__init__(callback, filters)
 
         exceptions = exceptions or (Exception,)
         if not isinstance(exceptions, tuple):
             exceptions = (exceptions,)
 
         self.exceptions = exceptions
-
-    async def check(self, client: "pyrogram.Client", update: Update):
-        return True
+        
