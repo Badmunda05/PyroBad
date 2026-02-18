@@ -50,7 +50,7 @@ class ErrorHandler(Handler):
         exception (``Exception``):
             The Exception instance that was raised.
 
-        update (``Update``):
+        update (:obj:`~pyrogram.raw.base.Update`):
             The received update, which can be one of the many single Updates listed in the
             :obj:`~pyrogram.raw.base.Update` base type.
 
