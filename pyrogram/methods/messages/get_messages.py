@@ -113,6 +113,17 @@ class GetMessages:
         pinned: bool = False,
         replies: int = 1,
     ) -> Optional["types.Message"]: ...
+    # Pinned message with provided message ids
+    # - message ids will not affect result
+    @overload
+    async def get_messages(
+        self: "pyrogram.Client",
+        chat_id: Union[int, str],
+        message_ids: Optional[Union[int, Iterable[int], str]] = None,
+        reply: Optional[bool] = None,
+        pinned: bool = False,
+        replies: int = 1,
+    ) -> Optional["types.Message"]: ...
     async def get_messages(
         self: "pyrogram.Client",
         chat_id: Optional[Union[int, str]] = None,
