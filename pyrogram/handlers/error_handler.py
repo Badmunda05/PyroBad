@@ -19,16 +19,19 @@
 from collections.abc import Sequence
 from typing import Callable
 
+import pyrogram
+from pyrogram.types import Update
 
-class ErrorHandler:
+from .handler import Handler
+
+
+class ErrorHandler(Handler):
     """The Error handler class. Used to handle unexpected errors.
 
     It is intended to be used with :meth:`~pyrogram.Client.add_handler`.
 
     For a more convenient way to register this handler, see the
     :meth:`~pyrogram.Client.on_error` decorator.
-
-    Note: This class does not subclasses :class:`~pyrogram.handlers.handler.Handler`.
 
     Parameters:
         callback (``Callable``):
@@ -62,3 +65,6 @@ class ErrorHandler:
             exceptions = (exceptions,)
 
         self.exceptions = exceptions
+
+    async def check(self, client: "pyrogram.Client", update: Update):
+        return True
