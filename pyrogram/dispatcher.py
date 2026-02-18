@@ -297,20 +297,27 @@ class Dispatcher:
 
             log.info("Stopped %s HandlerTasks", self.client.workers)
 
-    def add_handler(self, handler: Union[Handler, ErrorHandler], group: int):
+    def add_handler(self, handler: Handler, group: int):
         async def fn():
             for lock in self.locks_list:
                 await lock.acquire()
 
             try:
                 if isinstance(handler, ErrorHandler):
-                    self.error_handlers_groups.setdefault(group, []).append(handler)
-                    self.error_handlers_groups = OrderedDict(sorted(self.error_handlers_groups.items(), key=itemgetter(0)))
+                    if group not in self.error_handlers_groups:
+                        self.error_handlers_groups[group] = []
+                        self.error_handlers_groups = OrderedDict(
+                            sorted(self.error_handlers_groups.items(), key=itemgetter(0))
+                        )
+
+                    self.error_handlers_groups[group].append(handler)
                 else:
                     if group not in self.groups:
                         self.groups[group] = []
-                        self.groups = OrderedDict(sorted(self.groups.items()))
-    
+                        self.groups = OrderedDict(
+                            sorted(self.groups.items(), key=itemgetter(0))
+                        )
+
                     self.groups[group].append(handler)
             finally:
                 for lock in self.locks_list:
@@ -327,19 +334,23 @@ class Dispatcher:
                 if isinstance(handler, ErrorHandler):
                     if group not in self.error_handlers_groups:
                         raise ValueError(
-                            f"Group {group} does not exist in error handlers; "
-                            "Error handler was not removed"
+                            f"Group {group} does not exist. Error handler was not removed."
                         )
-
+    
                     self.error_handlers_groups[group].remove(handler)
-
+    
                     if not self.error_handlers_groups[group]:
                         del self.error_handlers_groups[group]
                 else:
                     if group not in self.groups:
-                        raise ValueError(f"Group {group} does not exist. Handler was not removed.")
+                        raise ValueError(
+                            f"Group {group} does not exist. Update handler was not removed."
+                        )
     
                     self.groups[group].remove(handler)
+    
+                    if not self.groups[group]:
+                        del self.groups[group]
             finally:
                 for lock in self.locks_list:
                     lock.release()
@@ -410,7 +421,9 @@ class Dispatcher:
             except Exception as e:
                 log.exception(e)
 
-    async def handle_update_handler_exception(self, exc: Exception, update_handler: Handler, args: Tuple[Any, ...]) -> None:
+    async def handle_update_handler_exception(
+        self, exc: Exception, update_handler: Handler, args: Tuple[Any, ...]
+    ) -> None:
         handled = False
         try:
             for group in self.error_handlers_groups.values():
@@ -447,4 +460,5 @@ class Dispatcher:
                 log.error(
                     f"Unexpected exception raised in {type(update_handler).__name__}:",
                     exc_info=(type(exc), exc, exc.__traceback__)
-                )
+    )
+                
