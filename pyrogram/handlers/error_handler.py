@@ -17,7 +17,7 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from collections.abc import Sequence
-from typing import Callable
+from typing import Callable, Optional
 
 import pyrogram
 from pyrogram.filters import Filter
@@ -78,14 +78,13 @@ class ErrorHandler(Handler):
     def __init__(
         self,
         callback: Callable,
-        filters: Filter | None = None,
-        exceptions: Exception | Sequence[Exception] | None = None
+        filters: Optional[Filter] = None,
+        exceptions: Optional[type[Exception] | Sequence[type[Exception]]] = None
     ):
         super().__init__(callback, filters)
 
-        exceptions = exceptions or (Exception,)
-        if not isinstance(exceptions, tuple):
-            exceptions = (exceptions,)
-
-        self.exceptions = exceptions
-        
+        self.exceptions: tuple[Exception] = (
+            tuple(exceptions)
+            if isinstance(exceptions, Sequence)
+            else exceptions or (Exception,)
+        )
