@@ -39,13 +39,13 @@ class ErrorHandler(Handler):
             A function that will be called whenever an unexpected error is raised.
             It takes the following positional arguments: *(exception, handler, client, *args)*.
 
-        filters (:obj:`Filter`, *optional*):
-            Pass one or more filters to allow only a subset of updates to be passed
-            in your callback function.
-
         exceptions (``Exception`` | List of ``Exception``, *optional*):
             An exception type or a sequence of exception types that this handler should handle.
             If None, the handler will catch any exception that is a subclass of ``Exception``.
+
+        filters (:obj:`Filter`, *optional*):
+            Pass one or more filters to allow only a subset of updates to be passed
+            in your callback function.
 
     Other parameters passed to the callback:
         client (:obj:`~pyrogram.Client`):
@@ -77,8 +77,8 @@ class ErrorHandler(Handler):
     def __init__(
         self,
         callback: Callable,
-        filters: Optional[Filter] = None,
         exceptions: Optional[Union[Exception, Sequence[Exception]]] = None,
+        filters: Optional[Filter] = None,
     ):
         super().__init__(callback, filters)
 
