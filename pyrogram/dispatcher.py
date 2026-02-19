@@ -414,7 +414,7 @@ class Dispatcher:
                                 continue
                             except Exception as exc:
                                 await self.handle_update_handler_exception(
-                                    exc, update, users, chats
+                                    exc, handler, update, users, chats
                                 )
 
                             break
@@ -426,6 +426,7 @@ class Dispatcher:
     async def handle_update_handler_exception(
         self,
         exc: Exception,
+        update_handler: Handler,
         update: pyrogram.raw.base.Update,
         users: dict[int, pyrogram.raw.base.User],
         chats: dict[int, pyrogram.raw.base.Chat]
@@ -440,12 +441,12 @@ class Dispatcher:
                     try:
                         if inspect.iscoroutinefunction(handler.callback):
                             await handler.callback(
-                                self.client, exc, update, users, chats
+                                self.client, exc, update_handler, update, users, chats
                             )
                         else:
                             await self.client.loop.run_in_executor(
                                 self.client.executor, handler.callback,
-                                self.client, exc, update, users, chats
+                                self.client, exc, update_handler, update, users, chats
                             )
                     except pyrogram.StopPropagation:
                         handled = True
@@ -466,5 +467,4 @@ class Dispatcher:
                 log.error(
                     f"Unexpected exception raised in {type(update_handler).__name__}:",
                     exc_info=(type(exc), exc, exc.__traceback__)
-                        )
-            
+                   )
