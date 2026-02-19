@@ -43,10 +43,9 @@ class ErrorHandler(Handler):
             Pass one or more filters to allow only a subset of updates to be passed
             in your callback function.
 
-        exceptions (``Exception`` | ``Sequence[Exception]``, *optional*):
+        exceptions (``Exception`` | List of ``Exception``, *optional*):
             An exception type or a sequence of exception types that this handler should handle.
             If None, the handler will catch any exception that is a subclass of ``Exception``.
-            Defaults to ``None``.
 
     Other parameters passed to the callback:
         client (:obj:`~pyrogram.Client`):
@@ -79,7 +78,7 @@ class ErrorHandler(Handler):
         self,
         callback: Callable,
         filters: Optional[Filter] = None,
-        exceptions: Optional[type[Exception] | Sequence[type[Exception]]] = None
+        exceptions: Optional[Union[Exception, Sequence[Exception]]] = None,
     ):
         super().__init__(callback, filters)
 
