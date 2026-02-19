@@ -37,7 +37,7 @@ class ErrorHandler(Handler):
     Parameters:
         callback (``Callable``):
             A function that will be called whenever an unexpected error is raised.
-            It takes the following positional arguments: *(exception, handler, client, *args)*.
+            It takes the following positional arguments: *(client, exception, handler, update, users, chats)*.
 
         filters (:obj:`Filter`, *optional*):
             Pass one or more filters to allow only a subset of updates to be passed
