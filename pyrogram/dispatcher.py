@@ -80,7 +80,6 @@ class Dispatcher:
 
         self.updates_queue = asyncio.Queue()
         self.groups = OrderedDict()
-        self.error_handlers_groups = OrderedDict()
 
         async def message_parser(update, users, chats):
             connection_id = getattr(update, "connection_id", None)
@@ -303,54 +302,34 @@ class Dispatcher:
                 await lock.acquire()
 
             try:
-                if isinstance(handler, ErrorHandler):
-                    if group not in self.error_handlers_groups:
-                        self.error_handlers_groups[group] = []
-                        self.error_handlers_groups = OrderedDict(
-                            sorted(self.error_handlers_groups.items(), key=itemgetter(0))
-                        )
+                if group not in self.groups:
+                    self.groups[group] = []
+                    self.groups = OrderedDict(
+                        sorted(self.groups.items(), key=itemgetter(0))
+                    )
 
-                    self.error_handlers_groups[group].append(handler)
-                else:
-                    if group not in self.groups:
-                        self.groups[group] = []
-                        self.groups = OrderedDict(
-                            sorted(self.groups.items(), key=itemgetter(0))
-                        )
-
-                    self.groups[group].append(handler)
+                self.groups[group].append(handler)
             finally:
                 for lock in self.locks_list:
                     lock.release()
 
         self.client.loop.create_task(fn())
 
-    def remove_handler(self, handler, group: int):
+    def remove_handler(self, handler: Handler, group: int):
         async def fn():
             for lock in self.locks_list:
                 await lock.acquire()
 
             try:
-                if isinstance(handler, ErrorHandler):
-                    if group not in self.error_handlers_groups:
-                        raise ValueError(
-                            f"Group {group} does not exist. Error handler was not removed."
-                        )
-    
-                    self.error_handlers_groups[group].remove(handler)
-    
-                    if not self.error_handlers_groups[group]:
-                        del self.error_handlers_groups[group]
-                else:
-                    if group not in self.groups:
-                        raise ValueError(
-                            f"Group {group} does not exist. Update handler was not removed."
-                        )
-    
-                    self.groups[group].remove(handler)
-    
-                    if not self.groups[group]:
-                        del self.groups[group]
+                if group not in self.groups:
+                    raise ValueError(
+                        f"Group {group} does not exist. Handler was not removed."
+                    )
+
+                self.groups[group].remove(handler)
+
+                if not self.groups[group]:
+                    del self.groups[group]
             finally:
                 for lock in self.locks_list:
                     lock.release()
@@ -377,6 +356,9 @@ class Dispatcher:
                 async with lock:
                     for group in self.groups.values():
                         for handler in group:
+                            if isinstance(handler, ErrorHandler):
+                                continue
+
                             args = None
 
                             if isinstance(handler, handler_type):
@@ -433,8 +415,11 @@ class Dispatcher:
     ) -> None:
         handled = False
         try:
-            for group in self.error_handlers_groups.values():
+            for group in self.groups.values():
                 for handler in group:
+                    if not isinstance(handler, ErrorHandler):
+                        continue
+
                     if not isinstance(exc, handler.exceptions):
                         continue
 
@@ -467,4 +452,4 @@ class Dispatcher:
                 log.error(
                     f"Unexpected exception raised in {type(update_handler).__name__}:",
                     exc_info=(type(exc), exc, exc.__traceback__)
-                   )
+                )
