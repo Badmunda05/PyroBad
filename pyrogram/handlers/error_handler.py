@@ -16,8 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import Sequence
-from typing import Callable, Optional, Union
+from typing import Callable, Optional, Sequence, Union
 
 from pyrogram.filters import Filter
 
@@ -79,7 +78,9 @@ class ErrorHandler(Handler):
     ):
         super().__init__(callback, filters)
 
-        exceptions = exceptions or Exception
-
-        is_iterable = not isinstance(exceptions, Exception)
-        self.exceptions = list(exceptions) if is_iterable else [exceptions]
+        if exceptions is None:
+            self.exceptions = (Exception,)
+        elif isinstance(exceptions, Sequence):
+            self.exceptions = tuple(exceptions)
+        else:
+            self.exceptions = (exceptions,)
