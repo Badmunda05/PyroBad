@@ -153,7 +153,7 @@ class GetMessages:
                 the previous message you replied to using this message.
 
             pinned (``bool``, *optional*):
-                If True, you will get pinned message.
+                If True, you will get last pinned message.
 
             replies (``int``, *optional*):
                 The number of subsequent replies to get for each message.
