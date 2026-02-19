@@ -16,7 +16,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import Sequence
 from typing import Callable, Optional, Sequence, Union
 
 import pyrogram
@@ -38,13 +37,13 @@ class OnError:
         .. include:: /_includes/usable-by/users-bots.rst
 
         Parameters:
-            filters (:obj:`~pyrogram.filters`, *optional*):
-                Pass one or more filters to allow only a subset of messages to be passed
-                in your function.
-
             exceptions (``Exception`` | List of ``Exception``, *optional*):
                 An exception type or a sequence of exception types that this handler should handle.
                 If None, the handler will catch any exception that is a subclass of ``Exception``.
+
+            filters (:obj:`~pyrogram.filters`, *optional*):
+                Pass one or more filters to allow only a subset of messages to be passed
+                in your function.
 
             group (``int``, *optional*):
                 The group identifier, defaults to 0.
