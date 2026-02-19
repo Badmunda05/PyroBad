@@ -17,9 +17,10 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
+from collections import OrderedDict
 import inspect
 import logging
-from collections import OrderedDict
+from typing import Dict
 
 import pyrogram
 from pyrogram import utils
@@ -407,8 +408,8 @@ class Dispatcher:
         exc: Exception,
         update_handler: Handler,
         update: pyrogram.raw.base.Update,
-        users: dict[int, pyrogram.raw.base.User],
-        chats: dict[int, pyrogram.raw.base.Chat]
+        users: Dict[int, pyrogram.raw.base.User],
+        chats: Dict[int, pyrogram.raw.base.Chat]
     ) -> None:
         handled = False
         try:
