@@ -17,11 +17,9 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from collections.abc import Sequence
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
 
-import pyrogram
 from pyrogram.filters import Filter
-from pyrogram.types import Update
 
 from .handler import Handler
 
@@ -71,19 +69,17 @@ class ErrorHandler(Handler):
             :obj:`~pyrogram.raw.types.Channel` mentioned in the update.
             You can access extra info about the chat (such as *title*, *participants_count*, etc...)
             by using the IDs you find in the *update* argument (e.g.: *chats[1701277281]*).
-
     """
 
     def __init__(
         self,
         callback: Callable,
         filters: Optional[Filter] = None,
-        exceptions: Optional[type[Exception] | Sequence[type[Exception]]] = None
+        exceptions: Optional[Union[Exception, Sequence[Exception]]] = None,
     ):
         super().__init__(callback, filters)
 
-        self.exceptions: tuple[Exception] = (
-            tuple(exceptions)
-            if isinstance(exceptions, Sequence)
-            else exceptions or (Exception,)
-        )
+        exceptions = exceptions or Exception
+
+        is_iterable = not isinstance(exceptions, Exception)
+        self.exceptions = list(exceptions) if is_iterable else [exceptions]
