@@ -407,7 +407,7 @@ class Dispatcher:
         self,
         exc: Exception,
         update_handler: Handler,
-        update: pyrogram.raw.base.Update,
+        update: "pyrogram.raw.base.Update",
         users: Dict[int, "pyrogram.raw.base.User"],
         chats: Dict[int, "pyrogram.raw.base.Chat"]
     ) -> None:
