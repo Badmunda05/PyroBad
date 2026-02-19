@@ -16,8 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections.abc import Sequence
-from typing import Callable, Optional
+from typing import Callable, Optional, Sequence, Union
 
 import pyrogram
 from pyrogram.filters import Filter
@@ -25,9 +24,9 @@ from pyrogram.filters import Filter
 
 class OnError:
     def on_error(
-        self: Optional["OnError" | Filter] = None,
+        self: Optional[Union["OnError", Filter]] = None,
+        exceptions: Optional[Union[Exception, Sequence[Exception]]] = None,
         filters: Optional[Filter] = None,
-        exceptions: Exception | tuple[Exception, ...] | None = None,
         group: int = 0,
     ) -> Callable:
         """Decorator for handling unexpected errors.
@@ -38,14 +37,13 @@ class OnError:
         .. include:: /_includes/usable-by/users-bots.rst
 
         Parameters:
+            exceptions (``Exception`` | List of ``Exception``, *optional*):
+                An exception type or a sequence of exception types that this handler should handle.
+                If None, the handler will catch any exception that is a subclass of ``Exception``.
+
             filters (:obj:`~pyrogram.filters`, *optional*):
                 Pass one or more filters to allow only a subset of messages to be passed
                 in your function.
-
-            exceptions (``Exception`` |  ``Sequence[Exception]``, *optional*):
-                An exception type or a sequence of exception types that this handler should handle.
-                If None, the handler will catch any exception that is a subclass of ``Exception``.
-                Defaults to ``None``.
 
             group (``int``, *optional*):
                 The group identifier, defaults to 0.
@@ -58,9 +56,10 @@ class OnError:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
 
-                func.handlers.append((pyrogram.handlers.ErrorHandler(func, filters, exceptions), group))
+                func.handlers.append(
+                    (pyrogram.handlers.ErrorHandler(func, filters, exceptions), group)
+                )
 
             return func
 
         return decorator
-        
