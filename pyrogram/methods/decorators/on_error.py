@@ -20,7 +20,7 @@ from collections.abc import Sequence
 from typing import Callable, Optional
 
 import pyrogram
-from pyrogram.filters import filters
+from pyrogram.filters import Filter
 
 
 class OnError:
