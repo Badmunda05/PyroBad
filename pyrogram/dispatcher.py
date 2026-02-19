@@ -20,7 +20,6 @@ import asyncio
 import inspect
 import logging
 from collections import OrderedDict
-from operator import itemgetter
 
 import pyrogram
 from pyrogram import utils
@@ -304,9 +303,7 @@ class Dispatcher:
             try:
                 if group not in self.groups:
                     self.groups[group] = []
-                    self.groups = OrderedDict(
-                        sorted(self.groups.items(), key=itemgetter(0))
-                    )
+                    self.groups = OrderedDict(sorted(self.groups.items()))
 
                 self.groups[group].append(handler)
             finally:
