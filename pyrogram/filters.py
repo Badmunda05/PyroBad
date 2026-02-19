@@ -371,7 +371,7 @@ giveaway_winners = create(giveaway_winners_filter)
 
 # region gift_code_filter
 async def gift_code_filter(_, __, m: Message):
-    return bool(m.gift_code)
+    return bool(m.premium_gift_code)
 
 
 gift_code = create(gift_code_filter)
@@ -944,9 +944,48 @@ linked_channel = create(linked_channel_filter)
 
 # endregion
 
+# region gift_offer_filter
+async def gift_offer_filter(_, __, m: Message):
+    return bool(
+        m.upgraded_gift_purchase_offer and m.upgraded_gift_purchase_offer.state == enums.GiftPurchaseOfferState.PENDING
+    )
+
+
+gift_offer = create(gift_offer_filter)
+"""Filter new gift offers."""
+
+
+# endregion
+
+# region gift_offer_accepted_filter
+async def gift_offer_accepted_filter(_, __, m: Message):
+    return bool(
+        m.upgraded_gift_purchase_offer and m.upgraded_gift_purchase_offer.state == enums.GiftPurchaseOfferState.ACCEPTED
+    )
+
+
+gift_offer_accepted = create(gift_offer_accepted_filter)
+"""Filter accepted gift offers."""
+
+
+# endregion
+
+# region gift_offer_rejected_filter
+async def gift_offer_rejected_filter(_, __, m: Message):
+    return bool(
+        (m.upgraded_gift_purchase_offer and m.upgraded_gift_purchase_offer.state == enums.GiftPurchaseOfferState.REJECTED)
+        or m.upgraded_gift_purchase_offer_rejected
+    )
+
+
+gift_offer_rejected = create(gift_offer_rejected_filter)
+"""Filter rejected gift offers."""
+
+
+# endregion
 
 # region command_filter
-def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = "/", case_sensitive: bool = False):
+def command(commands: Union[str, List[str]], prefixes: Optional[Union[str, List[str]]] = "/", case_sensitive: bool = False):
     """Filter commands, i.e.: text messages starting with "/" or any other custom prefix.
 
     Parameters:

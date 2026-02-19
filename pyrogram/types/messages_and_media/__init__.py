@@ -17,12 +17,17 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from .animation import Animation
+from .auction_bid import AuctionBid
+from .auction_round import AuctionRound
+from .auction_state import AuctionState, AuctionStateActive, AuctionStateFinished
 from .audio import Audio
 from .available_effect import AvailableEffect
 from .boosts_status import BoostsStatus
 from .business_message import BusinessMessage
 from .chat_background import ChatBackground
 from .chat_boost import ChatBoost
+from .chat_owner_changed import ChatOwnerChanged
+from .chat_owner_left import ChatOwnerLeft
 from .chat_theme import ChatTheme
 from .checked_gift_code import CheckedGiftCode
 from .checklist_task import ChecklistTask
@@ -31,6 +36,7 @@ from .checklist_tasks_done import ChecklistTasksDone
 from .checklist import Checklist
 from .contact_registered import ContactRegistered
 from .contact import Contact
+from .craft_gift_result import CraftGiftResult, CraftGiftResultSuccess, CraftGiftResultFail
 from .dice import Dice
 from .direct_message_price_changed import DirectMessagePriceChanged
 from .direct_messages_topic import DirectMessagesTopic
@@ -47,12 +53,13 @@ from .game import Game
 from .general_forum_topic_hidden import GeneralForumTopicHidden
 from .general_forum_topic_unhidden import GeneralForumTopicUnhidden
 from .gift_collection import GiftCollection
-from .gift_code import GiftCode
+from .premium_gift_code import PremiumGiftCode
 from .gift_purchase_limit import GiftPurchaseLimit
 from .gift_resale_parameters import GiftResaleParameters
 from .gift_resale_price import GiftResalePrice, GiftResalePriceStar, GiftResalePriceTon
 from .gift_upgrade_preview import GiftUpgradePreview
 from .gift_upgrade_price import GiftUpgradePrice
+from .gift_upgrade_variants import GiftUpgradeVariants
 from .invoice import Invoice
 from .link_preview_options import LinkPreviewOptions
 from .giveaway import Giveaway
@@ -94,6 +101,8 @@ from .saved_credentials import SavedCredentials
 from .screenshot_taken import ScreenshotTaken
 from .star_amount import StarAmount
 from .gift_attribute import GiftAttribute
+from .gift_auction_state import GiftAuctionState
+from .gift_auction import GiftAuction
 from .gift import Gift
 from .gifted_premium import GiftedPremium
 from .gifted_stars import GiftedStars
@@ -117,6 +126,9 @@ from .upgraded_gift_attribute_id_backdrop import UpgradedGiftAttributeIdBackdrop
 from .upgraded_gift_attribute_id_model import UpgradedGiftAttributeIdModel
 from .upgraded_gift_attribute_id_symbol import UpgradedGiftAttributeIdSymbol
 from .upgraded_gift_attribute_id import UpgradedGiftAttributeId
+from .upgraded_gift_attribute_rarity import UpgradedGiftAttributeRarity, UpgradedGiftAttributeRarityPerMille, UpgradedGiftAttributeRarityUncommon, UpgradedGiftAttributeRarityRare, UpgradedGiftAttributeRarityEpic, UpgradedGiftAttributeRarityLegendary
+from .upgraded_gift_original_details import UpgradedGiftOriginalDetails
+from .upgraded_gift_purchase_offer import UpgradedGiftPurchaseOffer, UpgradedGiftPurchaseOfferRejected
 from .upgraded_gift_value_info import UpgradedGiftValueInfo
 from .venue import Venue
 from .video import Video
@@ -128,12 +140,19 @@ from .write_access_allowed import WriteAccessAllowed
 
 __all__ = [
     "Animation",
+    "AuctionBid",
+    "AuctionRound",
+    "AuctionState",
+    "AuctionStateActive",
+    "AuctionStateFinished",
     "Audio",
     "AvailableEffect",
     "BoostsStatus",
     "BusinessMessage",
     "ChatBackground",
     "ChatBoost",
+    "ChatOwnerChanged",
+    "ChatOwnerLeft",
     "ChatTheme",
     "CheckedGiftCode",
     "ChecklistTask",
@@ -142,6 +161,9 @@ __all__ = [
     "Checklist",
     "ContactRegistered",
     "Contact",
+    "CraftGiftResult",
+    "CraftGiftResultSuccess",
+    "CraftGiftResultFail",
     "Dice",
     "DirectMessagePriceChanged",
     "DirectMessagesTopic",
@@ -158,7 +180,7 @@ __all__ = [
     "GeneralForumTopicHidden",
     "GeneralForumTopicUnhidden",
     "GiftCollection",
-    "GiftCode",
+    "PremiumGiftCode",
     "GiftPurchaseLimit",
     "GiftResaleParameters",
     "GiftResalePrice",
@@ -166,6 +188,7 @@ __all__ = [
     "GiftResalePriceTon",
     "GiftUpgradePreview",
     "GiftUpgradePrice",
+    "GiftUpgradeVariants",
     "Giveaway",
     "InputChecklistTask",
     "Invoice",
@@ -207,6 +230,8 @@ __all__ = [
     "ScreenshotTaken",
     "StarAmount",
     "GiftAttribute",
+    "GiftAuctionState",
+    "GiftAuction",
     "Gift",
     "GiftedPremium",
     "GiftedStars",
@@ -232,6 +257,15 @@ __all__ = [
     "UpgradedGiftAttributeIdModel",
     "UpgradedGiftAttributeIdSymbol",
     "UpgradedGiftAttributeId",
+    "UpgradedGiftAttributeRarity",
+    "UpgradedGiftAttributeRarityPerMille",
+    "UpgradedGiftAttributeRarityUncommon",
+    "UpgradedGiftAttributeRarityRare",
+    "UpgradedGiftAttributeRarityEpic",
+    "UpgradedGiftAttributeRarityLegendary",
+    "UpgradedGiftOriginalDetails",
+    "UpgradedGiftPurchaseOffer",
+    "UpgradedGiftPurchaseOfferRejected",
     "UpgradedGiftValueInfo",
     "Venue",
     "Video",
