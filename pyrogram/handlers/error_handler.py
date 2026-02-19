@@ -17,9 +17,10 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from collections.abc import Sequence
-from typing import Callable
+from typing import Callable, Optional, Sequence, Tuple, Union
 
 import pyrogram
+from pyrogram.filters import Filter
 from pyrogram.types import Update
 
 from .handler import Handler
@@ -38,33 +39,54 @@ class ErrorHandler(Handler):
             A function that will be called whenever an unexpected error is raised.
             It takes the following positional arguments: *(exception, handler, client, *args)*.
 
+        filters (:obj:`Filter`, *optional*):
+            Pass one or more filters to allow only a subset of updates to be passed
+            in your callback function.
+
         exceptions (``Exception`` | ``Sequence[Exception]``, *optional*):
             An exception type or a sequence of exception types that this handler should handle.
             If None, the handler will catch any exception that is a subclass of ``Exception``.
             Defaults to ``None``.
 
     Other parameters passed to the callback:
+        client (:obj:`~pyrogram.Client`):
+            The Client instance, useful when calling other API methods inside the error handler.
+
         exception (``Exception``):
             The Exception instance that was raised.
 
         handler (:obj:`~pyrogram.handlers.handler.Handler`):
             The Handler instance from which the exception was raised.
 
-        client (:obj:`~pyrogram.Client`):
-            The Client instance, useful when calling other API methods inside the error handler.
+        update (:obj:`~pyrogram.raw.base.Update`):
+            The received update, which can be one of the many single Updates listed in the
+            :obj:`~pyrogram.raw.base.Update` base type.
 
-        *args (``tuple[Any, ...]``):
-            The original arguments passed to the handler.
+        users (``dict``):
+            Dictionary of all :obj:`~pyrogram.types.User` mentioned in the update.
+            You can access extra info about the user (such as *first_name*, *last_name*, etc...) by using
+            the IDs you find in the *update* argument (e.g.: *users[1768841572]*).
+
+        chats (``dict``):
+            Dictionary of all :obj:`~pyrogram.types.Chat` and
+            :obj:`~pyrogram.raw.types.Channel` mentioned in the update.
+            You can access extra info about the chat (such as *title*, *participants_count*, etc...)
+            by using the IDs you find in the *update* argument (e.g.: *chats[1701277281]*).
+
     """
 
-    def __init__(self, callback: Callable, exceptions: Exception | Sequence[Exception] | None = None):
-        super().__init__(callback)
+    def __init__(
+        self,
+        callback: Callable,
+        filters: Optional[Filter] = None,
+        exceptions: Optional[type[Exception] | Sequence[type[Exception]]] = None
+    ):
+        super().__init__(callback, filters)
 
-        exceptions = exceptions or (Exception,)
-        if not isinstance(exceptions, tuple):
-            exceptions = (exceptions,)
-
-        self.exceptions = exceptions
-
-    async def check(self, client: "pyrogram.Client", update: Update):
-        return True
+        self.exceptions: Tuple[Exception]
+        if exceptions is None:
+            self.exceptions = (Exception,)
+        elif isinstance(exceptions, Sequence):
+            self.exceptions = tuple(exceptions)
+        else:
+            self.exceptions = (exceptions,)
