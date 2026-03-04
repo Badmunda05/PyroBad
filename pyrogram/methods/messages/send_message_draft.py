@@ -39,8 +39,6 @@ class SendMessageDraft:
         Parameters:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
-                For your personal cloud (Saved Messages) you can simply use "me" or "self".
-                For a contact that exists in your Telegram address book you can use his phone number (str).
 
             draft_id (``int``):
                 Unique identifier of the message draft, must be non-zero.
@@ -61,6 +59,25 @@ class SendMessageDraft:
 
         Returns:
             ``bool``: On success, True is returned.
+
+        Example:
+            .. code-block:: python
+
+                text = "Hello! I'm your Pyrogram bot! How can I help you?"
+                words = text.split()
+                draft_id = app.rnd_id()
+
+                for i, word in enumerate(words):
+                    await app.send_message_draft(
+                        chat_id=chat_id,
+                        draft_id=draft_id,
+                        text=" ".join(words[:i+1]),
+                    )
+
+                    await asyncio.sleep(0.33)
+
+                await app.send_message(chat_id, text)
+
         """
         return await self.invoke(
             raw.functions.messages.SetTyping(
