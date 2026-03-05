@@ -20,6 +20,7 @@ import asyncio
 import bisect
 import logging
 import os
+import time
 from enum import Enum, auto
 from hashlib import sha1
 from io import BytesIO
@@ -259,6 +260,10 @@ class Session:
             self.recv_task = None
 
         await self._set_state(SessionState.STOPPED)
+
+        self.client._last_sync_time = time.time()
+        self.client._last_monotonic = time.monotonic()
+        self.client._is_server_time_synced = False
 
         log.info("Session stopped")
 
