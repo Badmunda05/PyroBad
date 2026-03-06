@@ -48,6 +48,6 @@ class WebAppData(Object):
     @staticmethod
     def _parse(action: Union["raw.types.MessageActionWebViewDataSent", "raw.types.MessageActionWebViewDataSentMe"]):
         return WebAppData(
-            data=action.data,
+            data=getattr(action, "data", None),
             button_text=action.text
         )
