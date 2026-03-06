@@ -422,9 +422,19 @@ class Client(Methods):
         if isinstance(loop, asyncio.AbstractEventLoop):
             self.loop = loop
         else:
-            self.loop = utils.get_event_loop()
+            self.loop = None
 
         self.__config: "raw.types.Config" = None
+
+    @property
+    def loop(self) -> asyncio.AbstractEventLoop:
+        if not self._loop:
+            self._loop = utils.get_event_loop()
+        return self._loop
+
+    @loop.setter
+    def loop(self, value: asyncio.AbstractEventLoop):
+        self._loop = value
 
     def __enter__(self):
         return self.start()
