@@ -82,13 +82,15 @@ class MessageEntity(Object):
 
     @staticmethod
     def _parse(client, entity: "raw.base.MessageEntity", users: dict) -> Optional["MessageEntity"]:
-        # Special case for InputMessageEntityMentionName -> MessageEntityType.TEXT_MENTION
-        # This happens in case of UpdateShortSentMessage inside send_message() where entities are parsed from the input
         if isinstance(entity, raw.types.InputMessageEntityMentionName):
             entity_type = enums.MessageEntityType.TEXT_MENTION
             user_id = entity.user_id.user_id
         else:
-            entity_type = enums.MessageEntityType(entity.__class__)
+            try:
+                entity_type = enums.MessageEntityType(entity.__class__)
+            except ValueError:
+                entity_type = enums.MessageEntityType.UNKNOWN
+            
             user_id = getattr(entity, "user_id", None)
 
         return MessageEntity(
@@ -102,6 +104,7 @@ class MessageEntity(Object):
             expandable=getattr(entity, "collapsed", None),
             client=client
         )
+
 
     async def write(self):
         args = self.__dict__.copy()
