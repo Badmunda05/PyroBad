@@ -219,5 +219,8 @@ class MessageServiceType(AutoName):
     UPGRADED_GIFT_PURCHASE_OFFER_REJECTED = auto()
     "Upgraded gift purchase offer declined"
 
+    CHAT_HAS_PROTECTED_CONTENT_TOGGLED = auto()
+    "Chat has protected content toggled"
+
     CHAT_HAS_PROTECTED_CONTENT_DISABLE_REQUESTED = auto()
     "Chat has protected content disable requested"

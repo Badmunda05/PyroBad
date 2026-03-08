@@ -28,6 +28,7 @@ from .chat_background import ChatBackground
 from .chat_boost import ChatBoost
 from .chat_owner_changed import ChatOwnerChanged
 from .chat_owner_left import ChatOwnerLeft
+from .chat_has_protected_content_toggled import ChatHasProtectedContentToggled
 from .chat_has_protected_content_disable_requested import ChatHasProtectedContentDisableRequested
 from .chat_theme import ChatTheme
 from .checked_gift_code import CheckedGiftCode
@@ -154,6 +155,7 @@ __all__ = [
     "ChatBoost",
     "ChatOwnerChanged",
     "ChatOwnerLeft",
+    "ChatHasProtectedContentToggled",
     "ChatHasProtectedContentDisableRequested",
     "ChatTheme",
     "CheckedGiftCode",

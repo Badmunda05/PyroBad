@@ -800,6 +800,7 @@ def pyrogram_api():
             ChatBoost
             ChatOwnerChanged
             ChatOwnerLeft
+            ChatHasProtectedContentToggled
             ChatHasProtectedContentDisableRequested
             ContactRegistered
             ScreenshotTaken
