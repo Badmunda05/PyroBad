@@ -16,34 +16,38 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from __future__ import annotations
+
+from typing import List, Optional
 
 import pyrogram
 from pyrogram import enums
+from pyrogram.types.messages_and_media.message_entity import MessageEntity
+
+from .combined import CombinedParser
 from .html import HTML
 from .markdown import Markdown
+from .types import ParseResult
 
 
 class Parser:
     def __init__(self, client: Optional["pyrogram.Client"]):
         self.client = client
+        self.combined = CombinedParser(client)
         self.html = HTML(client)
         self.markdown = Markdown(client)
 
-    async def parse(self, text: str, mode: Optional[enums.ParseMode] = None) -> dict:
+    async def parse(self, text: str, mode: Optional[enums.ParseMode] = None) -> ParseResult:
         text = str(text or "").strip()
 
         if mode is None:
-            if self.client:
-                mode = self.client.parse_mode
-            else:
-                mode = enums.ParseMode.DEFAULT
+            mode = self.client.parse_mode if self.client else enums.ParseMode.DEFAULT
 
         if mode == enums.ParseMode.DEFAULT:
-            return await self.markdown.parse(text)
+            return await self.combined.parse(text)
 
         if mode == enums.ParseMode.MARKDOWN:
-            return await self.markdown.parse(text, True)
+            return await self.markdown.parse(text)
 
         if mode == enums.ParseMode.HTML:
             return await self.html.parse(text)
@@ -54,8 +58,7 @@ class Parser:
         raise ValueError(f'Invalid parse mode "{mode}"')
 
     @staticmethod
-    def unparse(text: str, entities: list, is_html: bool) -> str:
+    def unparse(text: str, entities: List[MessageEntity], is_html: bool) -> str:
         if is_html:
             return HTML.unparse(text, entities)
-        else:
-            return Markdown.unparse(text, entities)
+        return Markdown.unparse(text, entities)

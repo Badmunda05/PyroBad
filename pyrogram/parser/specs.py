@@ -1,0 +1,297 @@
+from __future__ import annotations
+
+import html
+from typing import Dict, Optional
+
+from pyrogram import enums
+from pyrogram.types.messages_and_media.message_entity import MessageEntity
+
+from .types import EntityMeta
+
+
+class EntitySpec:
+    entity_type: Optional[enums.MessageEntityType] = None
+    html_tags: tuple[str, ...] = ()
+
+    def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
+        return {}
+
+    def from_markdown_meta(self, meta: Optional[EntityMeta] = None) -> Optional[EntityMeta]:
+        return dict(meta or {})
+
+    def create_entity(
+        self,
+        start: int,
+        end: int,
+        meta: Optional[EntityMeta] = None
+    ) -> Optional[MessageEntity]:
+        if end <= start or self.entity_type is None:
+            return None
+
+        payload = self.from_markdown_meta(meta)
+        if payload is None:
+            return None
+
+        return MessageEntity(
+            type=self.entity_type,
+            offset=start,
+            length=end - start,
+            **payload
+        )
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        raise NotImplementedError
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        raise NotImplementedError
+
+
+class SimpleTagSpec(EntitySpec):
+    html_open = ""
+    html_close = ""
+    markdown_open = ""
+    markdown_close = ""
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        return f"{self.html_open}{content}{self.html_close}"
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        return f"{self.markdown_open}{content}{self.markdown_close}"
+
+
+class BoldSpec(SimpleTagSpec):
+    entity_type = enums.MessageEntityType.BOLD
+    html_tags = ("b", "strong")
+    html_open = "<b>"
+    html_close = "</b>"
+    markdown_open = "**"
+    markdown_close = "**"
+
+
+class ItalicSpec(SimpleTagSpec):
+    entity_type = enums.MessageEntityType.ITALIC
+    html_tags = ("i", "em")
+    html_open = "<i>"
+    html_close = "</i>"
+    markdown_open = "__"
+    markdown_close = "__"
+
+
+class UnderlineSpec(SimpleTagSpec):
+    entity_type = enums.MessageEntityType.UNDERLINE
+    html_tags = ("u", "ins")
+    html_open = "<u>"
+    html_close = "</u>"
+    markdown_open = "__"
+    markdown_close = "__"
+
+
+class StrikeSpec(SimpleTagSpec):
+    entity_type = enums.MessageEntityType.STRIKETHROUGH
+    html_tags = ("s", "strike", "del")
+    html_open = "<s>"
+    html_close = "</s>"
+    markdown_open = "~~"
+    markdown_close = "~~"
+
+
+class SpoilerSpec(SimpleTagSpec):
+    entity_type = enums.MessageEntityType.SPOILER
+    html_tags = ("spoiler", "tg-spoiler")
+    html_open = "<spoiler>"
+    html_close = "</spoiler>"
+    markdown_open = "||"
+    markdown_close = "||"
+
+
+class LinkSpec(EntitySpec):
+    entity_type = enums.MessageEntityType.TEXT_LINK
+    html_tags = ("a",)
+
+    def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
+        url = attrs.get("href")
+        if not url:
+            return None
+        return {"url": url}
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        url = html.escape(entity.url or "", quote=True)
+        return f'<a href="{url}">{content}</a>'
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        return f"[{content}]({entity.url or ''})"
+
+
+class TextMentionSpec(EntitySpec):
+    entity_type = enums.MessageEntityType.TEXT_MENTION
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        if entity.user is None:
+            return content
+
+        return f'<a href="tg://user?id={entity.user.id}">{content}</a>'
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        if entity.user is None:
+            return content
+
+        return f"[{content}](tg://user?id={entity.user.id})"
+
+
+class CodeSpec(SimpleTagSpec):
+    entity_type = enums.MessageEntityType.CODE
+    html_tags = ("code",)
+    html_open = "<code>"
+    html_close = "</code>"
+    markdown_open = "`"
+    markdown_close = "`"
+
+
+class PreSpec(EntitySpec):
+    entity_type = enums.MessageEntityType.PRE
+    html_tags = ("pre",)
+
+    def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
+        language = attrs.get("language")
+        return {"language": language} if language else {}
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        if entity.language:
+            language = html.escape(entity.language, quote=True)
+            return f'<pre language="{language}">{content}</pre>'
+        return f"<pre>{content}</pre>"
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        language = entity.language or ""
+        return f"```{language}\n{content}\n```"
+
+
+class BlockquoteSpec(EntitySpec):
+    entity_type = enums.MessageEntityType.BLOCKQUOTE
+    html_tags = ("blockquote",)
+
+    def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
+        if "expandable" in attrs:
+            return {"expandable": True}
+        return {}
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        if entity.expandable:
+            return f"<blockquote expandable>{content}</blockquote>"
+        return f"<blockquote>{content}</blockquote>"
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        return "\n".join(
+            ">" if line == "" else f"> {line}"
+            for line in content.split("\n")
+        )
+
+
+class CustomEmojiSpec(EntitySpec):
+    entity_type = enums.MessageEntityType.CUSTOM_EMOJI
+    html_tags = ("tg-emoji",)
+
+    def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
+        emoji_id = attrs.get("emoji-id")
+        if not emoji_id:
+            return None
+
+        try:
+            return {"custom_emoji_id": int(emoji_id)}
+        except ValueError:
+            return None
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        emoji_id = html.escape(str(entity.custom_emoji_id), quote=True)
+        return f'<tg-emoji emoji-id="{emoji_id}">{content}</tg-emoji>'
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        return f"![{content}](tg://emoji?id={entity.custom_emoji_id})"
+
+
+class DateTimeSpec(EntitySpec):
+    entity_type = enums.MessageEntityType.DATE_TIME
+    html_tags = ("tg-time",)
+
+    def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
+        unix_time = attrs.get("unix")
+        if not unix_time:
+            return None
+
+        try:
+            payload: EntityMeta = {"unix_time": int(unix_time)}
+        except ValueError:
+            return None
+
+        if "format" in attrs:
+            payload["date_time_format"] = attrs["format"] or None
+
+        return payload
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        attrs = [f'unix="{html.escape(str(entity.unix_time), quote=True)}"']
+        if entity.date_time_format:
+            attrs.append(f'format="{html.escape(entity.date_time_format, quote=True)}"')
+        return f"<tg-time {' '.join(attrs)}>{content}</tg-time>"
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        target = f"tg://time?unix={entity.unix_time}"
+        if entity.date_time_format:
+            target += f"&format={entity.date_time_format}"
+        return f"![{content}]({target})"
+
+
+HTML_SPECS = (
+    BoldSpec(),
+    ItalicSpec(),
+    UnderlineSpec(),
+    StrikeSpec(),
+    SpoilerSpec(),
+    LinkSpec(),
+    TextMentionSpec(),
+    CodeSpec(),
+    PreSpec(),
+    BlockquoteSpec(),
+    CustomEmojiSpec(),
+    DateTimeSpec(),
+)
+
+HTML_TAGS = {
+    tag: spec
+    for spec in HTML_SPECS
+    for tag in spec.html_tags
+}
+
+ENTITY_SPECS = {
+    spec.entity_type: spec
+    for spec in HTML_SPECS
+    if spec.entity_type is not None
+}
+
+HTML_ENTITY_ORDER = (
+    enums.MessageEntityType.BOLD,
+    enums.MessageEntityType.UNDERLINE,
+    enums.MessageEntityType.ITALIC,
+    enums.MessageEntityType.STRIKETHROUGH,
+    enums.MessageEntityType.SPOILER,
+    enums.MessageEntityType.TEXT_LINK,
+    enums.MessageEntityType.CODE,
+    enums.MessageEntityType.PRE,
+    enums.MessageEntityType.BLOCKQUOTE,
+    enums.MessageEntityType.CUSTOM_EMOJI,
+    enums.MessageEntityType.DATE_TIME,
+)
+
+MARKDOWN_ENTITY_ORDER = (
+    enums.MessageEntityType.BOLD,
+    enums.MessageEntityType.ITALIC,
+    enums.MessageEntityType.UNDERLINE,
+    enums.MessageEntityType.STRIKETHROUGH,
+    enums.MessageEntityType.SPOILER,
+    enums.MessageEntityType.TEXT_LINK,
+    enums.MessageEntityType.CUSTOM_EMOJI,
+    enums.MessageEntityType.DATE_TIME,
+    enums.MessageEntityType.CODE,
+    enums.MessageEntityType.PRE,
+    enums.MessageEntityType.BLOCKQUOTE,
+)
