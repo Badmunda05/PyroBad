@@ -1,293 +1,175 @@
-#  Pyrogram - Telegram MTProto API Client Library for Python
-#  Copyright (C) 2017-present Dan <https://github.com/delivrance>
-#
-#  This file is part of Pyrogram.
-#
-#  Pyrogram is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU Lesser General Public License as published
-#  by the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  Pyrogram is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU Lesser General Public License for more details.
-#
-#  You should have received a copy of the GNU Lesser General Public License
-#  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
+from __future__ import annotations
 
 import html
-import logging
-import re
 from html.parser import HTMLParser
-from typing import List, Optional
+from typing import Dict, List, Optional, TypedDict
 
 import pyrogram
-from pyrogram import raw, types
-from pyrogram.enums import MessageEntityType
-from pyrogram.errors import PeerIdInvalid
+from pyrogram.types.messages_and_media.message_entity import MessageEntity
 
-from . import utils
+from .rendering import html_entity_rank, make_entity_list, render_entities
+from .specs import EntitySpec, HTML_TAGS
+from .types import EntityMeta, ParseResult
+from .utils import add_surrogates, remove_surrogates
 
-log = logging.getLogger(__name__)
+
+class _HTMLFrame(TypedDict):
+    tag: str
+    spec: EntitySpec
+    start: int
+    meta: EntityMeta
 
 
-class Parser(HTMLParser):
-    # TODO: <span class="tg-spoiler"> <pre><code class="language-...">
-    MENTION_RE = re.compile(r"tg://user\?id=(\d+)")
+class _HTMLToEntitiesParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self.output: List[str] = []
+        self.entities: List[MessageEntity] = []
+        self.stack: List[_HTMLFrame] = []
 
-    def __init__(self, client: "pyrogram.Client"):
-        super().__init__()
+    def handle_starttag(self, tag: str, attrs: List[tuple[str, Optional[str]]]) -> None:
+        spec, payload = self._resolve_spec(tag, attrs)
 
-        self.client = client
-
-        self.text = ""
-        self.entities = []
-        self.tag_entities = {}
-
-    def handle_starttag(self, tag, attrs):
-        attrs = dict(attrs)
-        extra = {}
-
-        if tag in ["b", "strong"]:
-            entity = raw.types.MessageEntityBold
-        elif tag in ["i", "em"]:
-            entity = raw.types.MessageEntityItalic
-        elif tag in ["u", "ins"]:
-            entity = raw.types.MessageEntityUnderline
-        elif tag in ["s", "del", "strike"]:
-            entity = raw.types.MessageEntityStrike
-        elif tag == "blockquote":
-            entity = raw.types.MessageEntityBlockquote
-            extra["collapsed"] = "expandable" in attrs
-        elif tag == "code":
-            entity = raw.types.MessageEntityCode
-        elif tag == "pre":
-            entity = raw.types.MessageEntityPre
-            extra["language"] = attrs.get("language", "")
-        elif tag in ["spoiler", "tg-spoiler"]:
-            entity = raw.types.MessageEntitySpoiler
-        elif tag == "a":
-            url = attrs.get("href", "")
-
-            mention = Parser.MENTION_RE.match(url)
-
-            if mention:
-                entity = raw.types.InputMessageEntityMentionName
-                extra["user_id"] = int(mention.group(1))
-            elif url.startswith("mailto:"):
-                entity = raw.types.MessageEntityEmail
-            else:
-                entity = raw.types.MessageEntityTextUrl
-                extra["url"] = url
-        elif tag in ["emoji", "tg-emoji"]:
-            entity = raw.types.MessageEntityCustomEmoji
-            custom_emoji_id = attrs.get("emoji-id") if tag == "tg-emoji" else attrs.get("id")
-            extra["document_id"] = int(custom_emoji_id)
-        elif tag == "tg-time":
-            entity = raw.types.MessageEntityFormattedDate
-            extra["date"] = int(attrs.get("unix"))
-            date_time_format = attrs.get("format", "")
-
-            extra["relative"] = False
-            extra["short_time"] = False
-            extra["long_time"] = False
-            extra["short_date"] = False
-            extra["long_date"] = False
-            extra["day_of_week"] = False
-
-            if date_time_format:
-                if not re.fullmatch(r"r|w?[dD]?[tT]?", date_time_format):
-                    raise ValueError(f"Invalid date-time format string: '{date_time_format}'")
-
-                if date_time_format == "r":
-                    extra["relative"] = True
-                else:
-                    if "w" in date_time_format:
-                        extra["day_of_week"] = True
-
-                    if "d" in date_time_format:
-                        extra["short_date"] = True
-                    elif "D" in date_time_format:
-                        extra["long_date"] = True
-
-                    if "t" in date_time_format:
-                        extra["short_time"] = True
-                    elif "T" in date_time_format:
-                        extra["long_time"] = True
-        else:
+        if spec is None:
+            self.output.append(self.get_starttag_text())
             return
 
-        if tag not in self.tag_entities:
-            self.tag_entities[tag] = []
+        if tag == "code" and self.stack and self.stack[-1]["tag"] == "pre":
+            language = self._extract_language(dict(attrs))
+            if language:
+                self.stack[-1]["meta"]["language"] = language
+            return
 
-        self.tag_entities[tag].append(entity(offset=len(self.text), length=0, **extra))
+        self.stack.append(
+            {
+                "tag": tag,
+                "spec": spec,
+                "start": len("".join(self.output)),
+                "meta": payload,
+            }
+        )
 
-    def handle_data(self, data):
-        data = html.unescape(data)
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "code" and self.stack and self.stack[-1]["tag"] == "pre":
+            return
 
-        for entities in self.tag_entities.values():
-            for entity in entities:
-                entity.length += len(data)
+        index = self._find_frame(tag)
+        if index is None:
+            self.output.append(f"</{tag}>")
+            return
 
-        self.text += data
+        frame = self.stack.pop(index)
+        entity = frame["spec"].create_entity(frame["start"], len("".join(self.output)), frame["meta"])
+        if entity is not None:
+            self.entities.append(entity)
 
-    def handle_endtag(self, tag):
-        try:
-            self.entities.append(self.tag_entities[tag].pop())
-        except (KeyError, IndexError):
-            line, offset = self.getpos()
-            offset += 1
+    def handle_startendtag(self, tag: str, attrs: List[tuple[str, Optional[str]]]) -> None:
+        self.handle_starttag(tag, attrs)
+        self.handle_endtag(tag)
 
-            log.debug("Unmatched closing tag </%s> at line %s:%s", tag, line, offset)
-        else:
-            if not self.tag_entities[tag]:
-                self.tag_entities.pop(tag)
+    def handle_data(self, data: str) -> None:
+        self.output.append(add_surrogates(data))
 
-    def error(self, message):
-        pass
+    def handle_entityref(self, name: str) -> None:
+        self.output.append(add_surrogates(html.unescape(f"&{name};")))
+
+    def handle_charref(self, name: str) -> None:
+        self.output.append(add_surrogates(html.unescape(f"&#{name};")))
+
+    def handle_comment(self, data: str) -> None:
+        return
+
+    def parse(self, text: str) -> ParseResult:
+        self.feed(text)
+        self.close()
+
+        while self.stack:
+            frame = self.stack.pop()
+            self.output.insert(frame["start"], self._rebuild_start_tag(frame["tag"], frame["meta"]))
+
+        message = remove_surrogates("".join(self.output))
+        self.entities.sort(key=lambda entity: (entity.offset, entity.length))
+
+        return {
+            "message": message,
+            "entities": make_entity_list(self.entities)
+        }
+
+    def _resolve_spec(
+        self,
+        tag: str,
+        attrs: List[tuple[str, Optional[str]]]
+    ) -> tuple[Optional[EntitySpec], Optional[EntityMeta]]:
+        attrs_map = self._attrs_to_dict(attrs)
+        spec = HTML_TAGS.get(tag)
+
+        if tag == "span" and attrs_map.get("class") == "tg-spoiler":
+            spec = HTML_TAGS.get("tg-spoiler")
+
+        if spec is None:
+            return None, None
+
+        payload = spec.from_html_attrs(attrs_map)
+        if payload is None:
+            return None, None
+
+        return spec, payload
+
+    @staticmethod
+    def _attrs_to_dict(attrs: List[tuple[str, Optional[str]]]) -> Dict[str, str]:
+        result = {}
+
+        for key, value in attrs:
+            result[key] = "" if value is None else value
+
+        return result
+
+    @staticmethod
+    def _extract_language(attrs: Dict[str, str]) -> Optional[str]:
+        value = attrs.get("class", "")
+
+        for item in value.split():
+            if item.startswith("language-") and len(item) > 9:
+                return item[9:]
+
+        return None
+
+    def _find_frame(self, tag: str) -> Optional[int]:
+        for index in range(len(self.stack) - 1, -1, -1):
+            if self.stack[index]["tag"] == tag:
+                return index
+
+        return None
+
+    @staticmethod
+    def _rebuild_start_tag(tag: str, meta: EntityMeta) -> str:
+        if tag == "a" and meta.get("url"):
+            return f'<a href="{meta["url"]}">'
+        if tag == "pre" and meta.get("language"):
+            return f'<pre language="{meta["language"]}">'
+        if tag == "blockquote" and meta.get("expandable"):
+            return "<blockquote expandable>"
+        if tag == "tg-emoji" and meta.get("custom_emoji_id"):
+            return f'<tg-emoji emoji-id="{meta["custom_emoji_id"]}">'
+        return f"<{tag}>"
 
 
 class HTML:
-    def __init__(self, client: Optional["pyrogram.Client"]):
+    def __init__(self, client: Optional["pyrogram.Client"]) -> None:
         self.client = client
 
-    async def parse(self, text: str) -> dict:
-        # Strip whitespaces from the beginning and the end, but preserve closing tags
-        text = re.sub(r"^\s*(<[\w<>=\s\"]*>)\s*", r"\1", text)
-        text = re.sub(r"\s*(</[\w</>]*>)\s*$", r"\1", text)
-
-        parser = Parser(self.client)
-        parser.feed(utils.add_surrogates(text))
-        parser.close()
-
-        if parser.tag_entities:
-            unclosed_tags = []
-
-            for tag, entities in parser.tag_entities.items():
-                unclosed_tags.append(f"<{tag}> (x{len(entities)})")
-
-            log.info("Unclosed tags: %s", ", ".join(unclosed_tags))
-
-        entities = []
-
-        for entity in parser.entities:
-            if isinstance(entity, raw.types.InputMessageEntityMentionName):
-                try:
-                    if self.client is not None:
-                        entity.user_id = await self.client.resolve_peer(entity.user_id)
-                except PeerIdInvalid:
-                    continue
-
-            entities.append(entity)
-
-        # Remove zero-length entities
-        entities = list(filter(lambda x: x.length > 0, entities))
-
-        return {
-            "message": utils.remove_surrogates(parser.text),
-            "entities": sorted(entities, key=lambda e: e.offset) or None
-        }
+    async def parse(self, text: str) -> ParseResult:
+        return _HTMLToEntitiesParser().parse(text)
 
     @staticmethod
-    def unparse(text: str, entities: List["types.MessageEntity"]) -> str:
-        def parse_one(entity: "types.MessageEntity"):
-            """
-            Parses a single entity and returns (start_tag, start), (end_tag, end)
-            """
-            entity_type = entity.type
-            start = entity.offset
-            end = start + entity.length
+    def unparse(text: str, entities: List[MessageEntity]) -> str:
+        if not entities:
+            return text
 
-            if entity_type in (
-                MessageEntityType.BOLD,
-                MessageEntityType.ITALIC,
-                MessageEntityType.UNDERLINE,
-                MessageEntityType.STRIKETHROUGH,
-            ):
-                name = entity_type.name[0].lower()
-                start_tag = f"<{name}>"
-                end_tag = f"</{name}>"
-            elif entity_type == MessageEntityType.PRE:
-                name = entity_type.name.lower()
-                language = getattr(entity, "language", "") or ""
-                start_tag = f'<{name} language="{language}">' if language else f"<{name}>"
-                end_tag = f"</{name}>"
-            elif entity_type == MessageEntityType.BLOCKQUOTE:
-                name = entity_type.name.lower()
-                expandable = getattr(entity, "expandable", False)
-                start_tag = f'<{name}{" expandable" if expandable else ""}>'
-                end_tag = f"</{name}>"
-            elif entity_type in (
-                MessageEntityType.CODE,
-                MessageEntityType.SPOILER,
-            ):
-                name = entity_type.name.lower()
-                start_tag = f"<{name}>"
-                end_tag = f"</{name}>"
-            elif entity_type == MessageEntityType.TEXT_LINK:
-                url = entity.url
-                start_tag = f'<a href="{url}">'
-                end_tag = "</a>"
-            elif entity_type == MessageEntityType.TEXT_MENTION:
-                user = entity.user
-                start_tag = f'<a href="tg://user?id={user.id}">'
-                end_tag = "</a>"
-            elif entity_type == MessageEntityType.CUSTOM_EMOJI:
-                custom_emoji_id = entity.custom_emoji_id
-                start_tag = f'<tg-emoji emoji-id="{custom_emoji_id}">'
-                end_tag = "</tg-emoji>"
-            elif entity_type == MessageEntityType.DATE_TIME:
-                unix_time = entity.unix_time
-                date_time_format = entity.date_time_format
-
-                if date_time_format:
-                    start_tag = f'<tg-time unix="{unix_time}" format="{date_time_format}">'
-                else:
-                    start_tag = f'<tg-time unix="{unix_time}">'
-
-                end_tag = "</tg-time>"
-            else:
-                return None
-
-            return (start_tag, start), (end_tag, end)
-
-        def recursive(entity_i: int) -> int:
-            """
-            Takes the index of the entity to start parsing from, returns the number of parsed entities inside it.
-            Uses entities_offsets as a stack, pushing (start_tag, start) first, then parsing nested entities,
-            and finally pushing (end_tag, end) to the stack.
-            No need to sort at the end.
-            """
-            this = parse_one(entities[entity_i])
-            if this is None:
-                return 1
-            (start_tag, start), (end_tag, end) = this
-            entities_offsets.append((start_tag, start))
-            internal_i = entity_i + 1
-            # while the next entity is inside the current one, keep parsing
-            while internal_i < len(entities) and entities[internal_i].offset < end:
-                internal_i += recursive(internal_i)
-            entities_offsets.append((end_tag, end))
-            return internal_i - entity_i
-
-        text = utils.add_surrogates(text)
-
-        entities_offsets = []
-
-        # probably useless because entities are already sorted by telegram
-        entities.sort(key=lambda e: (e.offset, -e.length))
-
-        # main loop for first-level entities
-        i = 0
-        while i < len(entities):
-            i += recursive(i)
-
-        if entities_offsets:
-            last_offset = entities_offsets[-1][1]
-            # no need to sort, but still add entities starting from the end
-            for entity, offset in reversed(entities_offsets):
-                text = text[:offset] + entity + html.escape(text[offset:last_offset]) + text[last_offset:]
-                last_offset = offset
-
-        return utils.remove_surrogates(text)
+        return render_entities(
+            text=text,
+            entities=entities,
+            formatter=lambda spec, content, entity: spec.render_html(content, entity),
+            rank_getter=html_entity_rank,
+            escape_text=lambda value: html.escape(remove_surrogates(value), quote=False)
+        )

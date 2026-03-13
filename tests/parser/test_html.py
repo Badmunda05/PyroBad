@@ -16,74 +16,99 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+import asyncio
+
 import pyrogram
+import pytest
 from pyrogram.parser.html import HTML
+from pyrogram.types import User
 
 
-# expected: the expected unparsed HTML
-# text: original text without entities
-# entities: message entities coming from the server
-
-def test_html_unparse_bold():
-    expected = "<b>bold</b>"
-    text = "bold"
-    entities = pyrogram.types.List(
-        [pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.BOLD, offset=0, length=4)])
-
-    assert HTML.unparse(text=text, entities=entities) == expected
-
-
-def test_html_unparse_italic():
-    expected = "<i>italic</i>"
-    text = "italic"
-    entities = pyrogram.types.List(
-        [pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.ITALIC, offset=0, length=6)])
-
-    assert HTML.unparse(text=text, entities=entities) == expected
-
-
-def test_html_unparse_underline():
-    expected = "<u>underline</u>"
-    text = "underline"
-    entities = pyrogram.types.List(
-        [pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.UNDERLINE, offset=0, length=9)])
-
-    assert HTML.unparse(text=text, entities=entities) == expected
-
-
-def test_html_unparse_strike():
-    expected = "<s>strike</s>"
-    text = "strike"
-    entities = pyrogram.types.List(
-        [pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.STRIKETHROUGH, offset=0, length=6)])
-
-    assert HTML.unparse(text=text, entities=entities) == expected
-
-
-def test_html_unparse_spoiler():
-    expected = "<spoiler>spoiler</spoiler>"
-    text = "spoiler"
-    entities = pyrogram.types.List(
-        [pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.SPOILER, offset=0, length=7)])
-
-    assert HTML.unparse(text=text, entities=entities) == expected
-
-
-def test_html_unparse_url():
-    expected = '<a href="https://pyrogram.org/">URL</a>'
-    text = "URL"
-    entities = pyrogram.types.List([pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.TEXT_LINK,
-                                                                 offset=0, length=3, url='https://pyrogram.org/')])
-
-    assert HTML.unparse(text=text, entities=entities) == expected
-
-
-def test_html_unparse_code():
-    expected = '<code>code</code>'
-    text = "code"
-    entities = pyrogram.types.List(
-        [pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.CODE, offset=0, length=4)])
-
+@pytest.mark.parametrize(
+    ("expected", "text", "entities"),
+    [
+        (
+            "<b>bold</b>",
+            "bold",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.BOLD, offset=0, length=4)
+            ]),
+        ),
+        (
+            "<i>italic</i>",
+            "italic",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.ITALIC, offset=0, length=6)
+            ]),
+        ),
+        (
+            "<u>underline</u>",
+            "underline",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.UNDERLINE, offset=0, length=9)
+            ]),
+        ),
+        (
+            "<s>strike</s>",
+            "strike",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.STRIKETHROUGH, offset=0, length=6)
+            ]),
+        ),
+        (
+            "<spoiler>spoiler</spoiler>",
+            "spoiler",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.SPOILER, offset=0, length=7)
+            ]),
+        ),
+        (
+            '<a href="https://pyrogram.org/">URL</a>',
+            "URL",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(
+                    type=pyrogram.enums.MessageEntityType.TEXT_LINK,
+                    offset=0,
+                    length=3,
+                    url="https://pyrogram.org/",
+                )
+            ]),
+        ),
+        (
+            '<a href="tg://user?id=123456">mention</a>',
+            "mention",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(
+                    type=pyrogram.enums.MessageEntityType.TEXT_MENTION,
+                    offset=0,
+                    length=7,
+                    user=User(id=123456, is_self=False),
+                )
+            ]),
+        ),
+        (
+            '<tg-time unix="1647531900" format="wDT">22:45 tomorrow</tg-time>',
+            "22:45 tomorrow",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(
+                    type=pyrogram.enums.MessageEntityType.DATE_TIME,
+                    offset=0,
+                    length=14,
+                    unix_time=1647531900,
+                    date_time_format="wDT",
+                )
+            ]),
+        ),
+        (
+            "<code>code</code>",
+            "code",
+            pyrogram.types.List([
+                pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.CODE, offset=0, length=4)
+            ]),
+        ),
+    ],
+)
+def test_html_unparse_simple(expected, text, entities):
     assert HTML.unparse(text=text, entities=entities) == expected
 
 
@@ -158,3 +183,99 @@ def test_html_unparse_no_entities():
     entities = []
 
     assert HTML.unparse(text=text, entities=entities) == expected
+
+
+def test_html_parse_date_time():
+    result = asyncio.run(HTML(None).parse('<tg-time unix="1647531900" format="wDT">22:45 tomorrow</tg-time>'))
+
+    assert result["message"] == "22:45 tomorrow"
+    assert len(result["entities"]) == 1
+
+    entity = result["entities"][0]
+    assert entity.type == pyrogram.enums.MessageEntityType.DATE_TIME
+    assert entity.offset == 0
+    assert entity.length == 14
+    assert entity.unix_time == 1647531900
+    assert entity.date_time_format == "wDT"
+
+
+def test_html_parse_date_time_without_format():
+    result = asyncio.run(HTML(None).parse('<tg-time unix="1647531900">22:45 tomorrow</tg-time>'))
+
+    assert result["message"] == "22:45 tomorrow"
+    assert len(result["entities"]) == 1
+
+    entity = result["entities"][0]
+    assert entity.type == pyrogram.enums.MessageEntityType.DATE_TIME
+    assert entity.unix_time == 1647531900
+    assert entity.date_time_format is None
+
+
+def test_html_parse_invalid_date_time():
+    result = asyncio.run(HTML(None).parse('<tg-time unix="abc" format="wDT">22:45 tomorrow</tg-time>'))
+
+    assert result["message"] == '<tg-time unix="abc" format="wDT">22:45 tomorrow</tg-time>'
+    assert result["entities"] is None
+
+
+@pytest.mark.parametrize(
+    ("text", "message", "entity_type"),
+    [
+        ("<b>bold</b>", "bold", pyrogram.enums.MessageEntityType.BOLD),
+        ("<i>italic</i>", "italic", pyrogram.enums.MessageEntityType.ITALIC),
+        ("<u>underline</u>", "underline", pyrogram.enums.MessageEntityType.UNDERLINE),
+        ("<s>strike</s>", "strike", pyrogram.enums.MessageEntityType.STRIKETHROUGH),
+        ("<spoiler>spoiler</spoiler>", "spoiler", pyrogram.enums.MessageEntityType.SPOILER),
+    ],
+)
+def test_html_parse_basic_tags(text, message, entity_type):
+    result = asyncio.run(HTML(None).parse(text))
+
+    assert result["message"] == message
+    assert len(result["entities"]) == 1
+    assert result["entities"][0].type == entity_type
+
+
+def test_html_parse_unclosed_tag_becomes_text():
+    text = "<b>bold"
+    result = asyncio.run(HTML(None).parse(text))
+
+    assert result["message"] == text
+    assert result["entities"] is None
+
+
+def test_html_parse_utf16_date_time_with_emoji_prefix():
+    result = asyncio.run(HTML(None).parse('🥲 <tg-time unix="1647531900">22:45 tomorrow</tg-time>'))
+
+    assert result["message"] == "🥲 22:45 tomorrow"
+    assert len(result["entities"]) == 1
+
+    entity = result["entities"][0]
+    assert entity.type == pyrogram.enums.MessageEntityType.DATE_TIME
+    assert entity.offset == 3
+    assert entity.length == 14
+
+
+def test_html_roundtrip_multiple_entity_types():
+    text = "bold code URL 22:45 tomorrow"
+    entities = pyrogram.types.List([
+        pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.BOLD, offset=0, length=4),
+        pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.CODE, offset=5, length=4),
+        pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.TEXT_LINK,
+                                     offset=10, length=3, url="https://pyrogram.org/"),
+        pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.DATE_TIME,
+                                     offset=14, length=14, unix_time=1647531900, date_time_format="wDT"),
+    ])
+
+    parsed = asyncio.run(HTML(None).parse(HTML.unparse(text, entities)))
+
+    assert parsed["message"] == text
+    assert [(entity.type, entity.offset, entity.length) for entity in parsed["entities"]] == [
+        (pyrogram.enums.MessageEntityType.BOLD, 0, 4),
+        (pyrogram.enums.MessageEntityType.CODE, 5, 4),
+        (pyrogram.enums.MessageEntityType.TEXT_LINK, 10, 3),
+        (pyrogram.enums.MessageEntityType.DATE_TIME, 14, 14),
+    ]
+    assert parsed["entities"][2].url == "https://pyrogram.org/"
+    assert parsed["entities"][3].unix_time == 1647531900
+    assert parsed["entities"][3].date_time_format == "wDT"
