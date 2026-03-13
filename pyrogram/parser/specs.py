@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 import html
 from typing import Dict, Optional
 
@@ -9,7 +10,7 @@ from pyrogram.types.messages_and_media.message_entity import MessageEntity
 from .types import EntityMeta
 
 
-class EntitySpec:
+class EntitySpec(ABC):
     entity_type: Optional[enums.MessageEntityType] = None
     html_tags: tuple[str, ...] = ()
 
@@ -39,9 +40,11 @@ class EntitySpec:
             **payload
         )
 
+    @abstractmethod
     def render_html(self, content: str, entity: MessageEntity) -> str:
         raise NotImplementedError
 
+    @abstractmethod
     def render_markdown(self, content: str, entity: MessageEntity) -> str:
         raise NotImplementedError
 
