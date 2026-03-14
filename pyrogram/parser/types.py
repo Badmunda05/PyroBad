@@ -20,3 +20,8 @@ class EntityNode:
     start: int
     end: int
     children: List["EntityNode"] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class MentionUserRef:
+    id: int

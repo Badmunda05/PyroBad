@@ -19,6 +19,20 @@ def make_entity_list(entities: Iterable[MessageEntity]) -> Optional[TypesList]:
     return TypesList(items)
 
 
+async def export_entity_list(client, entities: Iterable[MessageEntity]) -> Optional[TypesList]:
+    items = [entity for entity in entities if entity is not None and entity.length > 0]
+    if not items:
+        return None
+
+    if client is None:
+        return TypesList(items)
+
+    for entity in items:
+        entity._client = client
+
+    return TypesList([await entity.write() for entity in items])
+
+
 def shift_entities(entities: Iterable[MessageEntity], offset: int) -> List[MessageEntity]:
     shifted: List[MessageEntity] = []
 

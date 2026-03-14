@@ -8,13 +8,14 @@ import pyrogram
 from pyrogram import enums
 from pyrogram.types.messages_and_media.message_entity import MessageEntity
 
-from .rendering import make_entity_list, markdown_entity_rank, shift_entities
-from .types import EntityMeta, ParseResult
+from .rendering import export_entity_list, markdown_entity_rank, shift_entities
+from .types import EntityMeta, MentionUserRef, ParseResult
 from .utils import add_surrogates, remove_surrogates
 
 
 CUSTOM_EMOJI_RE = re.compile(r"^tg://emoji\?id=(\d+)$")
 DATE_TIME_RE = re.compile(r"^tg://time\?unix=(\d+)(?:&format=(r|w?[dD]?[tT]?))?$")
+USER_LINK_RE = re.compile(r"^tg://user\?id=(\d+)$")
 
 
 @dataclass
@@ -37,13 +38,17 @@ class Markdown:
         self.client = client
 
     async def parse(self, text: str) -> ParseResult:
-        message, entities = self._parse_blocks(add_surrogates(text))
-        entities.sort(key=lambda entity: (entity.offset, entity.length))
+        message, entities = self._parse_entities(text)
 
         return {
-            "message": remove_surrogates(message),
-            "entities": make_entity_list(entities)
+            "message": message,
+            "entities": await export_entity_list(self.client, entities or [])
         }
+
+    def _parse_entities(self, text: str) -> Tuple[str, List[MessageEntity]]:
+        message, entities = self._parse_blocks(add_surrogates(text))
+        entities.sort(key=lambda entity: (entity.offset, entity.length))
+        return remove_surrogates(message), entities
 
     @staticmethod
     def unparse(text: str, entities: List[MessageEntity]) -> str:
@@ -67,12 +72,15 @@ class Markdown:
             if entity.type == enums.MessageEntityType.ITALIC:
                 return "__"
             if entity.type == enums.MessageEntityType.UNDERLINE:
-                return "__"
+                return "--"
             if entity.type == enums.MessageEntityType.STRIKETHROUGH:
                 return "~~"
             if entity.type == enums.MessageEntityType.SPOILER:
                 return "||"
-            if entity.type == enums.MessageEntityType.TEXT_LINK:
+            if entity.type in (
+                enums.MessageEntityType.TEXT_LINK,
+                enums.MessageEntityType.TEXT_MENTION
+            ):
                 return "["
             if entity.type in (
                 enums.MessageEntityType.CUSTOM_EMOJI,
@@ -91,13 +99,17 @@ class Markdown:
             if entity.type == enums.MessageEntityType.ITALIC:
                 return "__"
             if entity.type == enums.MessageEntityType.UNDERLINE:
-                return "__"
+                return "--"
             if entity.type == enums.MessageEntityType.STRIKETHROUGH:
                 return "~~"
             if entity.type == enums.MessageEntityType.SPOILER:
                 return "||"
             if entity.type == enums.MessageEntityType.TEXT_LINK:
                 return f"]({entity.url or ''})"
+            if entity.type == enums.MessageEntityType.TEXT_MENTION:
+                if entity.user is None:
+                    return "]()"
+                return f"](tg://user?id={entity.user.id})"
             if entity.type == enums.MessageEntityType.CUSTOM_EMOJI:
                 return f"](tg://emoji?id={entity.custom_emoji_id})"
             if entity.type == enums.MessageEntityType.DATE_TIME:
@@ -112,7 +124,7 @@ class Markdown:
             return ""
 
         parts: List[str] = []
-        active_blockquotes = 0
+        active_blockquotes: List[MessageEntity] = []
 
         for index in range(len(source) + 1):
             for entity in sorted(
@@ -120,7 +132,9 @@ class Markdown:
                 key=lambda item: (-item.length, entity_priority(item))
             ):
                 if entity.type == enums.MessageEntityType.BLOCKQUOTE:
-                    active_blockquotes -= 1
+                    if entity.expandable:
+                        parts.append("||")
+                    active_blockquotes = [item for item in active_blockquotes if item is not entity]
                 else:
                     parts.append(close_token(entity))
 
@@ -129,14 +143,17 @@ class Markdown:
                 key=lambda item: (-item.length, entity_priority(item))
             ):
                 if entity.type == enums.MessageEntityType.BLOCKQUOTE:
-                    active_blockquotes += 1
+                    active_blockquotes.append(entity)
 
             if index == len(source):
                 break
 
             if index == 0 or source[index - 1] == "\n":
-                for _ in range(active_blockquotes):
-                    parts.append("> ")
+                for entity in active_blockquotes:
+                    if entity.expandable and entity.offset == index:
+                        parts.append("**> ")
+                    else:
+                        parts.append("> ")
 
             for entity in sorted(
                 starts.get(index, []),
@@ -162,7 +179,7 @@ class Markdown:
                 entities.extend(shift_entities(block_entities, base))
                 continue
 
-            if self._is_line_start(text, index) and text[index] == ">":
+            if self._is_line_start(text, index) and self._starts_blockquote(text, index):
                 plain, block_entities, index = self._consume_blockquote(text, index)
                 base = len("".join(output))
                 output.append(plain)
@@ -282,6 +299,7 @@ class Markdown:
     def _consume_blockquote(self, text: str, index: int) -> Tuple[str, List[MessageEntity], int]:
         lines: List[str] = []
         cursor = index
+        expandable = text.startswith("**>", index)
 
         while cursor < len(text):
             line_end = text.find("\n", cursor)
@@ -289,16 +307,25 @@ class Markdown:
                 line_end = len(text)
 
             line = text[cursor:line_end]
-            if not line.startswith(">"):
+            prefix = "**>" if expandable and cursor == index else ">"
+            if not line.startswith(prefix):
                 break
 
-            content = line[1:]
+            content = line[len(prefix):]
             if content.startswith(" "):
                 content = content[1:]
+            closing = False
+            if expandable and content.endswith("||"):
+                content = content[:-2]
+                closing = True
             lines.append(content)
 
             if line_end == len(text):
                 cursor = len(text)
+                break
+
+            if closing:
+                cursor = line_end + 1
                 break
 
             next_cursor = line_end + 1
@@ -312,7 +339,8 @@ class Markdown:
         blockquote = MessageEntity(
             type=enums.MessageEntityType.BLOCKQUOTE,
             offset=0,
-            length=len(plain)
+            length=len(plain),
+            expandable=expandable or None
         )
         return plain, [blockquote, *inline_entities], cursor
 
@@ -358,12 +386,21 @@ class Markdown:
                     date_time_format=match.group(2) or None
                 )
         else:
-            entity = MessageEntity(
-                type=enums.MessageEntityType.TEXT_LINK,
-                offset=0,
-                length=len(label),
-                url=target
-            )
+            mention_match = USER_LINK_RE.match(target)
+            if mention_match:
+                entity = MessageEntity(
+                    type=enums.MessageEntityType.TEXT_MENTION,
+                    offset=0,
+                    length=len(label),
+                    user=MentionUserRef(id=int(mention_match.group(1)))
+                )
+            else:
+                entity = MessageEntity(
+                    type=enums.MessageEntityType.TEXT_LINK,
+                    offset=0,
+                    length=len(label),
+                    url=target
+                )
 
         return label, entity, end + 1
 
@@ -396,8 +433,45 @@ class Markdown:
         cursor = index + 1
 
         while cursor < len(text):
-            if text[cursor - 1] == "\n" and (text.startswith("```", cursor) or text[cursor] == ">"):
+            if text[cursor - 1] == "\n" and (
+                text.startswith("```", cursor)
+                or text[cursor] == ">"
+                or text.startswith("**>", cursor)
+            ):
                 return cursor
             cursor += 1
 
         return len(text)
+
+    def _starts_blockquote(self, text: str, index: int) -> bool:
+        if text[index] == ">":
+            return True
+
+        if not text.startswith("**>", index):
+            return False
+
+        cursor = index
+
+        while cursor < len(text):
+            line_end = text.find("\n", cursor)
+            if line_end == -1:
+                line_end = len(text)
+
+            line = text[cursor:line_end]
+            prefix = "**>" if cursor == index else ">"
+            if not line.startswith(prefix):
+                return False
+
+            content = line[len(prefix):]
+            if content.startswith(" "):
+                content = content[1:]
+
+            if content.endswith("||"):
+                return True
+
+            if line_end == len(text):
+                return False
+
+            cursor = line_end + 1
+
+        return False

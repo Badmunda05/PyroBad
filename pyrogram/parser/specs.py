@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 import html
+import re
 from typing import Dict, Optional
 
 from pyrogram import enums
 from pyrogram.types.messages_and_media.message_entity import MessageEntity
 
-from .types import EntityMeta
+from .types import EntityMeta, MentionUserRef
 
 
 class EntitySpec(ABC):
@@ -85,8 +86,8 @@ class UnderlineSpec(SimpleTagSpec):
     html_tags = ("u", "ins")
     html_open = "<u>"
     html_close = "</u>"
-    markdown_open = "__"
-    markdown_close = "__"
+    markdown_open = "--"
+    markdown_close = "--"
 
 
 class StrikeSpec(SimpleTagSpec):
@@ -110,12 +111,52 @@ class SpoilerSpec(SimpleTagSpec):
 class LinkSpec(EntitySpec):
     entity_type = enums.MessageEntityType.TEXT_LINK
     html_tags = ("a",)
+    USER_LINK_RE = re.compile(r"^tg://user\?id=(\d+)$")
 
     def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
         url = attrs.get("href")
         if not url:
             return None
+
+        mention_match = self.USER_LINK_RE.fullmatch(url)
+        if mention_match:
+            return {
+                "type": enums.MessageEntityType.TEXT_MENTION,
+                "user": MentionUserRef(id=int(mention_match.group(1)))
+            }
+
         return {"url": url}
+
+    def from_markdown_meta(self, meta: Optional[EntityMeta] = None) -> Optional[EntityMeta]:
+        payload = dict(meta or {})
+        entity_type = payload.pop("type", None)
+
+        if entity_type == enums.MessageEntityType.TEXT_MENTION:
+            return None
+
+        return payload
+
+    def create_entity(
+        self,
+        start: int,
+        end: int,
+        meta: Optional[EntityMeta] = None
+    ) -> Optional[MessageEntity]:
+        if end <= start:
+            return None
+
+        payload = dict(meta or {})
+        entity_type = payload.pop("type", self.entity_type)
+
+        if entity_type is None:
+            return None
+
+        return MessageEntity(
+            type=entity_type,
+            offset=start,
+            length=end - start,
+            **payload
+        )
 
     def render_html(self, content: str, entity: MessageEntity) -> str:
         url = html.escape(entity.url or "", quote=True)
@@ -192,10 +233,10 @@ class BlockquoteSpec(EntitySpec):
 
 class CustomEmojiSpec(EntitySpec):
     entity_type = enums.MessageEntityType.CUSTOM_EMOJI
-    html_tags = ("tg-emoji",)
+    html_tags = ("tg-emoji", "emoji")
 
     def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
-        emoji_id = attrs.get("emoji-id")
+        emoji_id = attrs.get("emoji-id") or attrs.get("id")
         if not emoji_id:
             return None
 

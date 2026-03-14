@@ -20,6 +20,7 @@ import asyncio
 
 import pyrogram
 import pytest
+from pyrogram import raw
 from pyrogram.parser.html import HTML
 from pyrogram.types import User
 
@@ -256,6 +257,19 @@ def test_html_parse_utf16_date_time_with_emoji_prefix():
     assert entity.length == 14
 
 
+def test_html_parse_legacy_emoji_tag():
+    result = asyncio.run(HTML(None).parse('<emoji id="123">x</emoji>'))
+
+    assert result["message"] == "x"
+    assert len(result["entities"]) == 1
+
+    entity = result["entities"][0]
+    assert entity.type == pyrogram.enums.MessageEntityType.CUSTOM_EMOJI
+    assert entity.offset == 0
+    assert entity.length == 1
+    assert entity.custom_emoji_id == 123
+
+
 def test_html_roundtrip_multiple_entity_types():
     text = "bold code URL 22:45 tomorrow"
     entities = pyrogram.types.List([
@@ -279,3 +293,18 @@ def test_html_roundtrip_multiple_entity_types():
     assert parsed["entities"][2].url == "https://pyrogram.org/"
     assert parsed["entities"][3].unix_time == 1647531900
     assert parsed["entities"][3].date_time_format == "wDT"
+
+
+class _FakeClient:
+    async def resolve_peer(self, user_id: int):
+        return raw.types.InputUser(user_id=user_id, access_hash=0)
+
+
+def test_html_parse_returns_raw_entities_for_client():
+    result = asyncio.run(HTML(_FakeClient()).parse('<a href="tg://user?id=123456">mention</a>'))
+
+    assert result["message"] == "mention"
+    assert len(result["entities"]) == 1
+    assert isinstance(result["entities"][0], raw.types.InputMessageEntityMentionName)
+    assert result["entities"][0].offset == 0
+    assert result["entities"][0].length == 7

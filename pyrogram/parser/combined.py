@@ -5,7 +5,7 @@ from typing import List, Optional
 import pyrogram
 from pyrogram.types.messages_and_media.message_entity import MessageEntity
 
-from .rendering import make_entity_list
+from .rendering import export_entity_list
 from .html import HTML
 from .markdown import Markdown
 from .types import ParseResult
@@ -19,13 +19,11 @@ class CombinedParser:
         self.markdown = Markdown(client)
 
     async def parse(self, text: str) -> ParseResult:
-        html_result = await self.html.parse(text)
+        html_result = self.html._parse_entities(text)
         source = html_result["message"]
         html_entities = list(html_result["entities"] or [])
 
-        markdown_result = await self.markdown.parse(source)
-        message = markdown_result["message"]
-        markdown_entities = list(markdown_result["entities"] or [])
+        message, markdown_entities = self.markdown._parse_entities(source)
 
         if html_entities:
             mapping = self._build_subsequence_map(add_surrogates(source), add_surrogates(message))
@@ -36,7 +34,7 @@ class CombinedParser:
 
         return {
             "message": message,
-            "entities": make_entity_list(entities)
+            "entities": await export_entity_list(self.client, entities)
         }
 
     @staticmethod

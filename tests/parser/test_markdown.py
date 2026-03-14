@@ -21,6 +21,7 @@ import asyncio
 import pyrogram
 import pytest
 from pyrogram import enums
+from pyrogram import raw
 from pyrogram.parser import Parser
 from pyrogram.parser.markdown import Markdown
 
@@ -43,7 +44,7 @@ from pyrogram.parser.markdown import Markdown
             ]),
         ),
         (
-            "__underline__",
+            "--underline--",
             "underline",
             pyrogram.types.List([
                 pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.UNDERLINE, offset=0, length=9)
@@ -207,6 +208,42 @@ def test_markdown_parse_invalid_date_time():
     assert result["entities"] is None
 
 
+def test_markdown_parse_tg_user_link_as_text_mention():
+    result = asyncio.run(Markdown(None).parse("[Alice](tg://user?id=123456)"))
+
+    assert result["message"] == "Alice"
+    assert len(result["entities"]) == 1
+
+    entity = result["entities"][0]
+    assert entity.type == pyrogram.enums.MessageEntityType.TEXT_MENTION
+    assert entity.offset == 0
+    assert entity.length == 5
+    assert entity.user.id == 123456
+
+
+def test_markdown_parse_tg_user_link_exports_raw_mention_for_client():
+    result = asyncio.run(Markdown(_FakeClient()).parse("[Alice](tg://user?id=123456)"))
+
+    assert result["message"] == "Alice"
+    assert len(result["entities"]) == 1
+    assert isinstance(result["entities"][0], raw.types.InputMessageEntityMentionName)
+    assert result["entities"][0].offset == 0
+    assert result["entities"][0].length == 5
+
+
+def test_markdown_parse_expandable_blockquote():
+    result = asyncio.run(Markdown(None).parse("**> a\n> b||"))
+
+    assert result["message"] == "a\nb"
+    assert len(result["entities"]) == 1
+
+    entity = result["entities"][0]
+    assert entity.type == pyrogram.enums.MessageEntityType.BLOCKQUOTE
+    assert entity.offset == 0
+    assert entity.length == 3
+    assert entity.expandable is True
+
+
 def test_default_parse_combined_date_time_and_markdown():
     text = '**<tg-time unix="1647531900" format="wDT">22:45 tomorrow</tg-time>**'
     result = asyncio.run(Parser(None).parse(text, enums.ParseMode.DEFAULT))
@@ -289,6 +326,49 @@ def test_markdown_roundtrip_multiple_entity_types():
     assert parsed["entities"][3].date_time_format == "t"
 
 
+def test_markdown_roundtrip_underline():
+    text = "underline"
+    entities = pyrogram.types.List([
+        pyrogram.types.MessageEntity(type=enums.MessageEntityType.UNDERLINE, offset=0, length=9)
+    ])
+
+    markdown = Markdown.unparse(text, entities)
+    parsed = asyncio.run(Markdown(None).parse(markdown))
+
+    assert markdown == "--underline--"
+    assert parsed["message"] == text
+    assert len(parsed["entities"]) == 1
+    assert parsed["entities"][0].type == enums.MessageEntityType.UNDERLINE
+
+
+def test_markdown_unparse_text_mention():
+    text = "Alice"
+    entities = pyrogram.types.List([
+        pyrogram.types.MessageEntity(
+            type=enums.MessageEntityType.TEXT_MENTION,
+            offset=0,
+            length=5,
+            user=pyrogram.types.User(id=123456, is_self=False)
+        )
+    ])
+
+    assert Markdown.unparse(text, entities) == "[Alice](tg://user?id=123456)"
+
+
+def test_markdown_unparse_expandable_blockquote():
+    text = "a\nb"
+    entities = pyrogram.types.List([
+        pyrogram.types.MessageEntity(
+            type=enums.MessageEntityType.BLOCKQUOTE,
+            offset=0,
+            length=3,
+            expandable=True
+        )
+    ])
+
+    assert Markdown.unparse(text, entities) == "**> a\n> b||"
+
+
 def test_default_parse_combined_html_and_markdown_offsets():
     text = '<b>bold</b> __italic__ <tg-time unix="1647531900" format="r">soon</tg-time>'
     result = asyncio.run(Parser(None).parse(text, enums.ParseMode.DEFAULT))
@@ -301,3 +381,8 @@ def test_default_parse_combined_html_and_markdown_offsets():
     ]
     assert result["entities"][2].unix_time == 1647531900
     assert result["entities"][2].date_time_format == "r"
+
+
+class _FakeClient:
+    async def resolve_peer(self, user_id: int):
+        return raw.types.InputUser(user_id=user_id, access_hash=0)

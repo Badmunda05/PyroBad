@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, TypedDict
 import pyrogram
 from pyrogram.types.messages_and_media.message_entity import MessageEntity
 
-from .rendering import html_entity_rank, make_entity_list, render_entities
+from .rendering import export_entity_list, html_entity_rank, make_entity_list, render_entities
 from .specs import EntitySpec, HTML_TAGS
 from .types import EntityMeta, ParseResult
 from .utils import add_surrogates, remove_surrogates
@@ -151,6 +151,8 @@ class _HTMLToEntitiesParser(HTMLParser):
             return "<blockquote expandable>"
         if tag == "tg-emoji" and meta.get("custom_emoji_id"):
             return f'<tg-emoji emoji-id="{meta["custom_emoji_id"]}">'
+        if tag == "emoji" and meta.get("custom_emoji_id"):
+            return f'<emoji id="{meta["custom_emoji_id"]}">'
         return f"<{tag}>"
 
 
@@ -159,6 +161,15 @@ class HTML:
         self.client = client
 
     async def parse(self, text: str) -> ParseResult:
+        result = self._parse_entities(text)
+
+        return {
+            "message": result["message"],
+            "entities": await export_entity_list(self.client, result["entities"] or [])
+        }
+
+    @staticmethod
+    def _parse_entities(text: str) -> ParseResult:
         return _HTMLToEntitiesParser().parse(text)
 
     @staticmethod
