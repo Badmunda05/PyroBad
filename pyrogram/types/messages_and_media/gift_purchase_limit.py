@@ -43,7 +43,7 @@ class GiftPurchaseLimit(Object):
 
     @staticmethod
     def _parse(total: int, remains: int) -> Optional["GiftPurchaseLimit"]:
-        if total <= 0:
+        if total is None or total <= 0:
             return None
 
         return GiftPurchaseLimit(
