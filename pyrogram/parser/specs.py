@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 import html
 import re
 from typing import Dict, Optional
@@ -50,62 +51,26 @@ class EntitySpec(ABC):
         raise NotImplementedError
 
 
+@dataclass(frozen=True)
+class SimpleTagKind:
+    entity_type: enums.MessageEntityType
+    html_tags: tuple[str, ...]
+    html_tag: str
+    markdown_token: str
+
+
 class SimpleTagSpec(EntitySpec):
-    html_open = ""
-    html_close = ""
-    markdown_open = ""
-    markdown_close = ""
+    def __init__(self, kind: SimpleTagKind) -> None:
+        self.entity_type = kind.entity_type
+        self.html_tags = kind.html_tags
+        self._html_tag = kind.html_tag
+        self._markdown_token = kind.markdown_token
 
     def render_html(self, content: str, entity: MessageEntity) -> str:
-        return f"{self.html_open}{content}{self.html_close}"
+        return f"<{self._html_tag}>{content}</{self._html_tag}>"
 
     def render_markdown(self, content: str, entity: MessageEntity) -> str:
-        return f"{self.markdown_open}{content}{self.markdown_close}"
-
-
-class BoldSpec(SimpleTagSpec):
-    entity_type = enums.MessageEntityType.BOLD
-    html_tags = ("b", "strong")
-    html_open = "<b>"
-    html_close = "</b>"
-    markdown_open = "**"
-    markdown_close = "**"
-
-
-class ItalicSpec(SimpleTagSpec):
-    entity_type = enums.MessageEntityType.ITALIC
-    html_tags = ("i", "em")
-    html_open = "<i>"
-    html_close = "</i>"
-    markdown_open = "__"
-    markdown_close = "__"
-
-
-class UnderlineSpec(SimpleTagSpec):
-    entity_type = enums.MessageEntityType.UNDERLINE
-    html_tags = ("u", "ins")
-    html_open = "<u>"
-    html_close = "</u>"
-    markdown_open = "--"
-    markdown_close = "--"
-
-
-class StrikeSpec(SimpleTagSpec):
-    entity_type = enums.MessageEntityType.STRIKETHROUGH
-    html_tags = ("s", "strike", "del")
-    html_open = "<s>"
-    html_close = "</s>"
-    markdown_open = "~~"
-    markdown_close = "~~"
-
-
-class SpoilerSpec(SimpleTagSpec):
-    entity_type = enums.MessageEntityType.SPOILER
-    html_tags = ("spoiler", "tg-spoiler")
-    html_open = "<spoiler>"
-    html_close = "</spoiler>"
-    markdown_open = "||"
-    markdown_close = "||"
+        return f"{self._markdown_token}{content}{self._markdown_token}"
 
 
 class LinkSpec(EntitySpec):
@@ -180,15 +145,6 @@ class TextMentionSpec(EntitySpec):
             return content
 
         return f"[{content}](tg://user?id={entity.user.id})"
-
-
-class CodeSpec(SimpleTagSpec):
-    entity_type = enums.MessageEntityType.CODE
-    html_tags = ("code",)
-    html_open = "<code>"
-    html_close = "</code>"
-    markdown_open = "`"
-    markdown_close = "`"
 
 
 class PreSpec(EntitySpec):
@@ -285,15 +241,50 @@ class DateTimeSpec(EntitySpec):
         return f"![{content}]({target})"
 
 
+SIMPLE_TAG_KINDS = (
+    SimpleTagKind(
+        entity_type=enums.MessageEntityType.BOLD,
+        html_tags=("b", "strong"),
+        html_tag="b",
+        markdown_token="**"
+    ),
+    SimpleTagKind(
+        entity_type=enums.MessageEntityType.ITALIC,
+        html_tags=("i", "em"),
+        html_tag="i",
+        markdown_token="__"
+    ),
+    SimpleTagKind(
+        entity_type=enums.MessageEntityType.UNDERLINE,
+        html_tags=("u", "ins"),
+        html_tag="u",
+        markdown_token="--"
+    ),
+    SimpleTagKind(
+        entity_type=enums.MessageEntityType.STRIKETHROUGH,
+        html_tags=("s", "strike", "del"),
+        html_tag="s",
+        markdown_token="~~"
+    ),
+    SimpleTagKind(
+        entity_type=enums.MessageEntityType.SPOILER,
+        html_tags=("spoiler", "tg-spoiler"),
+        html_tag="spoiler",
+        markdown_token="||"
+    ),
+    SimpleTagKind(
+        entity_type=enums.MessageEntityType.CODE,
+        html_tags=("code",),
+        html_tag="code",
+        markdown_token="`"
+    ),
+)
+
+
 HTML_SPECS = (
-    BoldSpec(),
-    ItalicSpec(),
-    UnderlineSpec(),
-    StrikeSpec(),
-    SpoilerSpec(),
+    *(SimpleTagSpec(kind) for kind in SIMPLE_TAG_KINDS),
     LinkSpec(),
     TextMentionSpec(),
-    CodeSpec(),
     PreSpec(),
     BlockquoteSpec(),
     CustomEmojiSpec(),
