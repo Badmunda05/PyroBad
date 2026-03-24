@@ -152,8 +152,7 @@ class PreSpec(EntitySpec):
     html_tags = ("pre",)
 
     def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
-        language = attrs.get("language")
-        return {"language": language} if language else {}
+        return {"language": attrs.get("language", "")}
 
     def render_html(self, content: str, entity: MessageEntity) -> str:
         if entity.language:

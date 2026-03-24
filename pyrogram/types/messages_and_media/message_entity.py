@@ -156,10 +156,7 @@ class MessageEntity(Object):
             args.pop("url")
 
         if self.language is None:
-            if self.type == enums.MessageEntityType.PRE:
-                args["language"] = ""
-            else:
-                args.pop("language")
+            args.pop("language")
 
         args.pop("custom_emoji_id")
         if self.custom_emoji_id is not None:

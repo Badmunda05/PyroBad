@@ -292,7 +292,7 @@ class Markdown:
             type=enums.MessageEntityType.PRE,
             offset=0,
             length=len(content),
-            language=remove_surrogates(language) or None
+            language=remove_surrogates(language) or ""
         )
         return content, [entity], end + 3
 
