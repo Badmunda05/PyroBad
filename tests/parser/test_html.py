@@ -57,7 +57,7 @@ from pyrogram.types import User
             ]),
         ),
         (
-            "<spoiler>spoiler</spoiler>",
+            "<tg-spoiler>spoiler</tg-spoiler>",
             "spoiler",
             pyrogram.types.List([
                 pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.SPOILER, offset=0, length=7)
@@ -114,8 +114,8 @@ def test_html_unparse_simple(expected, text, entities):
 
 
 def test_html_unparse_pre():
-    expected = """<pre language="python">for i in range(10):
-    print(i)</pre>"""
+    expected = """<pre><code class="python">for i in range(10):
+    print(i)</code></pre>"""
 
     text = """for i in range(10):
     print(i)"""
@@ -140,8 +140,8 @@ def test_html_unparse_blockquote():
 
 
 def test_html_unparse_mixed():
-    expected = "<b>aaaaaaa<i>aaa<u>bbbb</u></i></b><u><i>bbbbbbccc</i></u><u>ccccccc<s>ddd</s></u><s>ddddd<spoiler>dd" \
-               "eee</spoiler></s><spoiler>eeeeeeefff</spoiler>ffff<code>fffggggggg</code>ggghhhhhhhhhh"
+    expected = "<b>aaaaaaa<i>aaa<u>bbbb</u></i></b><u><i>bbbbbbccc</i></u><u>ccccccc<s>ddd</s></u><s>ddddd<tg-spoiler>dd" \
+               "eee</tg-spoiler></s><tg-spoiler>eeeeeeefff</tg-spoiler>ffff<code>fffggggggg</code>ggghhhhhhhhhh"
     text = "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhh"
     entities = pyrogram.types.List(
         [pyrogram.types.MessageEntity(type=pyrogram.enums.MessageEntityType.BOLD, offset=0, length=14),
