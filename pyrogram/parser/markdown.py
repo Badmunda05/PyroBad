@@ -79,7 +79,8 @@ class Markdown:
                 return "||"
             if entity.type in (
                 enums.MessageEntityType.TEXT_LINK,
-                enums.MessageEntityType.TEXT_MENTION
+                enums.MessageEntityType.TEXT_MENTION,
+                enums.MessageEntityType.EMAIL,
             ):
                 return "["
             if entity.type in (
@@ -104,6 +105,8 @@ class Markdown:
                 return "~~"
             if entity.type == enums.MessageEntityType.SPOILER:
                 return "||"
+            if entity.type == enums.MessageEntityType.EMAIL:
+                return f"](mailto:{remove_surrogates(source[entity.offset:entity.offset + entity.length])})"
             if entity.type == enums.MessageEntityType.TEXT_LINK:
                 return f"]({entity.url or ''})"
             if entity.type == enums.MessageEntityType.TEXT_MENTION:

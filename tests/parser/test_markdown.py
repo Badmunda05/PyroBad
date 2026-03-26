@@ -383,6 +383,19 @@ def test_default_parse_combined_html_and_markdown_offsets():
     assert result["entities"][2].date_time_format == "r"
 
 
+def test_markdown_unparse_email():
+    text = "test@example.com"
+    entities = pyrogram.types.List([
+        pyrogram.types.MessageEntity(
+            type=pyrogram.enums.MessageEntityType.EMAIL,
+            offset=0,
+            length=16,
+        )
+    ])
+
+    assert Markdown.unparse(text, entities) == "[test@example.com](mailto:test@example.com)"
+
+
 class _FakeClient:
     async def resolve_peer(self, user_id: int):
         return raw.types.InputUser(user_id=user_id, access_hash=0)

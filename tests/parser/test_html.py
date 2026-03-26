@@ -300,6 +300,49 @@ class _FakeClient:
         return raw.types.InputUser(user_id=user_id, access_hash=0)
 
 
+def test_html_unparse_email():
+    text = "test@example.com"
+    entities = pyrogram.types.List([
+        pyrogram.types.MessageEntity(
+            type=pyrogram.enums.MessageEntityType.EMAIL,
+            offset=0,
+            length=16,
+        )
+    ])
+
+    assert HTML.unparse(text=text, entities=entities) == '<a href="mailto:test@example.com">test@example.com</a>'
+
+
+def test_html_parse_mailto():
+    result = asyncio.run(HTML(None).parse('<a href="mailto:test@example.com">Email me</a>'))
+
+    assert result["message"] == "Email me"
+    assert len(result["entities"]) == 1
+
+    entity = result["entities"][0]
+    assert entity.type == pyrogram.enums.MessageEntityType.EMAIL
+    assert entity.offset == 0
+    assert entity.length == 8
+
+
+def test_html_parse_mailto_roundtrip():
+    text = "test@example.com"
+    entities = pyrogram.types.List([
+        pyrogram.types.MessageEntity(
+            type=pyrogram.enums.MessageEntityType.EMAIL,
+            offset=0,
+            length=16,
+        )
+    ])
+
+    html_text = HTML.unparse(text, entities)
+    parsed = asyncio.run(HTML(None).parse(html_text))
+
+    assert parsed["message"] == text
+    assert len(parsed["entities"]) == 1
+    assert parsed["entities"][0].type == pyrogram.enums.MessageEntityType.EMAIL
+
+
 def test_html_parse_returns_raw_entities_for_client():
     result = asyncio.run(HTML(_FakeClient()).parse('<a href="tg://user?id=123456">mention</a>'))
 

@@ -78,6 +78,8 @@ class LinkSpec(EntitySpec):
     html_tags = ("a",)
     USER_LINK_RE = re.compile(r"^tg://user\?id=(\d+)$")
 
+    MAILTO_RE = re.compile(r"^mailto:(.+)$", re.IGNORECASE)
+
     def from_html_attrs(self, attrs: Dict[str, str]) -> Optional[EntityMeta]:
         url = attrs.get("href")
         if not url:
@@ -88,6 +90,12 @@ class LinkSpec(EntitySpec):
             return {
                 "type": enums.MessageEntityType.TEXT_MENTION,
                 "user": MentionUserRef(id=int(mention_match.group(1)))
+            }
+
+        mailto_match = self.MAILTO_RE.fullmatch(url)
+        if mailto_match:
+            return {
+                "type": enums.MessageEntityType.EMAIL,
             }
 
         return {"url": url}
@@ -208,6 +216,16 @@ class CustomEmojiSpec(EntitySpec):
         return f"![{content}](tg://emoji?id={entity.custom_emoji_id})"
 
 
+class EmailSpec(EntitySpec):
+    entity_type = enums.MessageEntityType.EMAIL
+
+    def render_html(self, content: str, entity: MessageEntity) -> str:
+        return f'<a href="mailto:{html.escape(content, quote=True)}">{content}</a>'
+
+    def render_markdown(self, content: str, entity: MessageEntity) -> str:
+        return f"[{content}](mailto:{content})"
+
+
 class DateTimeSpec(EntitySpec):
     entity_type = enums.MessageEntityType.DATE_TIME
     html_tags = ("tg-time",)
@@ -288,6 +306,7 @@ HTML_SPECS = (
     BlockquoteSpec(),
     CustomEmojiSpec(),
     DateTimeSpec(),
+    EmailSpec(),
 )
 
 HTML_TAGS = {
@@ -309,6 +328,7 @@ HTML_ENTITY_ORDER = (
     enums.MessageEntityType.STRIKETHROUGH,
     enums.MessageEntityType.SPOILER,
     enums.MessageEntityType.TEXT_LINK,
+    enums.MessageEntityType.EMAIL,
     enums.MessageEntityType.CODE,
     enums.MessageEntityType.PRE,
     enums.MessageEntityType.BLOCKQUOTE,
@@ -323,6 +343,7 @@ MARKDOWN_ENTITY_ORDER = (
     enums.MessageEntityType.STRIKETHROUGH,
     enums.MessageEntityType.SPOILER,
     enums.MessageEntityType.TEXT_LINK,
+    enums.MessageEntityType.EMAIL,
     enums.MessageEntityType.CUSTOM_EMOJI,
     enums.MessageEntityType.DATE_TIME,
     enums.MessageEntityType.CODE,
