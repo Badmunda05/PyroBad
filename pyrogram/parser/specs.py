@@ -157,7 +157,7 @@ class PreSpec(EntitySpec):
     def render_html(self, content: str, entity: MessageEntity) -> str:
         if entity.language:
             language = html.escape(entity.language, quote=True)
-            return f'<pre language="{language}">{content}</pre>'
+            return f'<pre><code class="{language}">{content}</code></pre>'
         return f"<pre>{content}</pre>"
 
     def render_markdown(self, content: str, entity: MessageEntity) -> str:
