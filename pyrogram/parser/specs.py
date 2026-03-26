@@ -268,7 +268,7 @@ SIMPLE_TAG_KINDS = (
     SimpleTagKind(
         entity_type=enums.MessageEntityType.SPOILER,
         html_tags=("spoiler", "tg-spoiler"),
-        html_tag="spoiler",
+        html_tag="tg-spoiler",
         markdown_token="||"
     ),
     SimpleTagKind(
