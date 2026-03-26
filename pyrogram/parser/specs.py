@@ -263,25 +263,25 @@ SIMPLE_TAG_KINDS = (
         entity_type=enums.MessageEntityType.BOLD,
         html_tags=("b", "strong"),
         html_tag="b",
-        markdown_token="**"
+        markdown_token="*"
     ),
     SimpleTagKind(
         entity_type=enums.MessageEntityType.ITALIC,
         html_tags=("i", "em"),
         html_tag="i",
-        markdown_token="__"
+        markdown_token="_"
     ),
     SimpleTagKind(
         entity_type=enums.MessageEntityType.UNDERLINE,
         html_tags=("u", "ins"),
         html_tag="u",
-        markdown_token="--"
+        markdown_token="-"
     ),
     SimpleTagKind(
         entity_type=enums.MessageEntityType.STRIKETHROUGH,
         html_tags=("s", "strike", "del"),
         html_tag="s",
-        markdown_token="~~"
+        markdown_token="~"
     ),
     SimpleTagKind(
         entity_type=enums.MessageEntityType.SPOILER,
